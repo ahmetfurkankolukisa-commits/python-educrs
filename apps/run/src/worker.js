@@ -29,9 +29,10 @@ try {
   py.setStdout({ write: (buf) => { postMessage({ type: "stdout", runId, text: outDec.decode(buf, { stream: true }) }); return buf.length; } });
   py.setStderr({ write: (buf) => { postMessage({ type: "stderr", runId, text: errDec.decode(buf, { stream: true }) }); return buf.length; } });
   py.setStdin({ stdin: syncStdin });
-  const graderSrc = await (await fetch("/educrs_grader.py")).text();
   py.FS.mkdirTree("/educrs");
-  py.FS.writeFile("/educrs/educrs_grader.py", graderSrc);
+  for (const f of ["educrs_explain.py", "educrs_grader.py"]) {
+    py.FS.writeFile(`/educrs/${f}`, await (await fetch(`/${f}`)).text());
+  }
   const boot = await (await fetch("/bootstrap.py")).text();
   ns = py.toPy({});
   py.runPython(boot, { globals: ns });

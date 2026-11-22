@@ -125,7 +125,7 @@ async def run_user(code, mode="run", spec=None, seed=0):
     except SystemExit:
         return ("ok", None, None)
     except BaseException as e:  # noqa: BLE001 - we report everything to the learner
-        return ("error", _format_exc(e), None)
+        return ("error", _format_exc(e), _explain_json(e, code))
     finally:
         _restore()
 
@@ -143,6 +143,15 @@ def _check(code, spec_json, seed):
         result = {"passed": False, "problem": "bad-spec", "error": {"type": type(exc).__name__, "message": str(exc)}}
     result["worker_runs"] = _RUNS
     return json.dumps(result)
+
+
+def _explain_json(exc, code):
+    """Structured explanation for a Run-mode error (wording is rendered by the app via i18n)."""
+    try:
+        info = educrs_grader.error_info(exc, MAIN)
+        return json.dumps({"explanation": educrs_grader.educrs_explain.explain(info, code)})
+    except Exception:  # noqa: BLE001 - never let the explainer hide the real error
+        return None
 
 
 def _probe():

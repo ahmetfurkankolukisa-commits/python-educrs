@@ -10,7 +10,7 @@
 - `pnpm build:e2e && pnpm e2e` — e2e against built sites with the real `_headers`.
 - `pnpm docs:concepts` regenerates `docs/01-concept-graph.md` from `content/concepts.toml`. Never hand-edit the generated doc.
 - `pnpm content` regenerates `content/build/exercises.json` and `content/golden/**` by running every exercise in Pyodide (the browser's Python). Never hand-edit them; `pnpm test:content` fails if they are stale. Never run `tools/content/pipeline.py` WITHOUT `--check` under a CPython whose minor version differs from Pyodide's — it would write mismatching files.
-- One grader for browser and CI: `packages/grader/educrs_grader.py`. Expected output is never hand-written (it comes from running the solution); reference programs run before learner code.
+- One grader + explainer for browser and CI: `packages/grader/educrs_grader.py`, `educrs_explain.py`. Explainer rules look at structure (type, lineno, source, assigned names), never at exception messages; every rule needs a triggering program in `tools/tests/test_explain.py` and an `explain.<id>` message in `packages/i18n/locales/en.json` (tests enforce both). Expected output is never hand-written (it comes from running the solution); reference programs run before learner code.
 
 ## Non-negotiables
 - **Sandbox** (`apps/run`) must stay a different *site* from the app (`python-educrs-run.<account>.workers.dev`; workers.dev is on the PSL), CSP without `'unsafe-eval'`, `connect-src 'self'`, `frame-ancestors` = app origin only. Grading always runs in a fresh worker.

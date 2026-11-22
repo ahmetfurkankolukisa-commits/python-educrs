@@ -54,7 +54,9 @@ for (const f of ["pyodide.mjs", "pyodide.asm.mjs", "pyodide.asm.wasm", "python_s
   fs.copyFileSync(path.join(pyodideDir, f), path.join(dist, PYODIDE_DIR, f));
 }
 // The ONE grader shared with CI (packages/grader): the browser runs exactly what CI validated.
-fs.copyFileSync(path.resolve(root, "..", "..", "packages", "grader", "educrs_grader.py"), path.join(dist, "educrs_grader.py"));
+for (const f of ["educrs_grader.py", "educrs_explain.py"]) {
+  fs.copyFileSync(path.resolve(root, "..", "..", "packages", "grader", f), path.join(dist, f));
+}
 for (const f of fs.readdirSync(path.join(root, "wheels"))) {
   fs.copyFileSync(path.join(root, "wheels", f), path.join(dist, "wheels", f));
 }

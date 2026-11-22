@@ -21,6 +21,6 @@ describe("i18n", () => {
   });
 
   it("uses namespaced keys", () => {
-    for (const key of Object.keys(catalog("en"))) expect(key).toMatch(/^[a-z]+(\.[a-zA-Z]+)+$/);
+    for (const key of Object.keys(catalog("en"))) expect(key).toMatch(/^[a-z]+(\.[a-zA-Z][a-zA-Z-]*)+$/);
   });
 });
