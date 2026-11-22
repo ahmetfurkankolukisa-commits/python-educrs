@@ -1,0 +1,10 @@
+{
+  "answer": "8",
+  "grader": 1,
+  "id": "ex:shell.expressions/maths",
+  "outcome": {
+    "error": null,
+    "stdout": "8\n"
+  },
+  "python": "3.14"
+}

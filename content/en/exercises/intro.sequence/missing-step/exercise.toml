@@ -1,0 +1,18 @@
+id = "ex:intro.sequence/missing-step"
+concept = "intro.sequence"
+type = "fill-gap"
+difficulty = "easy"
+title = "The missing step"
+prompt = """
+Fill the gap so the program shows the three steps in order:
+
+    Get up
+    Get dressed
+    Go to school
+"""
+template = """print("Get up")
+____
+print("Go to school")"""
+tiles = ['print("Get dressed")', 'print("Go to school")', 'print("Get up")']
+answer = 'print("Get dressed")'
+explanation = "The middle line runs second, so it must show the middle step."

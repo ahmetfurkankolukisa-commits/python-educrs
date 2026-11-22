@@ -1,0 +1,13 @@
+id = "ex:intro.errors-are-normal/fix-the-quotes"
+concept = "intro.errors-are-normal"
+type = "fill-gap"
+difficulty = "easy"
+title = "Quotes at both ends"
+prompt = "Fill the gap so the program shows `Good job`."
+template = "print(____)"
+tiles = ['"Good job"', "Good job", '"Good job']
+answer = '"Good job"'
+explanation = "A message needs a quote at the start and a quote at the end."
+
+[tile_misconceptions]
+"Good job" = { id = "mc.missing-quotes", message = "Without quotes, Python thinks `Good` and `job` are names. Text needs quotes: `\"Good job\"`." }

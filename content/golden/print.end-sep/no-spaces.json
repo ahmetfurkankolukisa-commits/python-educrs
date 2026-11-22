@@ -1,0 +1,20 @@
+{
+  "answer": "sep=\"\"",
+  "grader": 1,
+  "id": "ex:print.end-sep/no-spaces",
+  "outcomes": {
+    "end=\"\"": {
+      "error": null,
+      "stdout": "Ha ha ha"
+    },
+    "sep=\" \"": {
+      "error": null,
+      "stdout": "Ha ha ha\n"
+    },
+    "sep=\"\"": {
+      "error": null,
+      "stdout": "Hahaha\n"
+    }
+  },
+  "python": "3.14"
+}

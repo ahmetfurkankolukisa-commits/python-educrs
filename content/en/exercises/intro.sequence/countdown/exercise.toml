@@ -1,0 +1,22 @@
+id = "ex:intro.sequence/countdown"
+concept = "intro.sequence"
+type = "code"
+difficulty = "easy"
+title = "Countdown"
+prompt = """
+Write a program that counts down like this:
+
+    3
+    2
+    1
+    Go!
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "You need four `print` lines, one for each line of output."
+
+[[hints]]
+text = "Put the lines in the order you want them to appear. `print(\"3\")` comes first."

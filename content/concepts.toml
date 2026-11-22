@@ -1549,6 +1549,18 @@ concepts = ["print.multiple-args"]
 belief = "print(\"Hi\" + name) and print(\"Hi\", name) print exactly the same thing."
 detect = "behavioral"
 
+[[misconception]]
+id = "mc.quote-ends-string"
+concepts = ["strings.quotes-mixed"]
+belief = "A quote inside text is just part of the text, even when it is the same kind as the quotes around it."
+detect = "exception"
+
+[[misconception]]
+id = "mc.swap-overwrites"
+concepts = ["vars.swap"]
+belief = "Writing a = b and then b = a swaps the two values."
+detect = "behavioral"
+
 # ================================================================ projects
 [[project]]
 id = "proj.business-card"

@@ -23,3 +23,11 @@ id = "ex:vars.reassign/predict-copy"
 [[steps]]
 kind = "exercise"
 id = "ex:vars.reassign/give-new-value"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.reassign/only-the-latest"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.reassign/wake-up"

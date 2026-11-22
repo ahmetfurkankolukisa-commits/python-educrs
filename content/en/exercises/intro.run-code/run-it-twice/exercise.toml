@@ -1,0 +1,8 @@
+id = "ex:intro.run-code/run-it-twice"
+concept = "intro.run-code"
+type = "predict-output"
+difficulty = "easy"
+title = "The same line twice"
+prompt = "What does **Run** show for this program?"
+options = ["Hi\nHi", "Hi", "HiHi"]
+explanation = "There are two `print` instructions, so the message appears twice. Each one is on its own line."

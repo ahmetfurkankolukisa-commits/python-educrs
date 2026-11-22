@@ -1,0 +1,27 @@
+id = "ex:vars.reassign/wake-up"
+concept = "vars.reassign"
+type = "code"
+difficulty = "easy"
+title = "Wake up"
+prompt = """
+The program shows `mood`. Add two lines: give `mood` the value `"awake"`, then show it again.
+
+For example, when `mood = "sleepy"` the program shows:
+
+    sleepy
+    awake
+
+Your program must work for **any** first mood.
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["mood"]
+tests = [{ mood = "sleepy" }, { mood = "grumpy" }]
+random = { count = 6, types = { mood = "str" } }
+
+[[hints]]
+text = "Give `mood` a new value with `=`, then print it again."
+
+[[hints]]
+text = "Add `mood = \"awake\"` and then `print(mood)`."

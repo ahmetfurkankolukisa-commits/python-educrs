@@ -1,0 +1,2 @@
+"Ada" = name
+print(name)

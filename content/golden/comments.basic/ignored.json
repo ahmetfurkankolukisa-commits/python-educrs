@@ -1,0 +1,10 @@
+{
+  "answer": "Hello!",
+  "grader": 1,
+  "id": "ex:comments.basic/ignored",
+  "outcome": {
+    "error": null,
+    "stdout": "Hello!\n"
+  },
+  "python": "3.14"
+}

@@ -1,0 +1,38 @@
+concept = "strings.literal"
+title = "Text needs quotes"
+
+[[steps]]
+kind = "explain"
+text = """
+Text in Python is called a **string**. A string goes inside quotes: `"Hello"` or `'Hello'`. Both kinds work, but the start and the end must match.
+
+Without quotes, Python thinks a word is the name of something. Then it shows an error.
+"""
+example = """print("double quotes")
+print('single quotes')"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.literal/quotes-not-shown"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.literal/single-quotes"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.literal/no-quotes"
+
+[[steps]]
+kind = "explain"
+text = """
+Watch out for curly quotes like “this”. Phones and word processors often add them. Python only understands straight quotes: `"` and `'`.
+"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.literal/add-the-quotes"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.literal/curly-quotes"

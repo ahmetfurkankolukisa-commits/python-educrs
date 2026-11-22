@@ -1,0 +1,10 @@
+id = "ex:shell.expressions/make-it-calculate"
+concept = "shell.expressions"
+type = "fill-gap"
+difficulty = "easy"
+title = "Let Python work it out"
+prompt = "Fill the gap so the program shows `10`."
+template = "print(____)"
+tiles = ["5 + 5", '"5 + 5"', '"10']
+answer = "5 + 5"
+explanation = "Without quotes, `5 + 5` is an expression. Python works out its value, `10`."

@@ -1,0 +1,8 @@
+id = "ex:comments.basic/switched-off"
+concept = "comments.basic"
+type = "predict-output"
+difficulty = "easy"
+title = "A line switched off"
+prompt = "What does this program show?"
+options = ["A\nC", "A\nB\nC", "A first\nC"]
+explanation = "The middle line starts with `#`, so it is a comment and doesn't run. The note after the first line is ignored too."

@@ -1,0 +1,61 @@
+{
+  "grader": 1,
+  "id": "ex:vars.name-error/capital-c",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 8,
+    "tests_total": 8
+  },
+  "starter": {
+    "error": {
+      "lineno": 2,
+      "message": "name 'City' is not defined",
+      "name": "City",
+      "offset": null,
+      "text": "print(\"I am in\", City)",
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\n    print(\"I am in\", City)\n                     ^^^^\nNameError: name 'City' is not defined. Did you mean: 'city'?\n",
+      "type": "NameError"
+    },
+    "explanation": {
+      "id": "name.case",
+      "lineno": 2,
+      "params": {
+        "name": "City",
+        "suggestion": "city"
+      }
+    },
+    "failed": {
+      "actual": "",
+      "error": {
+        "lineno": 2,
+        "message": "name 'City' is not defined",
+        "name": "City",
+        "offset": null,
+        "text": "print(\"I am in\", City)",
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\n    print(\"I am in\", City)\n                     ^^^^\nNameError: name 'City' is not defined. Did you mean: 'city'?\n",
+        "type": "NameError"
+      },
+      "expected": "I am in Rome\n",
+      "inputs": {
+        "city": "Rome"
+      }
+    },
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": false,
+    "problem": "runtime",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 8
+  }
+}

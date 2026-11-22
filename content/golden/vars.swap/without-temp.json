@@ -1,0 +1,10 @@
+{
+  "answer": "right right",
+  "grader": 1,
+  "id": "ex:vars.swap/without-temp",
+  "outcome": {
+    "error": null,
+    "stdout": "right right\n"
+  },
+  "python": "3.14"
+}

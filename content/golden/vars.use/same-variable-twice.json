@@ -1,0 +1,10 @@
+{
+  "answer": "soup soup",
+  "grader": 1,
+  "id": "ex:vars.use/same-variable-twice",
+  "outcome": {
+    "error": null,
+    "stdout": "soup soup\n"
+  },
+  "python": "3.14"
+}

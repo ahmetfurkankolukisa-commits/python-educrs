@@ -1,0 +1,58 @@
+{
+  "grader": 1,
+  "id": "ex:strings.literal/no-quotes",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "name 'Welcome' is not defined",
+      "name": "Welcome",
+      "offset": null,
+      "text": "print(Welcome)",
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\n    print(Welcome)\n          ^^^^^^^\nNameError: name 'Welcome' is not defined\n",
+      "type": "NameError"
+    },
+    "explanation": {
+      "id": "name.missing-quotes",
+      "lineno": 1,
+      "params": {
+        "name": "Welcome"
+      }
+    },
+    "failed": {
+      "actual": "",
+      "error": {
+        "lineno": 1,
+        "message": "name 'Welcome' is not defined",
+        "name": "Welcome",
+        "offset": null,
+        "text": "print(Welcome)",
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\n    print(Welcome)\n          ^^^^^^^\nNameError: name 'Welcome' is not defined\n",
+        "type": "NameError"
+      },
+      "expected": "Welcome\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "runtime",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

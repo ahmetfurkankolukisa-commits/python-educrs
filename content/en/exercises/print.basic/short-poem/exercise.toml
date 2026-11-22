@@ -1,0 +1,21 @@
+id = "ex:print.basic/short-poem"
+concept = "print.basic"
+type = "code"
+difficulty = "easy"
+title = "A short poem"
+prompt = """
+Write a program that shows this short poem:
+
+    Roses are red
+    Violets are blue
+    Python is fun
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Use one `print` for each line of the poem."
+
+[[hints]]
+text = "Start with `print(\"Roses are red\")`, then add two more lines."

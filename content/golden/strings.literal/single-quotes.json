@@ -1,0 +1,10 @@
+{
+  "answer": "Hi there",
+  "grader": 1,
+  "id": "ex:strings.literal/single-quotes",
+  "outcome": {
+    "error": null,
+    "stdout": "Hi there\n"
+  },
+  "python": "3.14"
+}

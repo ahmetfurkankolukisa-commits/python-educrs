@@ -1,0 +1,35 @@
+{
+  "grader": 1,
+  "id": "ex:proj.business-card/name-and-job",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "",
+      "error": null,
+      "expected": "Ada Lovelace\nProgrammer\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

@@ -1,0 +1,10 @@
+id = "ex:print.end-sep/no-spaces"
+concept = "print.end-sep"
+type = "fill-gap"
+difficulty = "easy"
+title = "Nothing in between"
+prompt = "Fill the gap so the program shows `Hahaha`."
+template = 'print("Ha", "ha", "ha", ____)'
+tiles = ['sep=""', 'sep=" "', 'end=""']
+answer = 'sep=""'
+explanation = "`sep=\"\"` puts nothing between the values, so they are glued together."

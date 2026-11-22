@@ -1,0 +1,8 @@
+id = "ex:vars.naming/capital-letters"
+concept = "vars.naming"
+type = "predict-output"
+difficulty = "easy"
+title = "Capital letters"
+prompt = "What happens when you run this program?"
+options = ["Ada", "Name", "Error"]
+explanation = "`Name` with a capital N is a different name. Python doesn't know it, so it shows an error."

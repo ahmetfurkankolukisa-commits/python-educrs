@@ -1,0 +1,18 @@
+id = "ex:vars.swap/finish-the-swap"
+concept = "vars.swap"
+type = "fill-gap"
+difficulty = "easy"
+title = "Finish the swap"
+prompt = "Fill the gap so that `a` and `b` swap their values. The program shows `coffee tea`."
+template = """a = "tea"
+b = "coffee"
+temp = a
+a = b
+____
+print(a, b)"""
+tiles = ["b = temp", "b = a", "temp = b"]
+answer = "b = temp"
+explanation = "The old value of `a` is safe in `temp`, so `b = temp` finishes the swap."
+
+[tile_misconceptions]
+"b = a" = { id = "mc.swap-overwrites", message = "`a` already holds `\"coffee\"` now. The old value of `a` is in `temp`, so use `b = temp`." }

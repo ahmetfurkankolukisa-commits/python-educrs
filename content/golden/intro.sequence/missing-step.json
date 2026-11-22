@@ -1,0 +1,20 @@
+{
+  "answer": "print(\"Get dressed\")",
+  "grader": 1,
+  "id": "ex:intro.sequence/missing-step",
+  "outcomes": {
+    "print(\"Get dressed\")": {
+      "error": null,
+      "stdout": "Get up\nGet dressed\nGo to school\n"
+    },
+    "print(\"Get up\")": {
+      "error": null,
+      "stdout": "Get up\nGet up\nGo to school\n"
+    },
+    "print(\"Go to school\")": {
+      "error": null,
+      "stdout": "Get up\nGo to school\nGo to school\n"
+    }
+  },
+  "python": "3.14"
+}

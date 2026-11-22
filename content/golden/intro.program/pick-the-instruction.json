@@ -1,0 +1,36 @@
+{
+  "answer": "print",
+  "grader": 1,
+  "id": "ex:intro.program/pick-the-instruction",
+  "outcomes": {
+    "Print": {
+      "error": {
+        "lineno": 1,
+        "message": "name 'Print' is not defined",
+        "name": "Print",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\nNameError: name 'Print' is not defined. Did you mean: 'print'?\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    },
+    "print": {
+      "error": null,
+      "stdout": "Python is fun\n"
+    },
+    "pritn": {
+      "error": {
+        "lineno": 1,
+        "message": "name 'pritn' is not defined",
+        "name": "pritn",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\nNameError: name 'pritn' is not defined. Did you mean: 'print'?\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    }
+  },
+  "python": "3.14"
+}

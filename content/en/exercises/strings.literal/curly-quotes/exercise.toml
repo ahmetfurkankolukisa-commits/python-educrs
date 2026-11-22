@@ -1,0 +1,19 @@
+id = "ex:strings.literal/curly-quotes"
+concept = "strings.literal"
+type = "code"
+difficulty = "easy"
+title = "Copied from a document"
+prompt = """
+This line was copied from a document, so it has curly quotes. Fix it so that it shows:
+
+    Hello from my phone
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Look closely at the quotes. Are they straight or curly?"
+
+[[hints]]
+text = "Delete the curly quotes and type straight ones: `\"`."

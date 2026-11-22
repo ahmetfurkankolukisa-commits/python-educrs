@@ -1,0 +1,8 @@
+id = "ex:intro.program/two-instructions"
+concept = "intro.program"
+type = "predict-output"
+difficulty = "easy"
+title = "Two instructions"
+prompt = "This program has two instructions. What does it show?"
+options = ["Wake up\nHave breakfast", "Have breakfast\nWake up", "Wake up Have breakfast"]
+explanation = "The computer follows the instructions in order, from top to bottom. Each `print` shows its message on a new line."

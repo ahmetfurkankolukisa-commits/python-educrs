@@ -1,0 +1,8 @@
+id = "ex:print.basic/empty-line"
+concept = "print.basic"
+type = "predict-output"
+difficulty = "easy"
+title = "Nothing inside"
+prompt = "What does this program show?"
+options = ["A\n\nB", "A\nB", "A\n()\nB"]
+explanation = "`print()` with nothing inside shows an empty line, so there is a gap between `A` and `B`."

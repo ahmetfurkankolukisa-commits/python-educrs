@@ -1,0 +1,15 @@
+id = "ex:intro.program/type-a-program"
+concept = "intro.program"
+type = "verbatim"
+difficulty = "easy"
+title = "Type a program"
+prompt = """
+Type this program into the editor **exactly as it is**, then press **Check**:
+
+```python
+print("Computers follow instructions.")
+```
+"""
+
+[[hints]]
+text = "Type the word `print`, then `(`, then the message in double quotes, then `)`."

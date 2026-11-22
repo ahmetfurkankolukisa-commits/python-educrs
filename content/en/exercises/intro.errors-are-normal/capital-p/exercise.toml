@@ -1,0 +1,11 @@
+id = "ex:intro.errors-are-normal/capital-p"
+concept = "intro.errors-are-normal"
+type = "predict-output"
+difficulty = "easy"
+title = "A capital letter"
+prompt = "What happens when you run this program?"
+options = ["Hi", "Error", "print"]
+explanation = "Python cares about capital letters. It knows `print`, but not `Print`, so it shows an error."
+
+[option_misconceptions]
+"Hi" = { id = "mc.case-insensitive", message = "Python treats `Print` and `print` as two different names. Only `print` shows a message." }

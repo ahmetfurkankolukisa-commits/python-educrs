@@ -1,0 +1,8 @@
+id = "ex:strings.literal/quotes-not-shown"
+concept = "strings.literal"
+type = "predict-output"
+difficulty = "easy"
+title = "Are the quotes shown?"
+prompt = "What does this program show?"
+options = ["Python", '"Python"', "Error"]
+explanation = "The quotes only tell Python where the text starts and ends. They are not shown."

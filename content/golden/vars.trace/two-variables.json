@@ -1,0 +1,10 @@
+{
+  "answer": "y y",
+  "grader": 1,
+  "id": "ex:vars.trace/two-variables",
+  "outcome": {
+    "error": null,
+    "stdout": "y y\n"
+  },
+  "python": "3.14"
+}

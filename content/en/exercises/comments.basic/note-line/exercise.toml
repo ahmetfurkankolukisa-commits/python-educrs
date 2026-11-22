@@ -1,0 +1,19 @@
+id = "ex:comments.basic/note-line"
+concept = "comments.basic"
+type = "code"
+difficulty = "easy"
+title = "Make it a note"
+prompt = """
+The first line is a note, but Python tries to run it. Make it a comment so that the program shows:
+
+    Hi!
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Python stops at the first line, because it is not code."
+
+[[hints]]
+text = "Start the first line with `#`."

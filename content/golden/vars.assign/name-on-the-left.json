@@ -1,0 +1,35 @@
+{
+  "answer": "colour",
+  "grader": 1,
+  "id": "ex:vars.assign/name-on-the-left",
+  "outcomes": {
+    "\"colour\"": {
+      "error": {
+        "lineno": 1,
+        "message": "cannot assign to literal here. Maybe you meant '==' instead of '='?",
+        "offset": 1,
+        "text": "\"colour\" = \"blue\"",
+        "traceback": "  File \"/main.py\", line 1\n    \"colour\" = \"blue\"\n    ^^^^^^^^\nSyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?\n",
+        "type": "SyntaxError"
+      },
+      "stdout": ""
+    },
+    "Colour": {
+      "error": {
+        "lineno": 2,
+        "message": "name 'colour' is not defined",
+        "name": "colour",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\nNameError: name 'colour' is not defined. Did you mean: 'Colour'?\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    },
+    "colour": {
+      "error": null,
+      "stdout": "blue\n"
+    }
+  },
+  "python": "3.14"
+}

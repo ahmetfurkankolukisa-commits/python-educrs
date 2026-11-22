@@ -100,7 +100,35 @@ def ex(eid):
 
 
 HEAD = 'concept = "vars.use"\ntitle = "Using variables"\n'
-LESSON = HEAD + EXPLAIN + ex("ex:vars.use/predict") + ex("ex:vars.use/fill") + ex("ex:vars.use/greet")
+# Five exercises: every concept with a lesson needs at least 5 (§16.4).
+FIVE = ex("ex:vars.use/predict") + ex("ex:vars.use/predict2") + ex("ex:vars.use/predict3") + ex("ex:vars.use/fill") + ex("ex:vars.use/greet")
+LESSON = HEAD + EXPLAIN + FIVE
+
+
+def renamed(files, old_id, new_id):
+    return dict(files, **{"exercise.toml": files["exercise.toml"].replace(f'id = "{old_id}"', f'id = "{new_id}"')})
+
+
+PROJECT = {
+    "exercise.toml": """
+id = "ex:proj.business-card/name"
+concept = "proj.business-card"
+type = "code"
+difficulty = "easy"
+title = "Your name"
+prompt = "Print your name and your job on two lines."
+[check]
+kind = "stdout"
+[[hints]]
+text = "one"
+[[hints]]
+text = "two"
+""",
+    "starter.py": "# Write your program below this line\n",
+    "solution.py": 'print("Ada Lovelace")\nprint("Programmer")\n',
+}
+PROJECT_LESSON = 'concept = "proj.business-card"\ntitle = "Project: Business card"\n' + EXPLAIN + "".join(
+    ex(f"ex:proj.business-card/{slug}") for slug in ("name", "job", "card"))
 
 
 class _ContentTree(unittest.TestCase):
@@ -256,10 +284,12 @@ class FillGapNegativeTests(_ContentTree):
 
 
 class LessonNegativeTests(_ContentTree):
-    def lesson(self, text, name="vars.use.toml"):
-        self.write("vars.use/greet", GOOD)
+    def lesson(self, text, name="vars.use.toml", good=GOOD):
+        self.write("vars.use/greet", good)
         self.write("vars.use/fill", FILL)
         self.write("vars.use/predict", PREDICT_USE)
+        self.write("vars.use/predict2", renamed(PREDICT_USE, "ex:vars.use/predict", "ex:vars.use/predict2"))
+        self.write("vars.use/predict3", renamed(PREDICT_USE, "ex:vars.use/predict", "ex:vars.use/predict3"))
         d = self.tmp / "content" / "en" / "lessons"
         d.mkdir(parents=True, exist_ok=True)
         (d / name).write_text(text, encoding="utf-8")
@@ -269,12 +299,12 @@ class LessonNegativeTests(_ContentTree):
         self.assertEqual(self.codes(), set())
 
     def test_unknown_exercise(self):
-        self.lesson(HEAD + EXPLAIN + ex("ex:vars.use/predict") + ex("ex:vars.use/missing") + ex("ex:vars.use/greet"))
+        self.lesson(HEAD + EXPLAIN + FIVE + ex("ex:vars.use/missing"))
         self.assertIn("unknown-exercise", self.codes())
 
     def test_exercise_from_another_concept(self):
         self.write("vars.reassign/predict", PREDICT)
-        self.lesson(HEAD + EXPLAIN + ex("ex:vars.use/predict") + ex("ex:vars.reassign/predict") + ex("ex:vars.use/greet"))
+        self.lesson(HEAD + EXPLAIN + FIVE + ex("ex:vars.reassign/predict"))
         self.assertIn("exercise-wrong-concept", self.codes())
 
     def test_too_few_exercises(self):
@@ -282,7 +312,7 @@ class LessonNegativeTests(_ContentTree):
         self.assertIn("too-few-exercises", self.codes())
 
     def test_must_start_with_explain(self):
-        self.lesson(HEAD + ex("ex:vars.use/predict") + EXPLAIN + ex("ex:vars.use/fill") + ex("ex:vars.use/greet"))
+        self.lesson(HEAD + ex("ex:vars.use/predict") + EXPLAIN + ex("ex:vars.use/predict2") + ex("ex:vars.use/predict3") + ex("ex:vars.use/fill") + ex("ex:vars.use/greet"))
         self.assertIn("first-step-not-explain", self.codes())
 
     def test_must_end_with_exercise(self):
@@ -290,7 +320,7 @@ class LessonNegativeTests(_ContentTree):
         self.assertIn("last-step-not-exercise", self.codes())
 
     def test_example_that_raises(self):
-        self.lesson(HEAD + EXPLAIN_RAISES + ex("ex:vars.use/predict") + ex("ex:vars.use/fill") + ex("ex:vars.use/greet"))
+        self.lesson(HEAD + EXPLAIN_RAISES + FIVE)
         self.assertIn("example-raises", self.codes())
 
     def test_exercise_used_twice(self):
@@ -301,6 +331,71 @@ class LessonNegativeTests(_ContentTree):
         self.lesson(LESSON, name="variables.toml")
         self.assertIn("lesson-file-mismatch", self.codes())
 
+    # --- F3.7 (§16.4): coverage, misconception coverage, readability
+    def test_concept_with_a_lesson_needs_five_items(self):
+        self.lesson(LESSON)
+        (self.tmp / "content" / "en" / "exercises" / "vars.use" / "predict3" / "exercise.toml").unlink()
+        self.assertIn("too-few-items", self.codes())
+
+    def test_misconception_of_the_concept_must_be_taught(self):
+        no_mc = dict(GOOD, **{"exercise.toml": GOOD["exercise.toml"].split("[[misconceptions]]")[0]})
+        self.lesson(HEAD + EXPLAIN + FIVE, good=no_mc)
+        self.write("vars.use/fill", FILL, **{"exercise.toml": [("""[tile_misconceptions]
+'"name"' = { id = "mc.quoted-name", message = "Remove the quotes." }
+""", "")]})
+        self.assertIn("misconception-not-taught", self.codes())
+
+    def test_dense_prose_is_too_hard_to_read(self):
+        dense = ('[[steps]]\nkind = "explain"\ntext = "Assignment statements establish associations between identifiers and '
+                 'corresponding object references. Subsequent evaluation dereferences identifiers, retrieving associated values."\n')
+        self.lesson(HEAD + dense + FIVE)
+        self.assertIn("hard-to-read", self.codes())
+
+    def test_a_very_long_sentence(self):
+        long_one = "When you run it the computer reads " + " and then ".join(["the next line"] * 6) + " until it reaches the end."
+        self.lesson(HEAD + f'[[steps]]\nkind = "explain"\ntext = "{long_one}"\n' + FIVE)
+        self.assertIn("long-sentence", self.codes())
+
+    def test_code_blocks_are_not_measured(self):
+        code = "\n".join(["characterisation_of_extraordinarily_complicated_identifiers = 'internationalisation'"] * 4)
+        text = f'Run this program.\n\n```python\n{code}\n```\n\nIt makes a long name.'
+        self.lesson(HEAD + f'[[steps]]\nkind = "explain"\ntext = """{text}"""\n' + FIVE)
+        self.assertEqual(self.codes(), set())
+
+
+class ProjectTests(_ContentTree):
+    """Projects are lessons too, placed after their module's concepts (§16.3)."""
+
+    def project(self, n=3, lesson=PROJECT_LESSON):
+        for slug in ("name", "job", "card")[:n]:
+            self.write(f"proj.business-card/{slug}", renamed(PROJECT, "ex:proj.business-card/name", f"ex:proj.business-card/{slug}"))
+        d = self.tmp / "content" / "en" / "lessons"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "proj.business-card.toml").write_text(lesson, encoding="utf-8")
+
+    def test_a_project_with_three_steps_passes_and_sits_at_the_end_of_its_module(self):
+        self.project()
+        bundle, _, report = pipeline.build(self.tmp)
+        self.assertEqual(report.errors, [])
+        self.assertEqual(bundle["path"], [{"module": "M1", "title": "print, strings, comments", "lessons": ["lesson:proj.business-card"]}])
+
+    def test_unknown_project(self):
+        self.project(lesson=PROJECT_LESSON.replace('concept = "proj.business-card"', 'concept = "proj.nope"'))
+        self.assertIn("unknown-concept", self.codes())
+
+    def test_project_needs_at_least_three_steps(self):
+        self.project(n=2, lesson=PROJECT_LESSON.replace(ex("ex:proj.business-card/card"), ""))
+        self.assertIn("too-few-exercises", self.codes())
+
+    def test_project_must_come_after_what_it_requires(self):
+        cat = self.tmp / "content" / "concepts.toml"
+        text = cat.read_text(encoding="utf-8")
+        old = 'requires = ["print.end-sep", "strings.escape"]'
+        self.assertIn(old, text)
+        cat.write_text(text.replace(old, 'requires = ["print.end-sep", "vars.swap"]'), encoding="utf-8")
+        self.project()
+        self.assertIn("project-before-requirement", self.codes())
+
 
 class PathTests(_ContentTree):
     """The learning path follows concepts.toml order, not file names (§13.6, §14.5)."""
@@ -309,14 +404,18 @@ class PathTests(_ContentTree):
         self.write("vars.use/greet", GOOD)
         self.write("vars.use/fill", FILL)
         self.write("vars.use/predict", PREDICT_USE)
+        self.write("vars.use/predict2", renamed(PREDICT_USE, "ex:vars.use/predict", "ex:vars.use/predict2"))
+        self.write("vars.use/predict3", renamed(PREDICT_USE, "ex:vars.use/predict", "ex:vars.use/predict3"))
         self.write("vars.reassign/predict", PREDICT)
-        self.write("vars.reassign/predict2", PREDICT, **{"exercise.toml": [('id = "ex:vars.reassign/predict"', 'id = "ex:vars.reassign/predict2"')]})
-        self.write("vars.reassign/predict3", PREDICT, **{"exercise.toml": [('id = "ex:vars.reassign/predict"', 'id = "ex:vars.reassign/predict3"')]})
+        for n in (2, 3, 4):
+            self.write(f"vars.reassign/predict{n}", renamed(PREDICT, "ex:vars.reassign/predict", f"ex:vars.reassign/predict{n}"))
+        self.write("vars.reassign/history", renamed(PREDICT, "ex:vars.reassign/predict", "ex:vars.reassign/history"),
+                   **{"exercise.toml": [('id = "mc.vars-auto-update"', 'id = "mc.var-remembers-history"')]})
         d = self.tmp / "content" / "en" / "lessons"
         d.mkdir(parents=True, exist_ok=True)
         # vars.reassign sorts first by file name, but comes after vars.use in the catalog
         (d / "vars.reassign.toml").write_text('concept = "vars.reassign"\ntitle = "Reassignment"\n' + EXPLAIN
-            + ex("ex:vars.reassign/predict") + ex("ex:vars.reassign/predict2") + ex("ex:vars.reassign/predict3"), encoding="utf-8")
+            + "".join(ex(f"ex:vars.reassign/{s}") for s in ("predict", "predict2", "predict3", "predict4", "history")), encoding="utf-8")
         (d / "vars.use.toml").write_text(LESSON, encoding="utf-8")
         bundle, _, report = pipeline.build(self.tmp)
         self.assertEqual(report.errors, [])

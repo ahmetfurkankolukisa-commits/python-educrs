@@ -1,0 +1,10 @@
+{
+  "answer": "rabbit",
+  "grader": 1,
+  "id": "ex:vars.assign/store-then-print",
+  "outcome": {
+    "error": null,
+    "stdout": "rabbit\n"
+  },
+  "python": "3.14"
+}

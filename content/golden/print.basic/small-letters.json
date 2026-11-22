@@ -1,0 +1,36 @@
+{
+  "answer": "print",
+  "grader": 1,
+  "id": "ex:print.basic/small-letters",
+  "outcomes": {
+    "PRINT": {
+      "error": {
+        "lineno": 1,
+        "message": "name 'PRINT' is not defined",
+        "name": "PRINT",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\nNameError: name 'PRINT' is not defined\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    },
+    "Print": {
+      "error": {
+        "lineno": 1,
+        "message": "name 'Print' is not defined",
+        "name": "Print",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\nNameError: name 'Print' is not defined. Did you mean: 'print'?\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    },
+    "print": {
+      "error": null,
+      "stdout": "Hello\n"
+    }
+  },
+  "python": "3.14"
+}

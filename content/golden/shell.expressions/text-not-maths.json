@@ -1,0 +1,10 @@
+{
+  "answer": "4 + 4",
+  "grader": 1,
+  "id": "ex:shell.expressions/text-not-maths",
+  "outcome": {
+    "error": null,
+    "stdout": "4 + 4\n"
+  },
+  "python": "3.14"
+}

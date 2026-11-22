@@ -1,0 +1,10 @@
+{
+  "answer": "A\n\nB",
+  "grader": 1,
+  "id": "ex:print.basic/empty-line",
+  "outcome": {
+    "error": null,
+    "stdout": "A\n\nB\n"
+  },
+  "python": "3.14"
+}

@@ -1,0 +1,11 @@
+id = "ex:vars.naming/valid-name"
+concept = "vars.naming"
+type = "fill-gap"
+difficulty = "easy"
+title = "A name that works"
+prompt = "Fill the gap with a name that works, so the program shows `Ada Lovelace`."
+template = """____ = "Ada Lovelace"
+print(full_name)"""
+tiles = ["full_name", "full name", "full-name"]
+answer = "full_name"
+explanation = "Names can't have spaces or `-` in them. Use `_` to join words: `full_name`."

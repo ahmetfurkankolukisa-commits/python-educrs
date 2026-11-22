@@ -1,0 +1,44 @@
+{
+  "grader": 1,
+  "id": "ex:strings.literal/curly-quotes",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "invalid character '“' (U+201C)",
+      "offset": 7,
+      "text": "print(“Hello from my phone”)",
+      "traceback": "  File \"/main.py\", line 1\n    print(“Hello from my phone”)\n          ^\nSyntaxError: invalid character '“' (U+201C)\n",
+      "type": "SyntaxError"
+    },
+    "explanation": {
+      "id": "syntax.smart-quotes",
+      "lineno": 1,
+      "params": {
+        "char": "“"
+      }
+    },
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "syntax",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 0
+  }
+}

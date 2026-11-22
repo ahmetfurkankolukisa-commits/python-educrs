@@ -26,3 +26,7 @@ id = "ex:vars.use/type-and-check"
 [[steps]]
 kind = "exercise"
 id = "ex:vars.use/greet-by-name"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.use/same-variable-twice"

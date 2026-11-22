@@ -1,0 +1,8 @@
+id = "ex:print.end-sep/dash"
+concept = "print.end-sep"
+type = "predict-output"
+difficulty = "easy"
+title = "A different separator"
+prompt = "What does this program show?"
+options = ["2026-11-22", "2026 11 22", "2026-11-22-"]
+explanation = "`sep=\"-\"` puts a `-` between the values instead of a space. Nothing is added after the last value."

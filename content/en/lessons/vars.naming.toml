@@ -1,0 +1,37 @@
+concept = "vars.naming"
+title = "Naming rules"
+
+[[steps]]
+kind = "explain"
+text = """
+You choose the names of your variables, but there are rules:
+
+- Use letters, digits and `_`. No spaces.
+- Don't start with a digit.
+- Capital letters matter: `name` and `Name` are different.
+- Don't use names Python already uses, like `print`.
+
+Good names say what the value is, like `first_name`.
+"""
+example = """first_name = "Grace"
+print(first_name)"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.naming/capital-letters"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.naming/valid-name"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.naming/taken-name"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.naming/rename-it"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.naming/no-spaces"

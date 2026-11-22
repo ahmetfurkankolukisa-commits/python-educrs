@@ -1,0 +1,19 @@
+id = "ex:intro.errors-are-normal/fix-the-bracket"
+concept = "intro.errors-are-normal"
+type = "code"
+difficulty = "easy"
+title = "Fix the bracket"
+prompt = """
+Run this program and read the error. Then fix it so that it shows:
+
+    Almost there!
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The error is about a bracket. Every `(` needs a `)`."
+
+[[hints]]
+text = "Add `)` at the end of the line."

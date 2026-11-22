@@ -1,0 +1,33 @@
+concept = "print.basic"
+title = "print()"
+
+[[steps]]
+kind = "explain"
+text = """
+`print` shows what you put inside its round brackets. Text goes in quotes. Every `print` starts on a new line.
+
+With nothing inside the brackets, `print()` shows an empty line.
+"""
+example = """print("Line one")
+print()
+print("Line three")"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.basic/empty-line"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.basic/small-letters"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.basic/hello-world"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.basic/with-a-gap"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.basic/short-poem"

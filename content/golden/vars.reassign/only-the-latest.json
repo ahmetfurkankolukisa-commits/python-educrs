@@ -1,0 +1,10 @@
+{
+  "answer": "high",
+  "grader": 1,
+  "id": "ex:vars.reassign/only-the-latest",
+  "outcome": {
+    "error": null,
+    "stdout": "high\n"
+  },
+  "python": "3.14"
+}

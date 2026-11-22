@@ -27,6 +27,9 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent.parent / "packages" / "grader"))
 import educrs_grader as grader  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import readability  # noqa: E402
+
 ID_RE = re.compile(r"^ex:([a-z][a-z0-9]*(?:\.[a-z0-9][a-z0-9-]*)+)/([a-z0-9][a-z0-9-]*)$")
 SOURCE_RE = re.compile(r"^(original|futurecoder@[0-9a-f]{7,40})$")
 TYPES = {"code", "verbatim", "predict-output", "fill-gap"}
@@ -39,6 +42,7 @@ ERROR_OPTION = "Error"
 MIN_HINTS = {"code": 2, "verbatim": 1, "predict-output": 0, "fill-gap": 0}
 GAP = "____"
 LESSON_MIN_EXERCISES = 3
+MIN_ITEMS_PER_CONCEPT = 5  # every concept with a lesson (plan §3.7); projects are exempt
 # 2 (F3.5): lessons carry `module`, the bundle carries `path`, predict option misconceptions are { id, message }.
 BUNDLE_SCHEMA = 2
 PYTHON = "%d.%d" % sys.version_info[:2]
@@ -48,6 +52,7 @@ class Report:
     def __init__(self):
         self.errors = []
         self.warnings = []
+        self.readability = {}  # lesson id -> readability.measure() result (printed with --readability)
 
     def error(self, where, code, msg):
         self.errors.append((where, code, msg))
@@ -67,12 +72,32 @@ def load_catalog(root):
     return {c["id"] for c in data["concept"]}, {m["id"] for m in data["misconception"]}
 
 
+def load_projects(root):
+    """[[project]] entries: id -> {module, requires}. A project is taught like a lesson (§16.3)."""
+    with open(root / "content" / "concepts.toml", "rb") as f:
+        data = tomllib.load(f)
+    return {p["id"]: {"module": p["module"], "requires": list(p.get("requires", []))} for p in data.get("project", [])}
+
+
+def load_misconception_concepts(root):
+    """Misconception id -> the concepts it belongs to."""
+    with open(root / "content" / "concepts.toml", "rb") as f:
+        data = tomllib.load(f)
+    return {m["id"]: list(m.get("concepts", [])) for m in data["misconception"]}
+
+
 def load_path_order(root):
-    """Modules in catalog order with titles, and each concept's (module, position)."""
+    """Modules in catalog order with titles, and each concept's (module, position).
+
+    A project sits right after the last concept of its module (positions are only compared).
+    """
     with open(root / "content" / "concepts.toml", "rb") as f:
         data = tomllib.load(f)
     modules = [{"id": m["id"], "title": m["title"]} for m in data["module"]]
     place = {c["id"]: (c["module"], i) for i, c in enumerate(data["concept"])}
+    for p in data.get("project", []):
+        last = max((i for mod, i in place.values() if mod == p["module"]), default=-1)
+        place[p["id"]] = (p["module"], last + 0.5)
     return modules, place
 
 
@@ -446,6 +471,63 @@ def build_lessons(root, entries, concepts, report, place=None):
     return sorted(lessons, key=lambda l: l["id"])
 
 
+def learner_texts(entry):
+    """Every piece of prose a learner reads for one exercise."""
+    texts = [entry["prompt"], *entry["hints"]]
+    if entry["type"] == "predict-output":
+        p = entry["predict"]
+        texts += [p["explanation"], *(m["message"] for m in p["option_misconceptions"].values())]
+    elif entry["type"] == "fill-gap":
+        f = entry["fill"]
+        texts += [f["explanation"], *(m["message"] for m in f["tile_misconceptions"].values())]
+    elif entry["type"] == "code":
+        texts += [m["message"] for m in entry["misconceptions"]]
+    return [t for t in texts if t]
+
+
+def taught_misconceptions(entry):
+    if entry["type"] == "predict-output":
+        return {m["id"] for m in entry["predict"]["option_misconceptions"].values()}
+    if entry["type"] == "fill-gap":
+        return {m["id"] for m in entry["fill"]["tile_misconceptions"].values()}
+    if entry["type"] == "code":
+        return {m["id"] for m in entry["misconceptions"]}
+    return set()
+
+
+def check_lessons(root, lessons, entries, projects, mc_concepts, place, report):
+    """Coverage, misconception coverage, readability and project order (§16.4)."""
+    lroot = root / "content" / "en" / "lessons"
+    by_id = {e["id"]: e for e in entries}
+    for lesson in lessons:
+        concept = lesson["concept"]
+        where = str((lroot / f"{concept}.toml").relative_to(root))
+        mine = [e for e in entries if e["concept"] == concept]
+        if concept in projects:
+            req = projects[concept]["requires"]
+            late = [c for c in req if c in place and place[c][1] > place[concept][1]]
+            if late:
+                report.error(where, "project-before-requirement", f"comes before the concepts it requires: {', '.join(late)}")
+        else:
+            if len(mine) < MIN_ITEMS_PER_CONCEPT:
+                report.error(where, "too-few-items", f"{concept} has {len(mine)} exercise(s); every concept with a lesson needs at least {MIN_ITEMS_PER_CONCEPT}")
+            taught = set().union(*(taught_misconceptions(e) for e in mine)) if mine else set()
+            for mc in sorted(m for m, cs in mc_concepts.items() if concept in cs and m not in taught):
+                report.error(where, "misconception-not-taught", f"{mc} belongs to {concept} but no exercise of it uses {mc}")
+        texts = []
+        for step in lesson["steps"]:
+            if step["kind"] == "explain":
+                texts.append(step["text"])
+            elif step["id"] in by_id:
+                texts += learner_texts(by_id[step["id"]])
+        m = readability.measure(texts)
+        if m["ease"] is not None and m["ease"] < readability.MIN_EASE:
+            report.error(where, "hard-to-read", f"Flesch reading ease {m['ease']} < {readability.MIN_EASE}: use shorter sentences and shorter words")
+        if m["longest"] > readability.MAX_SENTENCE_WORDS:
+            report.error(where, "long-sentence", f"{m['longest']} words (max {readability.MAX_SENTENCE_WORDS}): {m['longest_sentence']!r}")
+        report.readability[lesson["id"]] = m
+
+
 def build_path(modules, place, lessons):
     """Learning path (§13.6): modules in catalog order, each with its lessons in concept order.
 
@@ -464,6 +546,8 @@ def build_path(modules, place, lessons):
 def build(root):
     report = Report()
     concepts, misconceptions = load_catalog(root)
+    projects = load_projects(root)
+    concepts = concepts | set(projects)
     ex_root = root / "content" / "en" / "exercises"
     paths = sorted(ex_root.glob("*/*/exercise.toml")) if ex_root.is_dir() else []
     entries, goldens, seen = [], {}, {}
@@ -482,14 +566,9 @@ def build(root):
             goldens[entry["id"]] = golden
         entry["contentHash"] = content_hash(entry)
         entries.append(entry)
-    per_concept = {}
-    for e in entries:
-        per_concept[e["concept"]] = per_concept.get(e["concept"], 0) + 1
-    for c, n in sorted(per_concept.items()):
-        if n < 5:
-            report.warn(c, "coverage", f"{n} item(s); target is >= 5 per concept (F3.7)")
     modules, place = load_path_order(root)
     lessons = build_lessons(root, entries, concepts, report, place)
+    check_lessons(root, lessons, entries, projects, load_misconception_concepts(root), place, report)
     bundle = {
         "schema": BUNDLE_SCHEMA, "grader": grader.VERSION, "python": PYTHON,
         "exercises": sorted(entries, key=lambda e: e["id"]),
@@ -515,10 +594,14 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=str(HERE.parent.parent))
     ap.add_argument("--check", action="store_true", help="fail if generated files differ from the committed ones")
+    ap.add_argument("--readability", action="store_true", help="print each lesson's reading ease and longest sentence")
     args = ap.parse_args(argv)
     root = Path(args.root).resolve()
 
     bundle, goldens, report = build(root)
+    if args.readability:
+        for lid, m in sorted(report.readability.items(), key=lambda kv: kv[1]["ease"] or 0):
+            print(f"READ   {lid:<34} ease {m['ease']:>5}  longest {m['longest']:>2} words  ({m['sentences']} sentences)")
     for where, code, msg in report.errors:
         print(f"ERROR  {where}  [{code}] {msg}")
     for where, code, msg in report.warnings:

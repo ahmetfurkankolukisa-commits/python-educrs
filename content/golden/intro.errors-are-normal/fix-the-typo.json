@@ -1,0 +1,59 @@
+{
+  "grader": 1,
+  "id": "ex:intro.errors-are-normal/fix-the-typo",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "name 'pritn' is not defined",
+      "name": "pritn",
+      "offset": null,
+      "text": "pritn(\"Mistakes are how we learn.\")",
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\n    pritn(\"Mistakes are how we learn.\")\n    ^^^^^\nNameError: name 'pritn' is not defined. Did you mean: 'print'?\n",
+      "type": "NameError"
+    },
+    "explanation": {
+      "id": "name.typo",
+      "lineno": 1,
+      "params": {
+        "name": "pritn",
+        "suggestion": "print"
+      }
+    },
+    "failed": {
+      "actual": "",
+      "error": {
+        "lineno": 1,
+        "message": "name 'pritn' is not defined",
+        "name": "pritn",
+        "offset": null,
+        "text": "pritn(\"Mistakes are how we learn.\")",
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\n    pritn(\"Mistakes are how we learn.\")\n    ^^^^^\nNameError: name 'pritn' is not defined. Did you mean: 'print'?\n",
+        "type": "NameError"
+      },
+      "expected": "Mistakes are how we learn.\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "runtime",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

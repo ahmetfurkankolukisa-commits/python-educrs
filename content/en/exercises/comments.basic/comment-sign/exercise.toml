@@ -1,0 +1,11 @@
+id = "ex:comments.basic/comment-sign"
+concept = "comments.basic"
+type = "fill-gap"
+difficulty = "easy"
+title = "The comment sign"
+prompt = "Fill the gap so the first line is a comment and the program shows `Hello!`."
+template = """____ TODO: ask for a name
+print("Hello!")"""
+tiles = ["#", "//", "--"]
+answer = "#"
+explanation = "In Python, comments start with `#`. Some other languages use `//` or `--`, but Python doesn't."

@@ -1,0 +1,19 @@
+id = "ex:intro.errors-are-normal/fix-the-typo"
+concept = "intro.errors-are-normal"
+type = "code"
+difficulty = "easy"
+title = "Fix the typing mistake"
+prompt = """
+This program has a typing mistake. Run it and read the error. Then fix it so that it shows:
+
+    Mistakes are how we learn.
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The error says Python doesn't know a name. Which word is spelled wrong?"
+
+[[hints]]
+text = "`pritn` should be `print`."

@@ -1,0 +1,57 @@
+{
+  "grader": 1,
+  "id": "ex:vars.naming/rename-it",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 2,
+      "message": "'str' object is not callable",
+      "offset": null,
+      "text": "print(print)",
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\n    print(print)\n    ~~~~~^^^^^^^\nTypeError: 'str' object is not callable\n",
+      "type": "TypeError"
+    },
+    "explanation": {
+      "id": "type.shadowed-builtin",
+      "lineno": 2,
+      "params": {
+        "line": 1,
+        "name": "print"
+      }
+    },
+    "failed": {
+      "actual": "",
+      "error": {
+        "lineno": 2,
+        "message": "'str' object is not callable",
+        "offset": null,
+        "text": "print(print)",
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\n    print(print)\n    ~~~~~^^^^^^^\nTypeError: 'str' object is not callable\n",
+        "type": "TypeError"
+      },
+      "expected": "Hello\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "runtime",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

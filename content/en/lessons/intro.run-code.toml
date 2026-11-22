@@ -1,0 +1,32 @@
+concept = "intro.run-code"
+title = "Running code"
+
+[[steps]]
+kind = "explain"
+text = """
+The box with code in it is the **editor**. You can type in it.
+
+Press **Run** to see what your program does. You can run it as often as you like.
+
+When an exercise has a **Check** button, press it when you are done. Check runs your program and tells you if it does what the exercise asks.
+"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.run-code/type-and-run"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.run-code/change-the-message"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.run-code/run-it-twice"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.run-code/two-lines"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.run-code/close-the-bracket"

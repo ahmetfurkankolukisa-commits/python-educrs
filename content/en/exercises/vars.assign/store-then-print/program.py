@@ -1,0 +1,2 @@
+pet = "rabbit"
+print(pet)

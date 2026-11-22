@@ -1,0 +1,10 @@
+{
+  "answer": "A\nC",
+  "grader": 1,
+  "id": "ex:comments.basic/switched-off",
+  "outcome": {
+    "error": null,
+    "stdout": "A\nC\n"
+  },
+  "python": "3.14"
+}

@@ -34,7 +34,7 @@ async function code(page: Page, program: string) {
   await right(page);
 }
 
-/** vars.use: 4 easy exercises, no hints → 4 × 10 + 5 = 45 XP (docs/05-f3-mvp0.md §15.2). */
+/** vars.use: 5 easy exercises, no hints → 5 × 10 + 5 = 55 XP (docs/05-f3-mvp0.md §15.2). */
 export async function finishVarsUse(page: Page) {
   await openLesson(page, VARS_USE);
   await step(page, "explain");
@@ -49,10 +49,13 @@ export async function finishVarsUse(page: Page) {
   await code(page, 'city = "Lisbon"\nprint("I live in", city)');
   await step(page, "code");
   await code(page, 'name = "Ada"\nprint("Hello,", name)');
+  await step(page, "predict-output");
+  await choice(page, "soup soup").click();
+  await right(page);
   await expect(page.getByTestId("lesson-complete")).toBeVisible();
 }
 
-/** vars.reassign: easy fill-gap + medium predict + easy code → 10 + 15 + 10 + 5 = 40 XP. */
+/** vars.reassign: easy fill-gap, medium predict, easy code, easy predict, easy code → 10 + 15 + 10 + 10 + 10 + 5 = 60 XP. */
 export async function finishVarsReassign(page: Page) {
   await openLesson(page, VARS_REASSIGN);
   await step(page, "explain");
@@ -65,6 +68,11 @@ export async function finishVarsReassign(page: Page) {
   await right(page);
   await step(page, "code");
   await code(page, 'pet = "cat"\nnew_pet = "dog"\nprint(pet)\npet = new_pet\nprint(pet)');
+  await step(page, "predict-output");
+  await choice(page, "high").click();
+  await right(page);
+  await step(page, "code");
+  await code(page, 'mood = "sleepy"\nprint(mood)\nmood = "awake"\nprint(mood)');
   await expect(page.getByTestId("lesson-complete")).toBeVisible();
 }
 

@@ -1,0 +1,22 @@
+concept = "proj.business-card"
+title = "Project: Business card"
+
+[[steps]]
+kind = "explain"
+text = """
+Time for a small project! You will print a business card, step by step.
+
+Use what you know: `print`, strings, new lines, `sep=` and `end=`.
+"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:proj.business-card/name-and-job"
+
+[[steps]]
+kind = "exercise"
+id = "ex:proj.business-card/contact-line"
+
+[[steps]]
+kind = "exercise"
+id = "ex:proj.business-card/whole-card"

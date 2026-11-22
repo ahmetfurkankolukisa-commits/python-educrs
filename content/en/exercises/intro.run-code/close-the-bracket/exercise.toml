@@ -1,0 +1,10 @@
+id = "ex:intro.run-code/close-the-bracket"
+concept = "intro.run-code"
+type = "fill-gap"
+difficulty = "easy"
+title = "The last character"
+prompt = "This line is missing its last character. Which one makes it show `Ready to run`?"
+template = 'print("Ready to run"____'
+tiles = [")", "(", '"']
+answer = ")"
+explanation = "Every `(` needs a `)` to close it. Here the `)` at the end was missing."

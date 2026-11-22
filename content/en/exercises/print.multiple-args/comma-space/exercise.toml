@@ -1,0 +1,11 @@
+id = "ex:print.multiple-args/comma-space"
+concept = "print.multiple-args"
+type = "predict-output"
+difficulty = "easy"
+title = "Two values"
+prompt = "What does this program show?"
+options = ["Good night", "Goodnight", "Good, night"]
+explanation = "A comma separates the values, and `print` puts a space between them."
+
+[option_misconceptions]
+"Goodnight" = { id = "mc.comma-vs-plus", message = "A comma puts a space between the values. Only `+` glues text together without a space." }

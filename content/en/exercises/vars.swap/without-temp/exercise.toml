@@ -1,0 +1,11 @@
+id = "ex:vars.swap/without-temp"
+concept = "vars.swap"
+type = "predict-output"
+difficulty = "medium"
+title = "A swap that fails"
+prompt = "This program tries to swap `a` and `b`. Trace it. What does it show?"
+options = ["right right", "right left", "left left"]
+explanation = "After `a = b`, both hold `\"right\"`, and `\"left\"` is gone. So `b = a` gives `b` the value `\"right\"` again."
+
+[option_misconceptions]
+"right left" = { id = "mc.swap-overwrites", message = "After `a = b`, the old value of `a` is gone. `b = a` can only copy `\"right\"` back." }

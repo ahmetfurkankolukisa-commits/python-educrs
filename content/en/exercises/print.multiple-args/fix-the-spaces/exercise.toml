@@ -1,0 +1,24 @@
+id = "ex:print.multiple-args/fix-the-spaces"
+concept = "print.multiple-args"
+type = "code"
+difficulty = "easy"
+title = "Fix the spaces"
+prompt = """
+This program glues the words together. Change it so that it shows:
+
+    I like Python and pizza
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Each `+` glues two strings with no space between them."
+
+[[hints]]
+text = "Replace each `+` with a comma."
+
+[[misconceptions]]
+id = "mc.comma-vs-plus"
+program = "wrong/plus.py"
+message = "`+` adds no spaces. Use commas between the values, and `print` adds the spaces."

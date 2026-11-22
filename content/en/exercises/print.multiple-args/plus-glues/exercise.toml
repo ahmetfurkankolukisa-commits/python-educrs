@@ -1,0 +1,11 @@
+id = "ex:print.multiple-args/plus-glues"
+concept = "print.multiple-args"
+type = "predict-output"
+difficulty = "easy"
+title = "A plus sign"
+prompt = "What does this program show?"
+options = ["sunflower", "sun flower", "Error"]
+explanation = "`+` glues the two strings together, with no space between them."
+
+[option_misconceptions]
+"sun flower" = { id = "mc.comma-vs-plus", message = "`+` glues the strings together with no space. Only a comma adds a space." }

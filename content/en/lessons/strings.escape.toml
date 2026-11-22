@@ -1,0 +1,35 @@
+concept = "strings.escape"
+title = "Escape sequences"
+
+[[steps]]
+kind = "explain"
+text = '''
+A backslash `\` inside a string starts a special character:
+
+- `\n` starts a new line.
+- `\t` adds a tab, a wide space.
+- `\"` and `\'` are quotes that don't end the text.
+- `\\` is one backslash.
+'''
+example = '''print("Line one\nLine two")
+print("Name:\tAda")'''
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.escape/new-line"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.escape/two-lines-one-print"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.escape/escaped-quote"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.escape/three-lines"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.escape/folder-name"

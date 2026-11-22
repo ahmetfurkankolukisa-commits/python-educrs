@@ -1,0 +1,32 @@
+concept = "shell.expressions"
+title = "Expressions have values"
+
+[[steps]]
+kind = "explain"
+text = """
+Python can do sums. `2 + 3` is an **expression**: Python works out its value, `5`, before `print` shows it.
+
+In quotes, `"2 + 3"` is just text, so Python shows it as it is. You will learn much more about numbers later.
+"""
+example = """print(2 + 3)
+print("2 + 3")"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:shell.expressions/maths"
+
+[[steps]]
+kind = "exercise"
+id = "ex:shell.expressions/text-not-maths"
+
+[[steps]]
+kind = "exercise"
+id = "ex:shell.expressions/make-it-calculate"
+
+[[steps]]
+kind = "exercise"
+id = "ex:shell.expressions/times"
+
+[[steps]]
+kind = "exercise"
+id = "ex:shell.expressions/text-and-value"

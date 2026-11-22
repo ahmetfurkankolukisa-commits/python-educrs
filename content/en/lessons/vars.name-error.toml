@@ -1,0 +1,34 @@
+concept = "vars.name-error"
+title = "NameError"
+
+[[steps]]
+kind = "explain"
+text = """
+A **NameError** means Python doesn't know a name. There are three usual reasons:
+
+- a typing mistake, like `nmae` instead of `name`
+- missing quotes around some text
+- using a variable before the line that gives it a value
+
+The error shows the name and the line. Check those first.
+"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.name-error/spelling"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.name-error/fix-the-spelling"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.name-error/pick-the-name"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.name-error/too-early"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.name-error/capital-c"

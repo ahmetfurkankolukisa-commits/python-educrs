@@ -1,0 +1,32 @@
+concept = "print.multiple-args"
+title = "Several values in one print"
+
+[[steps]]
+kind = "explain"
+text = """
+`print` can show several values. Separate them with commas, and `print` puts a space between them.
+
+The `+` sign is different. It glues two strings together with **no** space.
+"""
+example = """print("Hello", "Ada")
+print("Hello" + "Ada")"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.multiple-args/comma-space"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.multiple-args/plus-glues"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.multiple-args/comma-or-plus"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.multiple-args/three-colours"
+
+[[steps]]
+kind = "exercise"
+id = "ex:print.multiple-args/fix-the-spaces"

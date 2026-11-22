@@ -1,0 +1,18 @@
+{
+  "answer": "Error",
+  "grader": 1,
+  "id": "ex:vars.naming/capital-letters",
+  "outcome": {
+    "error": {
+      "lineno": 2,
+      "message": "name 'Name' is not defined",
+      "name": "Name",
+      "offset": null,
+      "text": null,
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\nNameError: name 'Name' is not defined. Did you mean: 'name'?\n",
+      "type": "NameError"
+    },
+    "stdout": ""
+  },
+  "python": "3.14"
+}

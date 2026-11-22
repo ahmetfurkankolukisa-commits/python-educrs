@@ -136,10 +136,22 @@ const strip = (g: Record<string, unknown> | null) => {
   return rest;
 };
 
+// Every exercise on Chromium; on the other engines one of each kind. Python runs in the same
+// Pyodide wasm everywhere, so the full sweep re-tests content, not the browser — the sample still
+// covers each engine's worker plumbing for every check kind and every way a program can fail.
+const SAMPLE = new Set([
+  "ex:intro.run-code/type-and-run", // verbatim
+  "ex:vars.use/greet-by-name", // program-with-inputs + misconceptions
+  "ex:print.multiple-args/fix-the-spaces", // stdout + misconception
+  "ex:strings.literal/curly-quotes", // starter: SyntaxError
+  "ex:vars.naming/rename-it", // starter: runtime error (the traceback-source difference, F3.7)
+]);
+
 test.describe("browser grading matches the CI golden files exactly", () => {
   // predict-output and fill-gap are graded in the app (no Python); code and verbatim go through the sandbox.
   for (const ex of bundle.exercises.filter((e) => e.type === "code" || e.type === "verbatim")) {
-    test(ex.id, async ({ page }) => {
+    test(ex.id, async ({ page, browserName, isMobile }) => {
+      test.skip((browserName !== "chromium" || isMobile) && !SAMPLE.has(ex.id), "full sweep runs on Chromium; this engine runs the sample");
       await ready(page);
       const g = golden(ex.id);
       const reference = ex.type === "verbatim" ? ex.check.target! : ex.solution!;

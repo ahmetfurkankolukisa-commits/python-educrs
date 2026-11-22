@@ -1,0 +1,24 @@
+id = "ex:vars.name-error/capital-c"
+concept = "vars.name-error"
+type = "code"
+difficulty = "easy"
+title = "A capital letter"
+prompt = """
+Fix the NameError. The program should show `I am in` and then the city. For example, when `city = "Rome"`:
+
+    I am in Rome
+
+Your program must work for **any** city.
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["city"]
+tests = [{ city = "Rome" }, { city = "New York" }]
+random = { count = 6, types = { city = "str" } }
+
+[[hints]]
+text = "Capital letters matter in names."
+
+[[hints]]
+text = "`City` should be `city`."

@@ -1,0 +1,20 @@
+id = "ex:intro.run-code/two-lines"
+concept = "intro.run-code"
+type = "code"
+difficulty = "easy"
+title = "Two lines"
+prompt = """
+Write a program that shows these two lines:
+
+    Line one
+    Line two
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Each line of output needs its own `print`."
+
+[[hints]]
+text = "Write two lines of code: `print(\"Line one\")` and then `print(\"Line two\")`."

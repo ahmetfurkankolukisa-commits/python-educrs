@@ -1,0 +1,18 @@
+{
+  "answer": "Error",
+  "grader": 1,
+  "id": "ex:intro.errors-are-normal/capital-p",
+  "outcome": {
+    "error": {
+      "lineno": 1,
+      "message": "name 'Print' is not defined",
+      "name": "Print",
+      "offset": null,
+      "text": null,
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\nNameError: name 'Print' is not defined. Did you mean: 'print'?\n",
+      "type": "NameError"
+    },
+    "stdout": ""
+  },
+  "python": "3.14"
+}

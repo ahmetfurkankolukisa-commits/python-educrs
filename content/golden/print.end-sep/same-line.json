@@ -1,0 +1,10 @@
+{
+  "answer": "A B",
+  "grader": 1,
+  "id": "ex:print.end-sep/same-line",
+  "outcome": {
+    "error": null,
+    "stdout": "A B\n"
+  },
+  "python": "3.14"
+}

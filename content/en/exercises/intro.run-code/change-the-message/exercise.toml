@@ -1,0 +1,21 @@
+id = "ex:intro.run-code/change-the-message"
+concept = "intro.run-code"
+type = "code"
+difficulty = "easy"
+title = "Change the message"
+prompt = """
+This program shows `Hello, world!`. Change it so that it shows:
+
+    Hello, Python!
+
+Press **Run** to try it as often as you like. Then press **Check**.
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Only the text inside the quotes needs to change."
+
+[[hints]]
+text = "Replace `world` with `Python`. Keep the comma and the `!`."

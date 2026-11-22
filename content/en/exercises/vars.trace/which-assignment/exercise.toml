@@ -1,0 +1,16 @@
+id = "ex:vars.trace/which-assignment"
+concept = "vars.trace"
+type = "fill-gap"
+difficulty = "easy"
+title = "Which way?"
+prompt = "Fill the gap so the program shows `dog`."
+template = """a = "cat"
+b = "dog"
+____
+print(a)"""
+tiles = ["b = a", "a = b", 'a = "b"']
+answer = "a = b"
+explanation = "`a = b` gives `a` the value of `b`, which is `\"dog\"`."
+
+[tile_misconceptions]
+"b = a" = { id = "mc.assign-direction", message = "`b = a` changes `b`, not `a`. The variable on the left of `=` is the one that gets the new value." }

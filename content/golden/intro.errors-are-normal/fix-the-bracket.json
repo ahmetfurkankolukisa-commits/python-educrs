@@ -1,0 +1,45 @@
+{
+  "grader": 1,
+  "id": "ex:intro.errors-are-normal/fix-the-bracket",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "'(' was never closed",
+      "offset": 6,
+      "text": "print(\"Almost there!\"",
+      "traceback": "  File \"/main.py\", line 1\n    print(\"Almost there!\"\n         ^\nSyntaxError: '(' was never closed\n",
+      "type": "SyntaxError"
+    },
+    "explanation": {
+      "id": "syntax.unbalanced-brackets",
+      "lineno": 1,
+      "params": {
+        "char": "(",
+        "missing": ")"
+      }
+    },
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "syntax",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 0
+  }
+}

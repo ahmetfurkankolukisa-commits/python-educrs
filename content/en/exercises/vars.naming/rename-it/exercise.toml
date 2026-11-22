@@ -1,0 +1,19 @@
+id = "ex:vars.naming/rename-it"
+concept = "vars.naming"
+type = "code"
+difficulty = "medium"
+title = "Rename the variable"
+prompt = """
+Run this program and read the error. The name of the variable is the problem. Rename the variable so that the program shows:
+
+    Hello
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "After `print = \"Hello\"`, the name `print` holds text. It can't show anything any more."
+
+[[hints]]
+text = "Use another name, like `message`, in both lines."

@@ -1,0 +1,13 @@
+id = "ex:intro.program/pick-the-instruction"
+concept = "intro.program"
+type = "fill-gap"
+difficulty = "easy"
+title = "Pick the instruction"
+prompt = "Fill the gap so the program shows `Python is fun`."
+template = '____("Python is fun")'
+tiles = ["print", "pritn", "Print"]
+answer = "print"
+explanation = "`print` is the instruction that shows a message. Python only knows it with small letters."
+
+[tile_misconceptions]
+"Print" = { id = "mc.case-insensitive", message = "Python cares about capital letters. `Print` is not the same as `print`, so Python doesn't know it." }

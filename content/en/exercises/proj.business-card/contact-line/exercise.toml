@@ -1,0 +1,21 @@
+id = "ex:proj.business-card/contact-line"
+concept = "proj.business-card"
+type = "code"
+difficulty = "medium"
+title = "Contact details"
+prompt = """
+Show the contact details on one line, with ` | ` between them:
+
+    ada@example.com | 555-0100 | London
+
+Keep the three values and add `sep=`.
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Right now `print` puts a space between the values. `sep=` changes that."
+
+[[hints]]
+text = "`sep=\" | \"` puts a space, a `|` and a space between the values."

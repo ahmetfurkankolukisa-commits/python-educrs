@@ -25,7 +25,7 @@
 | Önkoşul bağlantısı | 251 |
 | En uzun önkoşul zinciri (derinlik) | 18 adım |
 | En geniş katman | 20 kavram (aynı anda açık olabilecek seçenek sayısının üst sınırı) |
-| Yanılgı | 38 (bunlarla bağlantılı 36 kavram) |
+| Yanılgı | 40 (bunlarla bağlantılı 38 kavram) |
 | Proje | 17 |
 | Tahmini alıştırma sayısı | ~865 (kavram başına 5) |
 
@@ -107,7 +107,7 @@ flowchart TD
 | `shell.expressions` | Expressions have values | `print.basic` | 3 |  |
 | `strings.literal` | String literals | `print.basic` | 3 | `mc.missing-quotes`, `mc.smart-quotes` |
 | `print.multiple-args` | print() with several values | `strings.literal` | 4 | `mc.comma-vs-plus` |
-| `strings.quotes-mixed` | Quotes inside strings | `strings.literal` | 4 |  |
+| `strings.quotes-mixed` | Quotes inside strings | `strings.literal` | 4 | `mc.quote-ends-string` |
 | `print.end-sep` | sep= and end= | `print.multiple-args` | 5 |  |
 | `strings.escape` | Escape sequences | `strings.quotes-mixed` | 5 |  |
 
@@ -121,7 +121,7 @@ flowchart TD
 | `vars.name-error` | NameError | `vars.use`, `intro.errors-are-normal` | 6 |  |
 | `vars.reassign` | Reassignment | `vars.use` | 6 | `mc.vars-auto-update`, `mc.var-remembers-history` |
 | `vars.trace` | Tracing program state | `vars.reassign` | 7 |  |
-| `vars.swap` | Order of updates | `vars.trace` | 8 |  |
+| `vars.swap` | Order of updates | `vars.trace` | 8 | `mc.swap-overwrites` |
 
 ### M3 · Numbers and operators (11)
 
@@ -409,6 +409,8 @@ flowchart TD
 | `mc.shadow-builtin` | Any word can be a variable name, even print. | `vars.naming` | exception |
 | `mc.assign-direction` | Assignment works both ways, so "Ada" = name is the same as name = "Ada". | `vars.assign` | exception |
 | `mc.comma-vs-plus` | print("Hi" + name) and print("Hi", name) print exactly the same thing. | `print.multiple-args` | behavioral |
+| `mc.quote-ends-string` | A quote inside text is just part of the text, even when it is the same kind as the quotes around it. | `strings.quotes-mixed` | exception |
+| `mc.swap-overwrites` | Writing a = b and then b = a swaps the two values. | `vars.swap` | behavioral |
 
 ## 7. Projeler
 

@@ -1,0 +1,27 @@
+{
+  "answer": ",",
+  "grader": 1,
+  "id": "ex:print.multiple-args/comma-or-plus",
+  "outcomes": {
+    "+": {
+      "error": null,
+      "stdout": "Goodmorning\n"
+    },
+    ",": {
+      "error": null,
+      "stdout": "Good morning\n"
+    },
+    ".": {
+      "error": {
+        "lineno": 1,
+        "message": "invalid syntax",
+        "offset": 14,
+        "text": "print(\"Good\".\"morning\")",
+        "traceback": "  File \"/main.py\", line 1\n    print(\"Good\".\"morning\")\n                 ^^^^^^^^^\nSyntaxError: invalid syntax\n",
+        "type": "SyntaxError"
+      },
+      "stdout": ""
+    }
+  },
+  "python": "3.14"
+}

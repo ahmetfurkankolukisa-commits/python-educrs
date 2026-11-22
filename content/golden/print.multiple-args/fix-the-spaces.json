@@ -1,0 +1,59 @@
+{
+  "grader": 1,
+  "id": "ex:print.multiple-args/fix-the-spaces",
+  "misconceptions": {
+    "mc.comma-vs-plus": {
+      "error": null,
+      "failed": {
+        "actual": "I likePythonand pizza\n",
+        "error": null,
+        "expected": "I like Python and pizza\n",
+        "inputs": null
+      },
+      "grader": 1,
+      "kind": "stdout",
+      "misconception": {
+        "id": "mc.comma-vs-plus",
+        "message": "`+` adds no spaces. Use commas between the values, and `print` adds the spaces."
+      },
+      "passed": false,
+      "problem": "wrong-output",
+      "seed": 1,
+      "tests_passed": 0,
+      "tests_total": 1
+    }
+  },
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "I likePythonand pizza\n",
+      "error": null,
+      "expected": "I like Python and pizza\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": {
+      "id": "mc.comma-vs-plus",
+      "message": "`+` adds no spaces. Use commas between the values, and `print` adds the spaces."
+    },
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

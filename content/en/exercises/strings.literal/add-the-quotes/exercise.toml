@@ -1,0 +1,14 @@
+id = "ex:strings.literal/add-the-quotes"
+concept = "strings.literal"
+type = "fill-gap"
+difficulty = "easy"
+title = "Straight quotes"
+prompt = "Fill the gap so the program shows `Good morning`."
+template = "print(____)"
+tiles = ['"Good morning"', "Good morning", "“Good morning”"]
+answer = '"Good morning"'
+explanation = "Text needs straight quotes at the start and at the end."
+
+[tile_misconceptions]
+"Good morning" = { id = "mc.missing-quotes", message = "Without quotes, Python thinks `Good` and `morning` are names. Text needs quotes: `\"Good morning\"`." }
+"“Good morning”" = { id = "mc.smart-quotes", message = "These are curly quotes, the kind a phone or a word processor adds. Python only understands straight quotes: `\"`." }

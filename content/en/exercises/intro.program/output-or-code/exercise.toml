@@ -1,0 +1,11 @@
+id = "ex:intro.program/output-or-code"
+concept = "intro.program"
+type = "predict-output"
+difficulty = "easy"
+title = "What appears on the screen?"
+prompt = "This program has one instruction. What does it show on the screen?"
+options = ["Good morning!", 'print("Good morning!")', '"Good morning!"']
+explanation = "`print` shows only the message. The word `print`, the brackets and the quotes are part of the instruction, not of the message."
+
+[[hints]]
+text = "The quotes show Python where the message starts and ends."

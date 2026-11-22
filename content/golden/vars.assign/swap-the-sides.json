@@ -1,0 +1,45 @@
+{
+  "grader": 1,
+  "id": "ex:vars.assign/swap-the-sides",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "cannot assign to literal here. Maybe you meant '==' instead of '='?",
+      "offset": 1,
+      "text": "\"Ada\" = name",
+      "traceback": "  File \"/main.py\", line 1\n    \"Ada\" = name\n    ^^^^^\nSyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='?\n",
+      "type": "SyntaxError"
+    },
+    "explanation": {
+      "id": "syntax.assign-to-literal",
+      "lineno": 1,
+      "params": {
+        "name": "name",
+        "value": "\"Ada\""
+      }
+    },
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "syntax",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 0
+  }
+}

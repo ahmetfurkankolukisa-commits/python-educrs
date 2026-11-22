@@ -8,11 +8,11 @@ import {
 // Every test starts with a fresh browser context, so a fresh IndexedDB: a brand-new learner.
 
 test.describe("rewards", () => {
-  test("a first lesson: +45 XP, the goal reached, a 1-day streak, then the goal question; it all survives a reload", async ({ page }) => {
+  test("a first lesson: +55 XP, the goal reached, a 1-day streak, then the goal question; it all survives a reload", async ({ page }) => {
     test.setTimeout(240_000);
     await finishVarsUse(page);
 
-    await expect(page.getByTestId("reward-xp")).toHaveText("+45 XP");
+    await expect(page.getByTestId("reward-xp")).toHaveText("+55 XP");
     const goal = page.getByTestId("reward-goal");
     await expect(goal).toHaveAttribute("data-met", "true");
     await expect(goal).toContainText("Daily goal reached!");
@@ -33,7 +33,7 @@ test.describe("rewards", () => {
     const check = async () => {
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-days", "1");
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-lit", "true");
-      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "45");
+      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "55");
       await expect(page.getByTestId("stat-goal").getByTestId("goal-ring")).toHaveAttribute("data-goal", "20");
     };
     await check();
@@ -43,7 +43,7 @@ test.describe("rewards", () => {
 
     // The question is asked until a goal is chosen — and not again after that.
     await finishVarsReassign(page);
-    await expect(page.getByTestId("reward-xp")).toHaveText("+40 XP");
+    await expect(page.getByTestId("reward-xp")).toHaveText("+60 XP");
     await expect(page.getByTestId("goal-question")).toHaveCount(0);
   });
 
@@ -60,16 +60,16 @@ test.describe("rewards", () => {
       await openPath(page);
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-days", "1");
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-lit", "false");
-      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "45");
+      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "55");
       await expect(page.getByTestId("stat-goal").getByTestId("goal-ring")).toHaveAttribute("data-value", "0");
 
       await finishVarsReassign(page);
-      await expect(page.getByTestId("reward-xp")).toHaveText("+40 XP");
+      await expect(page.getByTestId("reward-xp")).toHaveText("+60 XP");
       await expect(page.getByTestId("reward-streak")).toHaveAttribute("data-days", "2");
       await openPath(page);
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-days", "2");
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-lit", "true");
-      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "85");
+      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "115");
     });
   });
 
@@ -95,7 +95,7 @@ test.describe("rewards", () => {
     await page.getByRole("switch", { name: "Plain mode" }).uncheck();
     await expect(page.getByTestId("settings-status")).toHaveText("Saved.");
     await openPath(page);
-    await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "40");
+    await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "60");
   });
 });
 
