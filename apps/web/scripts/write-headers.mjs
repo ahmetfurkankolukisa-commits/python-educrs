@@ -26,13 +26,20 @@ for (const file of walk(dist)) {
   }
 }
 
+// Cloudflare Web Analytics (cookieless; plan §9.1 C) is injected at the edge: allow exactly
+// its script and beacon endpoint. Cloudflare's "JavaScript Detections" inline script is NOT
+// allowed: it changes per request, so only 'unsafe-inline' would admit it — that would void
+// the whole CSP. It is blocked harmlessly (docs/03-f1-spike-report.md, live smoke test).
+const CF_ANALYTICS_SCRIPT = "https://static.cloudflareinsights.com";
+const CF_ANALYTICS_BEACON = "https://cloudflareinsights.com";
+
 const csp = [
   "default-src 'self'",
-  `script-src 'self' ${[...hashes].join(" ")}`.trim(),
+  `script-src 'self' ${CF_ANALYTICS_SCRIPT} ${[...hashes].join(" ")}`.trim(),
   `style-src 'self' ${[...styleHashes].join(" ")}`.trim(),
   "img-src 'self' data:",
   `frame-src ${RUN_ORIGIN}`,
-  "connect-src 'self'",
+  `connect-src 'self' ${CF_ANALYTICS_BEACON}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
