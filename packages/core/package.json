@@ -1,0 +1,8 @@
+{
+  "name": "@educrs/core",
+  "private": true,
+  "type": "module",
+  "description": "Pure domain core: ports (interfaces), registries, event envelope + upcasters. No infrastructure imports allowed (enforced by dependency-cruiser).",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" }
+}

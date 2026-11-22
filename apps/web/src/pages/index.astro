@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import Runner from "../components/Runner.svelte";
+import { t } from "@educrs/i18n";
+---
+
+<Base>
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{t("home.heading")}</h1>
+  <p class="mt-4 text-lg text-muted">{t("home.lead")}</p>
+
+  <section aria-labelledby="try" class="mt-10">
+    <h2 id="try" class="text-xl font-semibold">{t("home.tryIt")}</h2>
+    <p class="mt-1 text-muted">{t("home.tryIt.help")}</p>
+    <div class="mt-4">
+      <Runner client:visible />
+    </div>
+  </section>
+</Base>

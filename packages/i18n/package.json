@@ -1,0 +1,8 @@
+{
+  "name": "@educrs/i18n",
+  "private": true,
+  "type": "module",
+  "description": "Typed UI string lookup. Every UI string goes through t(key) so new locales are translation work, not refactoring (plan §2.3 #3).",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" }
+}

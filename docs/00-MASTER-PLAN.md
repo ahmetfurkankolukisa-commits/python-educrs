@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.10)
+# Python Öğrenme Sistemi — Ana Plan (v0.11)
 
+> v0.11: F2 iskeleti kuruldu: pnpm monorepo, `packages/core|i18n|ui`, `apps/web` (Astro + Svelte, canlı Python kutusu), `apps/run` (sandbox), CI, Renovate. Bulgular: TypeScript 7 Astro/Svelte araçlarıyla uyumsuz (TS 6'ya kilitlendi); dependency-cruiser `.astro` dosyalarını okumuyor (kendi tarayıcımız eklendi); CPython 3.15 hata mesajı biçimini değiştirdi (hata açıklayıcısı mesaj metnine değil istisna türüne göre çalışmalı); Storybook F3'e ertelendi (henüz bileşen yok).
 > v0.10: F1 spike sonuçları işlendi (`docs/03-f1-spike-report.md`): CSP'de `'unsafe-eval'` gerekmiyor; Firefox/WebKit için açık `claim`; önceden yüklenmiş modüllerin anlık görüntüsü; notlandırma her zaman taze worker'da.
 > v0.9: Kavram grafiği tamamlandı: 173 kavram, 251 önkoşul bağlantısı, 32 yanılgı, 17 proje (`content/concepts.toml` → `docs/01-concept-graph.md`). Doğrulayıcı ve 13 negatif test hazır (`tools/`). Alıştırma tahmini ~865'e çıktı. **F0 tamamlandı.**
 > v0.8: futurecoder incelemesi işlendi (`docs/02-futurecoder-review.md`). Grader yeniden yazıldı (§3.2): `program-with-inputs`, tohumlu rastgele testler, davranışsal yanılgı tespiti, kısmi çözüm açma. CI'a golden file testleri eklendi (§3.7). Yeni alıştırma türleri: `verbatim`, `predict-output`.
@@ -10,7 +11,7 @@
 > v0.3: Arayüz sistemi ve kütüphane seçimi eklendi (§2.4; sürümler npm'den doğrulandı). Oyunlaştırma algoritmalarıyla birlikte genişletildi (§3.5).
 > v0.2: Genişletilebilirlik mimarisi eklendi (§2.3); repo yapısı ve yol haritası buna göre güncellendi.
 
-> Durum: **F1'in otomatik kısmı tamamlandı (v0.10): COI'siz sandbox 3 motorda 66/66 kontrolden geçti. Gerçek cihaz ve Firebase maddeleri açık (`docs/03-f1-spike-report.md` §5.2).** Bu belge sistemin tek doğruluk kaynağıdır.
+> Durum: **F2 iskeleti kodda tamamlandı (v0.11), `pnpm run check` yerelde tamamen yeşil. GitHub deposu ve Cloudflare projeleri senin onayını ve adımlarını bekliyor (`docs/04-deploy.md`).** Bu belge sistemin tek doğruluk kaynağıdır.
 > Her algoritma haritası (diyagram) koda dönüşmeden önce burada onaylanır, kod
 > yazıldıktan sonra da otomatik testlerle bu haritaya karşı doğrulanır.
 
@@ -893,7 +894,7 @@ Herhangi bir adım kırmızıysa deploy olmaz. "Algoritma haritalarını tekrar 
 |---|---|---|
 | **F0** ✅ | Bu plan + kavram grafiği ✅ + futurecoder incelemesi ✅ | Kullanıcı onayı ✅; futurecoder kararları yazılı ✅; kavram grafiği doğrulayıcıdan ve negatif testlerden geçiyor ✅ |
 | **F1** 🟡 | **Teknik keşif (spike):** en riskli varsayımları kanıtla. **Otomatik kısım tamamlandı ✅** (`docs/03-f1-spike-report.md`). Açık kalanlar: gerçek Safari/iOS, düşük donanımlı Android, gerçek ağda açılış, Firebase konsol adımları | **COI'siz sandbox mimarisi** (§3.1): `input()` service worker üzerinden Chrome, Firefox, Safari ve iOS Safari'de çalışıyor; üçüncü taraf iframe'deki service worker davranışı ölçüldü; **saldırı testleri** kullanıcı kodunun depolamaya ve ağa erişemediğini kanıtlıyor; sonsuz döngü `terminate` ile < 100 ms'de duruyor; gerçek düşük seviye bir Android cihazda bellek ve hız ölçüldü; 1000 adımlık iz < 500 ms; mobil sembol çubuğu prototipi var; **Firebase:** yeni proje açıldı, Identity Platform'a yükseltilmediği doğrulandı, `python.educrs.com` Auth yetkili alan adlarına eklendi, Google OAuth onay ekranı için alan adı doğrulandı, kotalar güncel sayfadan doğrulandı; CPython 3.14.x ile Pyodide 314.x arasında davranış eşliği test edildi |
-| **F2** | İskelet: **canlı alan adı** (`python.educrs.com` → app projesi; MVP-0 kullanıcı testlerinden geçene kadar `noindex` ve "erken erişim" bandı), **herkese açık GitHub repo** (`LICENSE` MIT, `content/LICENSE` CC BY-SA 4.0, `CONTRIBUTING.md`), pnpm monorepo, CI, **iki Cloudflare Pages projesi** (app + run), `packages/core` portları, i18n, `packages/ui` token'ları ve 3 tema, Storybook, dependency-cruiser, Renovate | `main`'e push → otomatik deploy; bilerek eklenen bir sınır ihlali build'i kırıyor; kontrast testi ve axe taraması çalışıyor; JS bütçeleri ölçülüp sabitlendi |
+| **F2** 🟡 | ✅ **Kodda tamamlandı** (ayrıntılar §8.1). Açık kalanlar: GitHub'a push, Cloudflare'de iki proje, alan adı bağlama (`docs/04-deploy.md`). İskelet: **canlı alan adı** (`python.educrs.com` → app projesi; MVP-0 kullanıcı testlerinden geçene kadar `noindex` ve "erken erişim" bandı), **herkese açık GitHub repo** (`LICENSE` MIT, `content/LICENSE` CC BY-SA 4.0, `CONTRIBUTING.md`), pnpm monorepo, CI, **iki Cloudflare Pages projesi** (app + run), `packages/core` portları, i18n, `packages/ui` token'ları ve 3 tema, Storybook, dependency-cruiser, Renovate | `main`'e push → otomatik deploy; bilerek eklenen bir sınır ihlali build'i kırıyor; kontrast testi ve axe taraması çalışıyor; JS bütçeleri ölçülüp sabitlendi |
 | **F3** | **MVP-0 (tamamen yerel):** sürümlü minimal event store, runtime, editör + mobil sembol çubuğu, `code` alıştırma türü (`stdout` + `program-with-inputs` kontrolleriyle), `verbatim` ve `predict-output` türleri, kademeli ipuçları, hata açıklayıcısı (ilk 20 hata türü), **M0–M2 içeriği** (19 kavram, ~95 alıştırma). Hesap, oyunlaştırma ve öğrenci modeli **yok**. | **5–10 gerçek yeni başlayan** M0–M2'yi tamamladı. Ölçülenler: ilk koda kadar geçen süre (< 60 sn), tamamlama oranı, takılma noktaları, sesli düşünme notları |
 | **F4** | **Veriden öğren:** MVP bulgularıyla plan v0.6 | Planda değişen her karar bir bulguya dayanıyor |
 | **F5** | Tracer + görselleştirici (metin anlatımı dahil) + **ikinci alıştırma türü (`parsons`)** | M2 ve M7 görselleştiriciyle çalışıyor; `parsons` var olan koda dokunmadan eklendi |
@@ -904,6 +905,30 @@ Herhangi bir adım kırmızıysa deploy olmaz. "Algoritma haritalarını tekrar 
 | **F10** | **YZ öğretmen** (K11): `TutorProvider` portu ile cihaz-üstü YZ ve Firebase AI Logic. Sokratik sistem talimatı, cevabı vermeme kuralı, kota dolunca kibarca kapanma, gizlilik bildirimi | Değerlendirme seti: 50 gerçek takılma senaryosunda öğretmen hiçbir zaman tam çözümü vermiyor; 13 yaş altı ve hesapsız kullanıcıda veri cihazdan çıkmıyor (testle kanıtlanacak); kota dolunca uygulama etkilenmiyor |
 | **F11** | PWA cilası, erişilebilirlik (WCAG AA), performans, anonim alıştırma istatistikleri | Lighthouse ≥ 95, çevrimdışı tam akış, istatistikler kotaya sığıyor |
 | **F12+** | Kalan müfredat (M3–M21), topluluk içerik katkısı (K12) | Her modül için doğrulayıcı yeşil; her modül sonunda 5 kişiyle kullanıcı testi |
+
+### 8.1 F2 sonuç raporu (v0.11)
+
+| Çıkış kriteri | Durum | Kanıt |
+|---|---|---|
+| `main`'e push → otomatik deploy | ⏳ Senin adımın | `docs/04-deploy.md` §1–3 |
+| Bilerek eklenen sınır ihlali build'i kırıyor | ✅ | `tools/tests/test_boundaries.mjs`: 8 ihlal türünün hepsi yakalanıyor (`.ts`, `.svelte`, `.astro`, döngü, paket→uygulama) |
+| Kontrast testi | ✅ | `packages/ui/src/contrast.test.ts`: 3 tema × 14 renk çifti. İlk koşuda açık temadaki kenarlık rengini yakaladı (2,41:1 → düzeltildi) |
+| axe erişilebilirlik taraması | ✅ | e2e: açık ve koyu temada ciddi veya kritik ihlal yok |
+| JS bütçeleri ölçülüp sabitlendi | ✅ | İlk boyama **2,0 KB** / 50 KB, sayfanın tamamı **21,2 KB** / 120 KB (`tools/js-budget.mjs`) |
+| Kod ve içerik lisansları, katkı rehberi | ✅ | `LICENSE` (MIT), `content/LICENSE` (CC BY-SA 4.0, resmi metin), `CONTRIBUTING.md` |
+| Renovate | ✅ yapılandırma | `renovate.json`: haftalık, sürümler sabit, TS < 7 kuralı, Pyodide güncellemeleri ayrı grupta. GitHub uygulamasının kurulumu senin adımın. |
+| Storybook | ⏭ F3'e ertelendi | Henüz belgelenecek bileşen yok. İlk bileşenlerle birlikte kurulacak. |
+| F1'den devreden: CPython–Pyodide eşliği | ✅ | `tools/tests/python_parity.mjs`: 22 örnek, CI'da Python 3.14 ile zorunlu |
+| F1'den devreden: iPhone emülasyonu | ✅ | e2e'de `mobile-webkit` projesi. Gerçek Safari/iOS hâlâ deploy sonrasında test edilecek. |
+
+**e2e (Chromium, Firefox, WebKit, iPhone emülasyonu): 36/36.** Testler gerçek arayüzü (kod kutusu, Çalıştır, Durdur, girdi kutusu) ve deploy edilecek gerçek `_headers` dosyalarını kullanıyor.
+
+**F2'de öğrenilenler:**
+1. `pnpm ci` pnpm'in kendi komutu çıktı (temiz kurulum yapıyor). Bizim betik onun yerine çalışmıyordu. Betiğin adı `check` oldu. "Yeşil" sanılan bir koşu aslında hiç test çalıştırmamıştı.
+2. Sınır kuralları ilk yazıldığında **hiçbiri** tetiklenmiyordu. Negatif testler üç ayrı hatayı ortaya çıkardı: JSON çıktısının okunmaması, pnpm'in katı düzeninde çıplak paket adları, `exclude` ayarının hedefleri de gizlemesi. Kural yazmak yetmiyor, tetiklendiği kanıtlanmalı.
+3. Chromium, CSP ihlal eden WebSocket'i kurucuda hata fırlatarak değil, sessizce kesiyor. Testin ölçmesi gereken şey "saldırgana sıfır istek" olmalı.
+4. Astro, HTML'e satır içi `<script>` ve `<style>` blokları ekliyor. `'unsafe-inline'` yerine bunlar build sırasında hash'lenip CSP'ye sabitleniyor.
+5. **PR önizlemelerinde Python kutusu çalışmıyor** (sandbox sadece `python.educrs.com` tarafından gömülebiliyor). F3'e iş olarak eklendi: izin verilen origin listesi + el sıkışma protokolü.
 
 ## 9. Gözden Kaçan Noktalar (Kör Nokta Denetimi, v0.4)
 

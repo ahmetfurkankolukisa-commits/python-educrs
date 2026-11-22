@@ -1,0 +1,42 @@
+/** WCAG 2.x relative luminance and contrast ratio. */
+
+export function parseHex(hex: string): [number, number, number] {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) throw new Error(`expected #rrggbb, got ${hex}`);
+  const n = Number.parseInt(m[1] as string, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function channel(c: number): number {
+  const s = c / 255;
+  return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+}
+
+export function luminance(hex: string): number {
+  const [r, g, b] = parseHex(hex);
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+export function contrastRatio(a: string, b: string): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** Pairs that must stay readable in every theme: [foreground, background, minimum ratio]. */
+export const REQUIRED_PAIRS: ReadonlyArray<readonly [string, string, number]> = [
+  ["--color-text", "--color-bg", 4.5],
+  ["--color-text", "--color-surface", 4.5],
+  ["--color-text", "--color-code-bg", 4.5],
+  ["--color-text-muted", "--color-bg", 4.5],
+  ["--color-text-muted", "--color-surface", 4.5],
+  ["--color-accent", "--color-bg", 4.5],
+  ["--color-accent", "--color-surface", 4.5],
+  ["--color-on-accent", "--color-accent", 4.5],
+  ["--color-success", "--color-surface", 4.5],
+  ["--color-danger", "--color-surface", 4.5],
+  ["--color-xp", "--color-surface", 4.5],
+  ["--color-streak", "--color-surface", 4.5],
+  // non-text UI (borders, focus rings): WCAG 1.4.11 asks for 3:1
+  ["--color-border", "--color-bg", 3],
+  ["--color-focus", "--color-bg", 3],
+];
