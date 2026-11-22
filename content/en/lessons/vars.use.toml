@@ -21,4 +21,8 @@ id = "ex:vars.use/fill-print-name"
 
 [[steps]]
 kind = "exercise"
+id = "ex:vars.use/type-and-check"
+
+[[steps]]
+kind = "exercise"
 id = "ex:vars.use/greet-by-name"

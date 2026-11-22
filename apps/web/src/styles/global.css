@@ -28,3 +28,9 @@ html {
   outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
+
+/* Headings that only receive focus from code (tabindex="-1", e.g. the next lesson card) are not
+   controls: screen readers still land there, but no focus ring is drawn around plain text. */
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}

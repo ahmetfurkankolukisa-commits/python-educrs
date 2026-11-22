@@ -40,7 +40,97 @@
     },
     {
       "concept": "vars.reassign",
-      "contentHash": "2cf91f0848d79d6c",
+      "contentHash": "d40d250ad9a3df55",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "\"blue\"",
+        "expected_output": "blue\n",
+        "explanation": "The second line gives `colour` a new value. The old value, `\"red\"`, is gone, so the program prints `blue`.",
+        "template": "colour = \"red\"\ncolour = ____\nprint(colour)",
+        "tile_feedback": {
+          "\"red\"": {
+            "output": "red\n"
+          },
+          "blue": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.undefined",
+              "lineno": 2,
+              "params": {
+                "name": "blue"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "blue": {
+            "id": "mc.missing-quotes",
+            "message": "Without quotes, Python looks for a variable called `blue`, and there isn't one. Text needs quotes: `\"blue\"`."
+          }
+        },
+        "tiles": [
+          "\"blue\"",
+          "blue",
+          "\"red\""
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.reassign/fill-new-value",
+      "prompt": "Fill the gap so the program prints `blue`.",
+      "source": "original",
+      "title": "A new colour",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "inputs": [
+          "pet",
+          "new_pet"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "new_pet": "str",
+            "pet": "str"
+          }
+        },
+        "tests": [
+          {
+            "new_pet": "dog",
+            "pet": "cat"
+          },
+          {
+            "new_pet": "hamster",
+            "pet": "goldfish"
+          }
+        ]
+      },
+      "concept": "vars.reassign",
+      "contentHash": "d0cd16fab2bdc8ea",
+      "difficulty": "easy",
+      "hints": [
+        "To give a variable a new value, write its name, then `=`, then the new value.",
+        "The variable that changes goes on the **left**: `pet = new_pet`."
+      ],
+      "id": "ex:vars.reassign/give-new-value",
+      "misconceptions": [
+        {
+          "id": "mc.assign-direction",
+          "message": "`new_pet = pet` changes `new_pet`, not `pet`. The variable on the left of `=` is the one that gets the new value: write `pet = new_pet`.",
+          "program": "pet = \"cat\"\nnew_pet = \"dog\"\nprint(pet)\nnew_pet = pet\nprint(pet)\n"
+        }
+      ],
+      "prompt": "The program prints `pet`, then prints it again. Add one line in the middle so that `pet`\ngets the value of `new_pet` before the second `print`.\n\nFor example, when `pet = \"cat\"` and `new_pet = \"dog\"`, the program prints:\n\n    cat\n    dog\n\nYour program must work for **any** two pets.\n",
+      "solution": "pet = \"cat\"\nnew_pet = \"dog\"\nprint(pet)\npet = new_pet\nprint(pet)\n",
+      "source": "original",
+      "starter": "pet = \"cat\"\nnew_pet = \"dog\"\nprint(pet)\n# Give pet the value of new_pet on the next line\n\nprint(pet)\n",
+      "title": "Change the pet",
+      "type": "code"
+    },
+    {
+      "concept": "vars.reassign",
+      "contentHash": "bcf095a05574aa16",
       "difficulty": "medium",
       "hints": [],
       "id": "ex:vars.reassign/predict-copy",
@@ -48,7 +138,10 @@
         "answer": "cat",
         "explanation": "`b = a` makes `b` refer to the value `\"cat\"` at that moment. Giving `a` a new value later\ndoes not change `b` — so the program prints `cat`.\n",
         "option_misconceptions": {
-          "dog": "mc.vars-auto-update"
+          "dog": {
+            "id": "mc.vars-auto-update",
+            "message": "`b = a` copies the value `a` has at that moment. Changing `a` later does not change `b`."
+          }
         },
         "options": [
           "cat",
@@ -158,7 +251,7 @@
     },
     {
       "concept": "vars.use",
-      "contentHash": "6bff0524e119ad85",
+      "contentHash": "7f871443d160f200",
       "difficulty": "easy",
       "hints": [],
       "id": "ex:vars.use/predict-two-vars",
@@ -166,7 +259,10 @@
         "answer": "Ada Lovelace",
         "explanation": "`print` shows the **values** of `first` and `last`, separated by a space, because they are\nseparated by a comma.\n",
         "option_misconceptions": {
-          "first last": "mc.quoted-name"
+          "first last": {
+            "id": "mc.quoted-name",
+            "message": "`first` and `last` have no quotes, so they are variable names. Python prints the values stored in them, not the names."
+          }
         },
         "options": [
           "Ada Lovelace",
@@ -180,14 +276,60 @@
       "source": "original",
       "title": "Two variables in one print",
       "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "verbatim",
+        "target": "city = \"Lisbon\"\nprint(\"I live in\", city)\n"
+      },
+      "concept": "vars.use",
+      "contentHash": "6985c3197366a011",
+      "difficulty": "easy",
+      "hints": [
+        "Two lines: first create the variable, then print it. Watch the quotes around `\"Lisbon\"` and the comma after `\"I live in\"`."
+      ],
+      "id": "ex:vars.use/type-and-check",
+      "prompt": "Type this program into the editor **exactly as it is**, then press **Check**:\n\n```python\ncity = \"Lisbon\"\nprint(\"I live in\", city)\n```\n",
+      "source": "original",
+      "starter": "",
+      "title": "Type it yourself",
+      "type": "verbatim"
     }
   ],
   "grader": 1,
   "lessons": [
     {
+      "concept": "vars.reassign",
+      "contentHash": "72f351b8dd59b417",
+      "id": "lesson:vars.reassign",
+      "module": "M2",
+      "steps": [
+        {
+          "example": "colour = \"red\"\nprint(colour)\ncolour = \"blue\"\nprint(colour)",
+          "example_output": "red\nblue\n",
+          "kind": "explain",
+          "text": "A variable can get a new value later in the program. The old value is gone: the variable only\nremembers the **latest** value it was given."
+        },
+        {
+          "id": "ex:vars.reassign/fill-new-value",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.reassign/predict-copy",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.reassign/give-new-value",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Giving a variable a new value"
+    },
+    {
       "concept": "vars.use",
-      "contentHash": "cdc07468bd3786db",
+      "contentHash": "41e2711e67aa998d",
       "id": "lesson:vars.use",
+      "module": "M2",
       "steps": [
         {
           "example": "name = \"Ada\"\nprint(name)\nprint(\"name\")",
@@ -204,6 +346,10 @@
           "kind": "exercise"
         },
         {
+          "id": "ex:vars.use/type-and-check",
+          "kind": "exercise"
+        },
+        {
           "id": "ex:vars.use/greet-by-name",
           "kind": "exercise"
         }
@@ -211,6 +357,16 @@
       "title": "Using variables"
     }
   ],
+  "path": [
+    {
+      "lessons": [
+        "lesson:vars.use",
+        "lesson:vars.reassign"
+      ],
+      "module": "M2",
+      "title": "Variables"
+    }
+  ],
   "python": "3.14",
-  "schema": 1
+  "schema": 2
 }

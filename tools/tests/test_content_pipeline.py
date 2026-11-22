@@ -52,7 +52,7 @@ prompt = "What prints?"
 options = ["cat", "dog"]
 explanation = "b keeps the old value."
 [option_misconceptions]
-"dog" = "mc.vars-auto-update"
+"dog" = { id = "mc.vars-auto-update", message = "b keeps the value it got." }
 """,
     "program.py": 'a = "cat"\nb = a\na = "dog"\nprint(b)\n',
 }
@@ -162,12 +162,29 @@ class PipelineNegativeTests(_ContentTree):
         self.assertIn("content-error", self.codes())
 
     def test_predict_answer_not_among_options(self):
-        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('options = ["cat", "dog"]', 'options = ["dog", "a"]'), ('"dog" = "mc.vars-auto-update"', '')]})
+        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('options = ["cat", "dog"]', 'options = ["dog", "a"]'), ('"dog" = { id = "mc.vars-auto-update", message = "b keeps the value it got." }', '')]})
         self.assertIn("answer-not-in-options", self.codes())
 
     def test_predict_correct_option_tagged_as_misconception(self):
-        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('"dog" = "mc.vars-auto-update"', '"cat" = "mc.vars-auto-update"')]})
+        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('"dog" = {', '"cat" = {')]})
         self.assertIn("correct-option-has-misconception", self.codes())
+
+    def test_predict_misconception_without_message(self):
+        # the pre-F3.5 form (bare id) gave the learner nothing to read (§14.4)
+        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('"dog" = { id = "mc.vars-auto-update", message = "b keeps the value it got." }', '"dog" = "mc.vars-auto-update"')]})
+        self.assertIn("bad-option-misconceptions", self.codes())
+
+    def test_predict_misconception_with_empty_message(self):
+        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('message = "b keeps the value it got."', 'message = "  "')]})
+        self.assertIn("bad-option-misconceptions", self.codes())
+
+    def test_predict_misconception_on_unknown_option(self):
+        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('"dog" = {', '"bird" = {')]})
+        self.assertIn("unknown-option", self.codes())
+
+    def test_predict_misconception_not_in_catalog(self):
+        self.write("vars.reassign/predict", PREDICT, **{"exercise.toml": [('id = "mc.vars-auto-update"', 'id = "mc.no-such-thing"')]})
+        self.assertIn("unknown-misconception", self.codes())
 
     # --- static checks
     def test_unknown_concept(self):
@@ -283,6 +300,29 @@ class LessonNegativeTests(_ContentTree):
     def test_file_name_must_match_concept(self):
         self.lesson(LESSON, name="variables.toml")
         self.assertIn("lesson-file-mismatch", self.codes())
+
+
+class PathTests(_ContentTree):
+    """The learning path follows concepts.toml order, not file names (§13.6, §14.5)."""
+
+    def test_lessons_carry_their_module_and_path_follows_catalog_order(self):
+        self.write("vars.use/greet", GOOD)
+        self.write("vars.use/fill", FILL)
+        self.write("vars.use/predict", PREDICT_USE)
+        self.write("vars.reassign/predict", PREDICT)
+        self.write("vars.reassign/predict2", PREDICT, **{"exercise.toml": [('id = "ex:vars.reassign/predict"', 'id = "ex:vars.reassign/predict2"')]})
+        self.write("vars.reassign/predict3", PREDICT, **{"exercise.toml": [('id = "ex:vars.reassign/predict"', 'id = "ex:vars.reassign/predict3"')]})
+        d = self.tmp / "content" / "en" / "lessons"
+        d.mkdir(parents=True, exist_ok=True)
+        # vars.reassign sorts first by file name, but comes after vars.use in the catalog
+        (d / "vars.reassign.toml").write_text('concept = "vars.reassign"\ntitle = "Reassignment"\n' + EXPLAIN
+            + ex("ex:vars.reassign/predict") + ex("ex:vars.reassign/predict2") + ex("ex:vars.reassign/predict3"), encoding="utf-8")
+        (d / "vars.use.toml").write_text(LESSON, encoding="utf-8")
+        bundle, _, report = pipeline.build(self.tmp)
+        self.assertEqual(report.errors, [])
+        self.assertEqual({l["id"]: l["module"] for l in bundle["lessons"]}, {"lesson:vars.use": "M2", "lesson:vars.reassign": "M2"})
+        self.assertEqual(bundle["path"], [{"module": "M2", "title": "Variables", "lessons": ["lesson:vars.use", "lesson:vars.reassign"]}])
+        self.assertEqual(bundle["schema"], pipeline.BUNDLE_SCHEMA)
 
 
 if __name__ == "__main__":

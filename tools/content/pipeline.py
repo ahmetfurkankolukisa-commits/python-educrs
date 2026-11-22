@@ -39,6 +39,8 @@ ERROR_OPTION = "Error"
 MIN_HINTS = {"code": 2, "verbatim": 1, "predict-output": 0, "fill-gap": 0}
 GAP = "____"
 LESSON_MIN_EXERCISES = 3
+# 2 (F3.5): lessons carry `module`, the bundle carries `path`, predict option misconceptions are { id, message }.
+BUNDLE_SCHEMA = 2
 PYTHON = "%d.%d" % sys.version_info[:2]
 
 
@@ -63,6 +65,15 @@ def load_catalog(root):
     with open(root / "content" / "concepts.toml", "rb") as f:
         data = tomllib.load(f)
     return {c["id"] for c in data["concept"]}, {m["id"] for m in data["misconception"]}
+
+
+def load_path_order(root):
+    """Modules in catalog order with titles, and each concept's (module, position)."""
+    with open(root / "content" / "concepts.toml", "rb") as f:
+        data = tomllib.load(f)
+    modules = [{"id": m["id"], "title": m["title"]} for m in data["module"]]
+    place = {c["id"]: (c["module"], i) for i, c in enumerate(data["concept"])}
+    return modules, place
 
 
 def read_text(folder, rel, where, report):
@@ -154,17 +165,10 @@ def build_entry(root, path, concepts, misconceptions, report):
             report.error(where, "duplicate-options", "options must be distinct")
         if options and ERROR_OPTION not in options:
             options = options + [ERROR_OPTION]
-        om = d.get("option_misconceptions", {})
-        if not isinstance(om, dict):
-            report.error(where, "bad-option-misconceptions", "option_misconceptions must map option text to a misconception id")
-            om = {}
-        for opt, mid in om.items():
-            if opt not in options:
-                report.error(where, "unknown-option", f"option_misconceptions refers to {opt!r}, which is not an option")
-            if mid not in misconceptions:
-                report.error(where, "unknown-misconception", f"{mid!r} is not in the concepts.toml catalog")
+        om = _tagged(d.get("option_misconceptions", {}), options, misconceptions, where, report,
+                     what="option", bad="bad-option-misconceptions", unknown="unknown-option")
         entry["predict"] = {
-            "program": program, "options": options, "option_misconceptions": dict(sorted(om.items())),
+            "program": program, "options": options, "option_misconceptions": om,
             "explanation": _str(d, "explanation", where, report),
         }
     else:  # fill-gap (docs/05-f3-mvp0.md §13.4)
@@ -186,26 +190,35 @@ def _fill_gap(d, catalog, where, report):
     if answer not in tiles:
         report.error(where, "answer-not-in-tiles", "answer must be one of the tiles")
     tm = d.get("tile_misconceptions", {})
-    clean = {}
-    if not isinstance(tm, dict):
-        report.error(where, "bad-tile-misconceptions", "tile_misconceptions must map a tile to { id, message }")
-        tm = {}
-    for tile, v in tm.items():
-        if tile not in tiles:
-            report.error(where, "unknown-tile", f"tile_misconceptions refers to {tile!r}, which is not a tile")
-        if tile == answer:
-            report.error(where, "correct-tile-has-misconception", "the answer tile cannot be tagged with a misconception")
-        if not (isinstance(v, dict) and isinstance(v.get("id"), str) and isinstance(v.get("message"), str) and v["message"].strip()):
-            report.error(where, "bad-tile-misconceptions", f"{tile!r}: expected {{ id = \"mc.…\", message = \"…\" }}")
-            continue
-        if v["id"] not in catalog:
-            report.error(where, "unknown-misconception", f"{v['id']!r} is not in the concepts.toml catalog")
-        clean[tile] = {"id": v["id"], "message": v["message"].strip()}
+    if isinstance(tm, dict) and answer in tm:
+        report.error(where, "correct-tile-has-misconception", "the answer tile cannot be tagged with a misconception")
+    clean = _tagged(tm, tiles, catalog, where, report, what="tile", bad="bad-tile-misconceptions", unknown="unknown-tile")
     return {
         "template": template, "tiles": tiles, "answer": answer,
         "explanation": _str(d, "explanation", where, report),
         "tile_misconceptions": dict(sorted(clean.items())),
     }
+
+
+def _tagged(mapping, keys, catalog, where, report, what, bad, unknown):
+    """Wrong answers (tiles / options) tagged with a misconception: `{ id, message }` each.
+
+    The message is what the learner sees (catalog `belief` text is for authors, not learners).
+    """
+    if not isinstance(mapping, dict):
+        report.error(where, bad, f"{what}_misconceptions must map a {what} to {{ id, message }}")
+        return {}
+    clean = {}
+    for key, v in mapping.items():
+        if key not in keys:
+            report.error(where, unknown, f"{what}_misconceptions refers to {key!r}, which is not a {what}")
+        if not (isinstance(v, dict) and isinstance(v.get("id"), str) and isinstance(v.get("message"), str) and v["message"].strip()):
+            report.error(where, bad, f"{key!r}: expected {{ id = \"mc.…\", message = \"…\" }}")
+            continue
+        if v["id"] not in catalog:
+            report.error(where, "unknown-misconception", f"{v['id']!r} is not in the concepts.toml catalog")
+        clean[key] = {"id": v["id"], "message": v["message"].strip()}
+    return dict(sorted(clean.items()))
 
 
 def _check(c, where, report):
@@ -357,7 +370,7 @@ def content_hash(entry):
 
 
 # ------------------------------------------------------------------ lessons (§13.2)
-def build_lessons(root, entries, concepts, report):
+def build_lessons(root, entries, concepts, report, place=None):
     lroot = root / "content" / "en" / "lessons"
     paths = sorted(lroot.glob("*.toml")) if lroot.is_dir() else []
     by_id = {e["id"]: e for e in entries}
@@ -423,13 +436,28 @@ def build_lessons(root, entries, concepts, report):
             report.error(where, "last-step-not-exercise", "a lesson ends with an exercise step")
         if exercises < LESSON_MIN_EXERCISES:
             report.error(where, "too-few-exercises", f"{exercises} exercise step(s); a lesson needs at least {LESSON_MIN_EXERCISES}")
-        lesson = {"id": f"lesson:{concept}", "concept": concept, "title": title, "steps": out}
+        lesson = {"id": f"lesson:{concept}", "concept": concept, "module": (place or {}).get(concept, (None, 0))[0],
+                  "title": title, "steps": out}
         lesson["contentHash"] = content_hash(lesson)
         lessons.append(lesson)
     with_lesson = {l["concept"] for l in lessons}
     for c in sorted({e["concept"] for e in entries} - with_lesson):
         report.warn(c, "no-lesson", "has exercises but no lesson manifest yet (F3.7)")
     return sorted(lessons, key=lambda l: l["id"])
+
+
+def build_path(modules, place, lessons):
+    """Learning path (§13.6): modules in catalog order, each with its lessons in concept order.
+
+    Only concepts that have a lesson appear; modules without lessons are left out.
+    """
+    order = sorted((l for l in lessons if l["concept"] in place), key=lambda l: place[l["concept"]][1])
+    path = []
+    for m in modules:
+        ids = [l["id"] for l in order if l["module"] == m["id"]]
+        if ids:
+            path.append({"module": m["id"], "title": m["title"], "lessons": ids})
+    return path
 
 
 # ------------------------------------------------------------------ build
@@ -460,11 +488,13 @@ def build(root):
     for c, n in sorted(per_concept.items()):
         if n < 5:
             report.warn(c, "coverage", f"{n} item(s); target is >= 5 per concept (F3.7)")
-    lessons = build_lessons(root, entries, concepts, report)
+    modules, place = load_path_order(root)
+    lessons = build_lessons(root, entries, concepts, report, place)
     bundle = {
-        "schema": 1, "grader": grader.VERSION, "python": PYTHON,
+        "schema": BUNDLE_SCHEMA, "grader": grader.VERSION, "python": PYTHON,
         "exercises": sorted(entries, key=lambda e: e["id"]),
         "lessons": lessons,
+        "path": build_path(modules, place, lessons),
     }
     return bundle, goldens, report
 

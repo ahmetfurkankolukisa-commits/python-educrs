@@ -1,0 +1,25 @@
+concept = "vars.reassign"
+title = "Giving a variable a new value"
+
+[[steps]]
+kind = "explain"
+text = """
+A variable can get a new value later in the program. The old value is gone: the variable only
+remembers the **latest** value it was given.
+"""
+example = """colour = "red"
+print(colour)
+colour = "blue"
+print(colour)"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.reassign/fill-new-value"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.reassign/predict-copy"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.reassign/give-new-value"

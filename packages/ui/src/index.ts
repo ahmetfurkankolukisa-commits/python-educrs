@@ -1,3 +1,14 @@
 export { contrastRatio, luminance, REQUIRED_PAIRS } from "./contrast.ts";
+export { parseInline, parseMarkdown, type Block, type Inline } from "./markdown.ts";
+export type { PanelTone, PathModuleView, PathNodeView } from "./types.ts";
 export { default as CodeEditor } from "./CodeEditor.svelte";
 export { default as SymbolBar } from "./SymbolBar.svelte";
+export { default as Markdown } from "./Markdown.svelte";
+export { default as CodeBlock } from "./CodeBlock.svelte";
+export { default as ChoiceList } from "./ChoiceList.svelte";
+export { default as GapFill } from "./GapFill.svelte";
+export { default as FeedbackPanel } from "./FeedbackPanel.svelte";
+export { default as HintLadder } from "./HintLadder.svelte";
+export { default as LessonHeader } from "./LessonHeader.svelte";
+export { default as LessonComplete } from "./LessonComplete.svelte";
+export { default as LearningPath } from "./LearningPath.svelte";

@@ -11,4 +11,4 @@ does not change `b` — so the program prints `cat`.
 """
 
 [option_misconceptions]
-"dog" = "mc.vars-auto-update"
+"dog" = { id = "mc.vars-auto-update", message = "`b = a` copies the value `a` has at that moment. Changing `a` later does not change `b`." }

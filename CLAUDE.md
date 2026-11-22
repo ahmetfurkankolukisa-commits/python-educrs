@@ -15,6 +15,7 @@
 
 ## Non-negotiables
 - **Sandbox** (`apps/run`) must stay a different *site* from the app (`python-educrs-run.<account>.workers.dev`; workers.dev is on the PSL), CSP without `'unsafe-eval'`, `connect-src 'self'`, `frame-ancestors` = app origin only. Grading always runs in a fresh worker.
+- **Storage**: `dexie` only inside `packages/store` (behind the `LocalStore` port; boundary rule + negative tests, `.astro` scanner too). Workspace packages declare `sideEffects` (ui: CSS only) so the `@educrs/ui` barrel tree-shakes — a module-level side effect there would ship every component to every page; `pnpm budget` shows it.
 - **Editor under CSP**: CodeMirror lives in a shadow root (`EditorView({root})`) so its styles go through `adoptedStyleSheets`; the CSP allows only `style-src-attr 'unsafe-inline'`, never inline `<style>`/`style-src 'unsafe-inline'`. A green test run does not prove the editor is styled — e2e asserts computed styles.
 - **Boundaries** (`.dependency-cruiser.cjs` + `tools/check-astro-imports.mjs`): `packages/core|i18n` import no frameworks; apps import UI libs only via `packages/ui`. Add a negative case to `tools/tests/test_boundaries.mjs` for every new rule.
 - **Event sourcing**: stored events are never rewritten; upcast on read; unknown types preserved; reward rules are versioned and append-only (plan §3.5.6).

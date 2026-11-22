@@ -1,0 +1,16 @@
+id = "ex:vars.use/type-and-check"
+concept = "vars.use"
+type = "verbatim"
+difficulty = "easy"
+title = "Type it yourself"
+prompt = """
+Type this program into the editor **exactly as it is**, then press **Check**:
+
+```python
+city = "Lisbon"
+print("I live in", city)
+```
+"""
+
+[[hints]]
+text = "Two lines: first create the variable, then print it. Watch the quotes around `\"Lisbon\"` and the comma after `\"I live in\"`."

@@ -23,6 +23,9 @@ const CASES = [
   { name: "app .svelte uses UI lib directly", file: "apps/web/src/components/__Violation.svelte", body: '<script lang="ts">\n  import "bits-ui";\n</script>\n', rule: "ui-libs-only-via-packages-ui" },
   { name: "app .astro uses UI lib directly", file: "apps/web/src/components/__Violation.astro", body: '---\nimport "bits-ui";\n---\n<p>x</p>\n', rule: "ui-libs-only-via-packages-ui" },
   { name: "app uses CodeMirror directly", file: "apps/web/src/__violation.ts", body: 'import "@codemirror/view";\nexport {};\n', rule: "ui-libs-only-via-packages-ui" },
+  { name: "app uses Dexie directly", file: "apps/web/src/__violation.ts", body: 'import "dexie";\nexport {};\n', rule: "storage-only-via-packages-store" },
+  { name: "app .astro uses Dexie directly", file: "apps/web/src/components/__Violation.astro", body: '---\nimport "dexie";\n---\n<p>x</p>\n', rule: "storage-only-via-packages-store" },
+  { name: "ui package uses Dexie", file: "packages/ui/src/__violation.ts", body: 'import "dexie";\nexport {};\n', rule: "storage-only-via-packages-store" },
   { name: "circular import", file: "packages/ui/src/__a.ts", body: 'import "./__b.ts";\nexport const a = 1;\n', extra: { "packages/ui/src/__b.ts": 'import "./__a.ts";\nexport const b = 1;\n' }, rule: "no-circular" },
 ];
 

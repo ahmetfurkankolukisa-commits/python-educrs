@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@astrojs/svelte": "9.1.6",
+    "@educrs/core": "workspace:*",
     "@educrs/i18n": "workspace:*",
+    "@educrs/store": "workspace:*",
     "@educrs/ui": "workspace:*",
     "@tailwindcss/vite": "4.3.5",
     "astro": "7.4.13",

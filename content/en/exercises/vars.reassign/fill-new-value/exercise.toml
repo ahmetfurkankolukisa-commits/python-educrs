@@ -1,0 +1,15 @@
+id = "ex:vars.reassign/fill-new-value"
+concept = "vars.reassign"
+type = "fill-gap"
+difficulty = "easy"
+title = "A new colour"
+prompt = "Fill the gap so the program prints `blue`."
+template = """colour = "red"
+colour = ____
+print(colour)"""
+tiles = ['"blue"', "blue", '"red"']
+answer = '"blue"'
+explanation = "The second line gives `colour` a new value. The old value, `\"red\"`, is gone, so the program prints `blue`."
+
+[tile_misconceptions]
+"blue" = { id = "mc.missing-quotes", message = "Without quotes, Python looks for a variable called `blue`, and there isn't one. Text needs quotes: `\"blue\"`." }

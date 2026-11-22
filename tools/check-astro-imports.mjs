@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // dependency-cruiser cannot parse .astro files. This scans their frontmatter and <script>
-// blocks for import specifiers and applies the same "UI libraries only via @educrs/ui" rule.
+// blocks for import specifiers and applies the same rules as .dependency-cruiser.cjs for apps:
+// UI libraries only via @educrs/ui, storage (Dexie) only via @educrs/store.
 // Usage: node tools/check-astro-imports.mjs [--json]
 import fs from "node:fs";
 import path from "node:path";
@@ -8,8 +9,11 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const { THIRD_PARTY_UI } = createRequire(import.meta.url)("./boundary-patterns.cjs");
-const uiRe = new RegExp(THIRD_PARTY_UI);
+const { THIRD_PARTY_UI, STORAGE } = createRequire(import.meta.url)("./boundary-patterns.cjs");
+const RULES = [
+  { name: "ui-libs-only-via-packages-ui", re: new RegExp(THIRD_PARTY_UI) },
+  { name: "storage-only-via-packages-store", re: new RegExp(STORAGE) },
+];
 
 const files = [];
 const walk = (dir) => {
@@ -28,7 +32,7 @@ for (const file of files) {
   const front = /^---\r?\n([\s\S]*?)\r?\n---/.exec(src)?.[1] ?? "";
   const scripts = [...src.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join("\n");
   for (const m of `${front}\n${scripts}`.matchAll(/(?:import\s+(?:[^'"]*?\s+from\s+)?|import\s*\(\s*)["']([^"']+)["']/g)) {
-    if (uiRe.test(m[1])) violations.push({ rule: { name: "ui-libs-only-via-packages-ui" }, from: path.relative(root, file), to: m[1] });
+    for (const r of RULES) if (r.re.test(m[1])) violations.push({ rule: { name: r.name }, from: path.relative(root, file), to: m[1] });
   }
 }
 

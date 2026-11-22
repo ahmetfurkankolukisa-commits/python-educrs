@@ -1,0 +1,17 @@
+---
+import Base from "../../../layouts/Base.astro";
+import LessonFlow from "../../../components/LessonFlow.svelte";
+import { nextLesson } from "@educrs/core";
+import { bundle, exercisesOf, lessonById, lessonHref, lessonSlug } from "../../../lib/content.ts";
+
+export function getStaticPaths() {
+  return bundle.lessons.map((l) => ({ params: lessonSlug(l), props: { id: l.id } }));
+}
+
+const lesson = lessonById(Astro.props.id);
+const next = nextLesson(bundle.path, lesson.id);
+---
+
+<Base title={`${lesson.title} · Learn Python`}>
+  <LessonFlow client:load lesson={lesson} exercises={exercisesOf(lesson)} pathHref="/learn/" nextHref={next ? lessonHref(lessonById(next)) : null} />
+</Base>

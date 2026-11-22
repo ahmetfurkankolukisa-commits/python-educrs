@@ -3,7 +3,7 @@
  * architecture cannot erode silently. tools/tests/test_boundaries.mjs proves each rule
  * actually fires by planting a deliberate violation.
  */
-const { INFRA, THIRD_PARTY_UI } = require("./tools/boundary-patterns.cjs");
+const { INFRA, STORAGE, THIRD_PARTY_UI } = require("./tools/boundary-patterns.cjs");
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -28,6 +28,13 @@ module.exports = {
       severity: "error",
       from: { path: "^apps/" },
       to: { path: THIRD_PARTY_UI },
+    },
+    {
+      name: "storage-only-via-packages-store",
+      comment: "IndexedDB access (Dexie) lives behind the LocalStore port in packages/store, so storage can be swapped or faked in one place (docs/05-f3-mvp0.md §14.1).",
+      severity: "error",
+      from: { pathNot: "^packages/store/" },
+      to: { path: STORAGE },
     },
     {
       name: "packages-never-import-apps",
