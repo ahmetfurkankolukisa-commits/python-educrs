@@ -22,5 +22,9 @@ export default defineConfig({
     { command: "node tools/serve-dist.mjs apps/web/dist localhost 4321", url: "http://localhost:4321/", reuseExistingServer: !ci },
     { command: "node tools/serve-dist.mjs apps/run/dist 127.0.0.1 4322", url: "http://127.0.0.1:4322/build-info.json", reuseExistingServer: !ci },
     { command: "node e2e/evil-server.mjs", url: "http://127.0.0.1:4323/health", reuseExistingServer: !ci },
+    // Same app build on two more origins: an allowed "preview" and a "spoof" that may embed the
+    // sandbox (frame-ancestors) but is NOT in the sandbox's origin allowlist (protocol v1).
+    { command: "node tools/serve-dist.mjs apps/web/dist localhost 4325", url: "http://localhost:4325/", reuseExistingServer: !ci },
+    { command: "node tools/serve-dist.mjs apps/web/dist localhost 4326", url: "http://localhost:4326/", reuseExistingServer: !ci },
   ],
 });

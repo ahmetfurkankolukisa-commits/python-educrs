@@ -98,9 +98,16 @@ def _format_exc(e):
     return "".join(te.format())
 
 
-async def run_user(code, mode="run"):
+_RUNS = 0  # how many user programs this worker has run (a fresh grading worker reports 1)
+
+
+async def run_user(code, mode="run", spec=None, seed=0):
     """Returns (status, error, extra_json)."""
+    global _RUNS
+    _RUNS += 1
     try:
+        if mode == "check":
+            return ("ok", None, _check(code, spec, seed))
         if mode == "run":
             _write_main(code)
             await eval_code_async(code, _new_globals(), filename=MAIN)
@@ -118,6 +125,40 @@ async def run_user(code, mode="run"):
         return ("error", _format_exc(e), None)
     finally:
         _restore()
+
+
+# ---------------------------------------------------------------- grading (F3.1: minimal; F3.2 replaces)
+def _normalise(text):
+    lines = text.replace("\r\n", "\n").rstrip("\n").split("\n")
+    return "\n".join(line.rstrip() for line in lines)
+
+
+def _check(code, spec_json, seed):
+    """Grade in THIS (fresh) worker. Output is captured, never streamed to the learner."""
+    import contextlib
+    import io
+    import random
+
+    spec = json.loads(spec_json or "{}")
+    kind = spec.get("kind")
+    result = {"seed": seed, "worker_runs": _RUNS}
+    if kind != "stdout":
+        return json.dumps({**result, "passed": False, "error": f"unsupported check kind {kind!r}"})
+    random.seed(seed)
+    _write_main(code)
+    buf = io.StringIO()
+    err = None
+    try:
+        with contextlib.redirect_stdout(buf):
+            exec(compile(code, MAIN, "exec"), _new_globals())
+    except SystemExit:
+        pass
+    except BaseException as e:  # noqa: BLE001
+        err = _format_exc(e)
+    expected = spec.get("expected", "")
+    actual = buf.getvalue()
+    passed = err is None and _normalise(actual) == _normalise(expected)
+    return json.dumps({**result, "passed": passed, "expected": expected, "actual": actual, "error": err})
 
 
 def _probe():
