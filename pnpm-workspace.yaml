@@ -1,3 +1,10 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# pnpm blocks dependency install scripts by default (supply-chain safety) and CI fails on
+# unapproved ones. Only these well-known wrangler dependencies may run them:
+#   esbuild — verifies its platform binary; workerd — local Workers runtime for `wrangler dev`.
+allowBuilds:
+  esbuild: true
+  workerd: true
