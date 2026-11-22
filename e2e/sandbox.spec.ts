@@ -167,9 +167,15 @@ test.describe("code editor (F3.4)", () => {
     await editorReady(page);
     const style = await page.locator(".cm-editor").evaluate((el) => {
       const cs = getComputedStyle(el);
-      return { radius: cs.borderTopLeftRadius, font: getComputedStyle(el.querySelector(".cm-scroller")!).fontFamily, position: cs.position };
+      return {
+        radius: cs.borderTopLeftRadius,
+        token: getComputedStyle(document.documentElement).getPropertyValue("--radius-md").trim(),
+        font: getComputedStyle(el.querySelector(".cm-scroller")!).fontFamily,
+        position: cs.position,
+      };
     });
-    expect(style.radius).toBe("8px"); // --radius-md from our theme
+    expect(style.radius).toBe(style.token); // --radius-md from our theme, whatever its value
+    expect(style.token).not.toBe("");
     expect(style.font).toMatch(/mono|Menlo|monospace/i);
     expect(style.position).toBe("relative"); // CodeMirror's own base theme
   });

@@ -1,92 +1,119 @@
 /*
  * Design tokens — single source for colour, spacing, type, radius, motion (plan §2.4.3).
+ * Visual direction A, "warm and playful" (docs/05-f3-mvp0.md §17.5–17.6): Lexend, indigo with a
+ * coral spark, big round corners, buttons you can press.
  * Three themes share the same token names. Contrast of every text/background pair is
  * verified by packages/ui/src/contrast.test.ts; a colour change that hurts readability
  * fails CI. The dark values appear twice (media query + explicit theme); the test
  * checks both copies stay identical.
+ * -soft colours are backgrounds, -shadow/-fill are non-text (3:1), -strong is a button fill.
  */
 
 :root,
 [data-theme="light"] {
-  --color-bg: #fafaf9;
+  --color-bg: #fff8f1;
   --color-surface: #ffffff;
-  --color-text: #1c1917;
-  --color-text-muted: #57534e;
-  --color-border: #78716c;
-  --color-accent: #1d4ed8;
+  --color-text: #1f1b3a;
+  --color-text-muted: #5b5675;
+  --color-border: #8a82a6;
+  --color-border-soft: #e5e0f5;
+  --color-accent: #4338ca;
   --color-on-accent: #ffffff;
+  --color-accent-shadow: #312e81;
+  --color-accent-soft: #eef0ff;
   --color-success: #15803d;
   --color-danger: #b91c1c;
   --color-xp: #6d28d9;
+  --color-xp-soft: #f3e8ff;
   --color-streak: #c2410c;
-  --color-code-bg: #f5f5f4;
-  --color-focus: #1d4ed8;
+  --color-streak-fill: #e8590c;
+  --color-streak-soft: #ffedd5;
+  --color-code-bg: #f1eefb;
+  --color-focus: #4338ca;
   --color-code-keyword: #6d28d9;
   --color-code-string: #166534;
-  --color-code-comment: #57534e;
-  --color-code-number: #92400e;
-  --color-code-function: #1d4ed8;
+  --color-code-comment: #5b5675;
+  --color-code-number: #9a3412;
+  --color-code-function: #4338ca;
   --color-code-error-line: #fee2e2;
-  --color-warning: #854d0e;
+  --color-warning: #92400e;
+  --color-warning-strong: #b45309;
+  --color-on-warning-strong: #ffffff;
   --color-success-soft: #dcfce7;
-  --color-warning-soft: #fef9c3;
+  --color-warning-soft: #fff1cc;
   --color-danger-soft: #fee2e2;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not([data-theme="high-contrast"]) {
-    --color-bg: #1c1917;
-    --color-surface: #292524;
-    --color-text: #f5f5f4;
-    --color-text-muted: #a8a29e;
-    --color-border: #78716c;
-    --color-accent: #93c5fd;
-    --color-on-accent: #172554;
+    --color-bg: #16132b;
+    --color-surface: #221e3d;
+    --color-text: #f4f2ff;
+    --color-text-muted: #b8b2d6;
+    --color-border: #7a7399;
+    --color-border-soft: #3a3560;
+    --color-accent: #a5b4fc;
+    --color-on-accent: #1e1b4b;
+    --color-accent-shadow: #6366f1;
+    --color-accent-soft: #2e2a5c;
     --color-success: #86efac;
     --color-danger: #fca5a5;
     --color-xp: #c4b5fd;
+    --color-xp-soft: #2e1f55;
     --color-streak: #fdba74;
-    --color-code-bg: #0c0a09;
-    --color-focus: #93c5fd;
-  --color-code-keyword: #c4b5fd;
-  --color-code-string: #86efac;
-  --color-code-comment: #a8a29e;
-  --color-code-number: #fdba74;
-  --color-code-function: #93c5fd;
-  --color-code-error-line: #450a0a;
-    --color-warning: #fde047;
-    --color-success-soft: #052e16;
-    --color-warning-soft: #422006;
-    --color-danger-soft: #450a0a;
+    --color-streak-fill: #fb923c;
+    --color-streak-soft: #3d2410;
+    --color-code-bg: #0f0d20;
+    --color-focus: #a5b4fc;
+    --color-code-keyword: #c4b5fd;
+    --color-code-string: #86efac;
+    --color-code-comment: #b8b2d6;
+    --color-code-number: #fdba74;
+    --color-code-function: #a5b4fc;
+    --color-code-error-line: #4c1d24;
+    --color-warning: #fcd34d;
+    --color-warning-strong: #fcd34d;
+    --color-on-warning-strong: #1f1b3a;
+    --color-success-soft: #0d3320;
+    --color-warning-soft: #3d2a06;
+    --color-danger-soft: #3f1218;
     color-scheme: dark;
   }
 }
 
 [data-theme="dark"] {
-  --color-bg: #1c1917;
-  --color-surface: #292524;
-  --color-text: #f5f5f4;
-  --color-text-muted: #a8a29e;
-  --color-border: #78716c;
-  --color-accent: #93c5fd;
-  --color-on-accent: #172554;
+  --color-bg: #16132b;
+  --color-surface: #221e3d;
+  --color-text: #f4f2ff;
+  --color-text-muted: #b8b2d6;
+  --color-border: #7a7399;
+  --color-border-soft: #3a3560;
+  --color-accent: #a5b4fc;
+  --color-on-accent: #1e1b4b;
+  --color-accent-shadow: #6366f1;
+  --color-accent-soft: #2e2a5c;
   --color-success: #86efac;
   --color-danger: #fca5a5;
   --color-xp: #c4b5fd;
+  --color-xp-soft: #2e1f55;
   --color-streak: #fdba74;
-  --color-code-bg: #0c0a09;
-  --color-focus: #93c5fd;
+  --color-streak-fill: #fb923c;
+  --color-streak-soft: #3d2410;
+  --color-code-bg: #0f0d20;
+  --color-focus: #a5b4fc;
   --color-code-keyword: #c4b5fd;
   --color-code-string: #86efac;
-  --color-code-comment: #a8a29e;
+  --color-code-comment: #b8b2d6;
   --color-code-number: #fdba74;
-  --color-code-function: #93c5fd;
-  --color-code-error-line: #450a0a;
-  --color-warning: #fde047;
-  --color-success-soft: #052e16;
-  --color-warning-soft: #422006;
-  --color-danger-soft: #450a0a;
+  --color-code-function: #a5b4fc;
+  --color-code-error-line: #4c1d24;
+  --color-warning: #fcd34d;
+  --color-warning-strong: #fcd34d;
+  --color-on-warning-strong: #1f1b3a;
+  --color-success-soft: #0d3320;
+  --color-warning-soft: #3d2a06;
+  --color-danger-soft: #3f1218;
   color-scheme: dark;
 }
 
@@ -96,12 +123,18 @@
   --color-text: #ffffff;
   --color-text-muted: #e7e5e4;
   --color-border: #ffffff;
+  --color-border-soft: #ffffff;
   --color-accent: #ffff00;
   --color-on-accent: #000000;
+  --color-accent-shadow: #ffffff;
+  --color-accent-soft: #000000;
   --color-success: #4ade80;
   --color-danger: #ff8080;
   --color-xp: #f0abfc;
+  --color-xp-soft: #000000;
   --color-streak: #fdba74;
+  --color-streak-fill: #fdba74;
+  --color-streak-soft: #000000;
   --color-code-bg: #000000;
   --color-focus: #ffff00;
   --color-code-keyword: #f0abfc;
@@ -111,6 +144,8 @@
   --color-code-function: #ffff00;
   --color-code-error-line: #4c0519;
   --color-warning: #fde047;
+  --color-warning-strong: #fde047;
+  --color-on-warning-strong: #000000;
   --color-success-soft: #000000;
   --color-warning-soft: #000000;
   --color-danger-soft: #000000;
@@ -127,7 +162,7 @@
   --space-8: 2rem;
   --space-12: 3rem;
 
-  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Lexend Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -137,9 +172,12 @@
   --text-3xl: 2.25rem;
   --leading: 1.6;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* "Pressable" depth: a solid edge under buttons and tiles that disappears when pressed. */
+  --press: 4px;
 
   --target-min: 44px; /* minimum touch target (plan §2.4.4) */
 

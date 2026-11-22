@@ -1,13 +1,14 @@
 ---
 import Base from "../layouts/Base.astro";
 import Runner from "../components/Runner.svelte";
+import { Button } from "@educrs/ui";
 import { t } from "@educrs/i18n";
 ---
 
 <Base>
   <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{t("home.heading")}</h1>
   <p class="mt-4 text-lg text-muted">{t("home.lead")}</p>
-  <a href="/learn/" class="mt-6 inline-grid min-h-11 place-items-center rounded-md bg-accent px-6 font-semibold text-on-accent" data-testid="start-learning">{t("home.startLearning")}</a>
+  <div class="mt-6"><Button href="/learn/" data-testid="start-learning">{t("home.startLearning")}</Button></div>
 
   <section aria-labelledby="try" class="mt-10">
     <h2 id="try" class="text-xl font-semibold">{t("home.tryIt")}</h2>

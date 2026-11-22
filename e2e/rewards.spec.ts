@@ -17,6 +17,8 @@ test.describe("rewards", () => {
     await expect(goal).toHaveAttribute("data-met", "true");
     await expect(goal).toContainText("Daily goal reached!");
     await expect(goal).toHaveClass(/celebrate/);
+    // the small burst of sparks around the badge (direction A, §17.6) is drawn…
+    expect(await page.locator(".sparks").evaluate((el) => getComputedStyle(el).display)).not.toBe("none");
     await expect(page.getByTestId("reward-streak")).toHaveAttribute("data-days", "1");
 
     const question = page.getByTestId("goal-question");
@@ -63,9 +65,12 @@ test.describe("rewards", () => {
       await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "55");
       await expect(page.getByTestId("stat-goal").getByTestId("goal-ring")).toHaveAttribute("data-value", "0");
 
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await finishVarsReassign(page);
       await expect(page.getByTestId("reward-xp")).toHaveText("+60 XP");
       await expect(page.getByTestId("reward-streak")).toHaveAttribute("data-days", "2");
+      // …but not for someone who asked for less motion
+      expect(await page.locator(".sparks").evaluate((el) => getComputedStyle(el).display)).toBe("none");
       await openPath(page);
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-days", "2");
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-lit", "true");

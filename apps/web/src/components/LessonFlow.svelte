@@ -3,7 +3,7 @@
   // pure reducer in @educrs/core; this component wires it to the sandbox, the store and the UI.
   import { onMount, tick } from "svelte";
   import { catalog, t, type MessageKey } from "@educrs/i18n";
-  import { ChoiceList, CodeBlock, FeedbackPanel, GapFill, GoalPicker, HintLadder, LessonComplete, LessonHeader, Markdown } from "@educrs/ui";
+  import { Button, ChoiceList, CodeBlock, FeedbackPanel, GapFill, GoalPicker, HintLadder, LessonComplete, LessonHeader, Markdown } from "@educrs/ui";
   import {
     EVENT, canReveal, checkFeedback, fillFeedback, flow, lessonRun, parseGrade, predictFeedback, resumePoint, revealRatio,
     startFlow, summary, type Exercise, type Explanation, type Feedback, type FlowAction, type FlowState, type Lesson,
@@ -262,9 +262,7 @@
         {#if step.example}
           <CodeBlock code={step.example} label={t("lesson.program")} output={step.example_output ?? null} outputLabel={t("lesson.exampleOutput")} />
         {/if}
-        <button type="button" class="min-h-11 rounded-md bg-accent px-6 font-semibold text-on-accent" onclick={next} data-testid="continue">
-          {t("lesson.continue")}
-        </button>
+        <Button wide onclick={next} data-testid="continue">{t("lesson.continue")}</Button>
       {:else if ex}
         <Markdown text={ex.prompt} />
 
@@ -300,10 +298,10 @@
               <HintLadder hints={ex.hints} shown={fs.hints} onmore={() => dispatch({ type: "hint", available: ex.hints.length })} />
             </div>
             {#if canReveal(fs) && fs.revealed < units(ex)}
-              <button type="button" class="min-h-11 rounded-md border-2 border-border px-4 font-semibold" onclick={reveal} data-testid="show-me">{t("lesson.showMe")}</button>
+              <Button variant="secondary" onclick={reveal} data-testid="show-me">{t("lesson.showMe")}</Button>
             {/if}
             {#if ex.type === "predict-output" || ex.type === "fill-gap"}
-              <button type="button" class="min-h-11 rounded-md bg-accent px-8 font-semibold text-on-accent" onclick={check} data-testid="check">{t("lesson.check")}</button>
+              <Button onclick={check} data-testid="check">{t("lesson.check")}</Button>
             {/if}
           </div>
           {#if pickFirst}<p class="text-danger" role="alert">{t("lesson.pickFirst")}</p>{/if}

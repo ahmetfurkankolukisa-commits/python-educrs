@@ -4,6 +4,7 @@
   // facts: no badge, no numbers, no celebration (plan §3.5.1 #4).
   import { onMount, type Snippet } from "svelte";
   import { t } from "@educrs/i18n";
+  import Button from "./Button.svelte";
   import GoalRing from "./GoalRing.svelte";
 
   interface Rewards {
@@ -36,10 +37,14 @@
 
 <section class="done" data-testid="lesson-complete" data-plain={plain}>
   {#if !plain}
-    <svg class="badge" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-      <circle cx="32" cy="32" r="29" />
-      <path d="M19 33l9 9 17-18" />
-    </svg>
+    <div class="badge-wrap" aria-hidden="true">
+      <svg class="badge" viewBox="0 0 64 64" focusable="false">
+        <circle cx="32" cy="32" r="30" />
+        <path d="M32 13l5.6 11.4 12.6 1.8-9.1 8.9 2.1 12.5L32 41.7l-11.2 5.9 2.1-12.5-9.1-8.9 12.6-1.8z" />
+      </svg>
+      <!-- A small burst of sparks: CSS only, never in plain mode or with reduced motion (§17.6). -->
+      <span class="sparks">{#each [0, 1, 2, 3, 4, 5, 6, 7] as i (i)}<i></i>{/each}</span>
+    </div>
   {/if}
   <h1 tabindex="-1" bind:this={heading}>{t("lesson.complete.title")}</h1>
   <p class="lesson">{lessonTitle}</p>
@@ -68,8 +73,8 @@
   {/if}
   {@render children?.()}
   <div class="actions">
-    {#if nextHref}<a class="btn primary" href={nextHref}>{t("lesson.complete.next")}</a>{/if}
-    <a class="btn" class:primary={!nextHref} href={pathHref}>{t("lesson.complete.path")}</a>
+    {#if nextHref}<Button href={nextHref} wide>{t("lesson.complete.next")}</Button>{/if}
+    <Button href={pathHref} variant={nextHref ? "secondary" : "primary"} wide>{t("lesson.complete.path")}</Button>
   </div>
 </section>
 
@@ -81,15 +86,52 @@
     padding: var(--space-8) var(--space-4);
     text-align: center;
   }
+  .badge-wrap {
+    position: relative;
+    width: 7rem;
+    height: 7rem;
+  }
   .badge {
-    width: 5rem;
-    height: 5rem;
-    fill: var(--color-success-soft);
-    stroke: var(--color-success);
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 100%;
+    height: 100%;
     animation: pop var(--motion-base) var(--ease-out);
+  }
+  .badge circle {
+    fill: var(--color-streak-soft);
+  }
+  .badge path {
+    fill: var(--color-streak-fill);
+    stroke: var(--color-streak);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .sparks i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: -0.25rem;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0;
+    animation: spark 700ms var(--ease-out) 120ms;
+  }
+  .sparks i:nth-child(odd) {
+    background: var(--color-streak-fill);
+  }
+  .sparks i:nth-child(1) { --dx: 0rem; --dy: -4.5rem; }
+  .sparks i:nth-child(2) { --dx: 3.2rem; --dy: -3.2rem; }
+  .sparks i:nth-child(3) { --dx: 4.5rem; --dy: 0rem; }
+  .sparks i:nth-child(4) { --dx: 3.2rem; --dy: 3.2rem; }
+  .sparks i:nth-child(5) { --dx: 0rem; --dy: 4.5rem; }
+  .sparks i:nth-child(6) { --dx: -3.2rem; --dy: 3.2rem; }
+  .sparks i:nth-child(7) { --dx: -4.5rem; --dy: 0rem; }
+  .sparks i:nth-child(8) { --dx: -3.2rem; --dy: -3.2rem; }
+  @media (prefers-reduced-motion: reduce) {
+    .sparks {
+      display: none;
+    }
   }
   h1 {
     margin: 0;
@@ -120,63 +162,55 @@
     align-items: center;
     gap: var(--space-2);
     min-height: 2.75rem;
-    padding: var(--space-1) var(--space-3);
-    border: 1px solid var(--color-border);
+    padding: var(--space-1) var(--space-4);
     border-radius: 999px;
-    background: var(--color-surface);
-    font-weight: 600;
+    font-weight: 700;
   }
   .icon {
     width: 1.25rem;
     height: 1.25rem;
   }
   .xp {
+    background: var(--color-xp-soft);
     color: var(--color-xp);
   }
   .xp .icon {
     fill: var(--color-xp);
   }
+  .goal {
+    background: var(--color-success-soft);
+    color: var(--color-success);
+  }
   .streak {
+    background: var(--color-streak-soft);
     color: var(--color-streak);
   }
   .streak .icon {
-    fill: var(--color-streak);
+    fill: var(--color-streak-fill);
   }
   .goal.celebrate {
-    border-color: var(--color-success);
     animation: pop var(--motion-base) var(--ease-out);
   }
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-  }
-  .btn {
-    display: inline-grid;
-    place-items: center;
-    min-height: var(--target-min);
-    padding: 0 var(--space-6);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-md);
-    color: var(--color-text);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .btn.primary {
-    border-color: var(--color-accent);
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-  }
-  .btn:focus-visible {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
+    display: grid;
+    gap: var(--space-2);
+    width: min(100%, 22rem);
+    margin-top: var(--space-6);
   }
   @keyframes pop {
     from {
       transform: scale(0.6);
       opacity: 0;
+    }
+  }
+  @keyframes spark {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) scale(0.6);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--dx), var(--dy)) scale(1);
     }
   }
 </style>

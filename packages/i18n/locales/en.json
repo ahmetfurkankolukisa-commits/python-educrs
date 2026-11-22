@@ -99,6 +99,7 @@
   "path.state.completed": "Completed",
   "path.state.next": "Up next",
   "path.state.todo": "Not started",
+  "path.state.inProgress": "In progress",
   "path.module": "Module {id}",
   "lesson.loading": "Loading the lesson…",
   "nav.path": "Learning path",

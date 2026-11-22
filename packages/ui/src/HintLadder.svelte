@@ -43,10 +43,9 @@
     gap: var(--space-2);
   }
   li {
-    padding: var(--space-3);
-    border-left: 3px solid var(--color-accent);
-    background: var(--color-surface);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-accent-soft);
+    border-radius: var(--radius-md);
   }
   .label {
     display: block;
@@ -61,9 +60,12 @@
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-md);
     background: transparent;
-    color: var(--color-text);
-    font: 600 var(--text-base) / 1 var(--font-sans);
+    color: var(--color-accent);
+    font: 700 var(--text-base) / 1 var(--font-sans);
     cursor: pointer;
+  }
+  .more:hover {
+    background: var(--color-accent-soft);
   }
   .more:focus-visible {
     outline: 3px solid var(--color-focus);

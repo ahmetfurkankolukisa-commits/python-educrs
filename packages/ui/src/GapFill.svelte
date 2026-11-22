@@ -39,13 +39,14 @@
   .gap {
     display: inline-block;
     min-width: 3ch;
-    padding: 0 0.25em;
-    border-bottom: 2px dashed var(--color-accent);
+    padding: 0 0.35em;
+    border: 2px dashed var(--color-accent);
+    border-radius: var(--radius-sm);
     color: var(--color-text);
   }
   .gap.filled {
-    border-bottom-style: solid;
-    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    border-style: solid;
+    background: var(--color-accent-soft);
   }
   .sr-only {
     position: absolute;

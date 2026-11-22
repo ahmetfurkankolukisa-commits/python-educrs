@@ -17,7 +17,7 @@
       <ol>
         {#each m.nodes as n, i (n.lessonId)}
           <li class="row">
-            <a class="node {n.state}" href={n.href} data-testid="path-node" data-lesson={n.lessonId} data-state={n.state}>
+            <a class="node {n.state}" href={n.href} data-testid="path-node" data-lesson={n.lessonId} data-state={n.state} data-in-progress={n.inProgress}>
               <span class="dot" aria-hidden="true">
                 {#if n.state === "completed"}
                   <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
@@ -27,7 +27,7 @@
               </span>
               <span class="label">
                 <span class="title">{n.title}</span>
-                <span class="state">{t(`path.state.${n.state}`)}</span>
+                <span class="state">{n.inProgress && n.state === "todo" ? t("path.state.inProgress") : t(`path.state.${n.state}`)}</span>
               </span>
               {#if n.state === "next"}
                 <span class="cta" aria-hidden="true">{n.inProgress ? t("path.continue") : t("path.start")}</span>
@@ -46,15 +46,20 @@
     gap: var(--space-12);
   }
   h2 {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
     margin: 0 0 var(--space-6);
     font-size: var(--text-xl);
     text-align: center;
   }
   .mod-id {
-    display: block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: 999px;
+    background: var(--color-accent-soft);
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--color-text-muted);
+    color: var(--color-accent);
   }
   ol {
     margin: 0;
@@ -91,17 +96,20 @@
     color: var(--color-text-muted);
     transition: transform var(--motion-fast) var(--ease-out);
   }
+  /* Direction A (docs/05-f3-mvp0.md §17.6): finished lessons are solid "pressable" coins, the
+     next one has the coral ring, the rest are dashed outlines. */
   .completed .dot {
-    border: 3px solid var(--color-success);
-    background: var(--color-success-soft);
-    color: var(--color-success);
+    border: 0;
+    background: var(--color-accent);
+    box-shadow: 0 var(--press) 0 var(--color-accent-shadow);
+    color: var(--color-on-accent);
   }
   .next .dot {
-    width: 5rem;
-    height: 5rem;
-    border: 4px solid var(--color-accent);
-    color: var(--color-accent);
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 18%, transparent);
+    width: 5.25rem;
+    height: 5.25rem;
+    border: 6px solid var(--color-streak-fill);
+    box-shadow: 0 calc(var(--press) + 2px) 0 var(--color-streak);
+    color: var(--color-streak);
   }
   .node:hover .dot {
     transform: scale(1.05);
@@ -134,10 +142,11 @@
     color: var(--color-text-muted);
   }
   .cta {
-    margin-top: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    border-radius: 999px;
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
     background: var(--color-accent);
+    box-shadow: 0 var(--press) 0 var(--color-accent-shadow);
     color: var(--color-on-accent);
     font-size: var(--text-sm);
     font-weight: 700;

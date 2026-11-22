@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.26)
+# Python Öğrenme Sistemi — Ana Plan (v0.27)
 
+> v0.27: **Görsel kimlik kararı (F3.8):** Proje sahibi üç seçenek arasından **A'yı, "sıcak ve oyunsu"yu** seçti: Lexend, çivit mavisi + mercan, büyük yuvarlak köşeler, basılabilen butonlar. §2.4.2'deki Inter yerine Lexend (OFL-1.1, kendi sunucumuzdan). Font sınırı sayfa başına ≤ 90 KB, sadece Latin. Uygulama haritası `docs/05-f3-mvp0.md` §17.6.
 > v0.26: **F3.7 tamamlandı:** M0–M2 içeriği yazıldı: 19 ders, Kartvizit projesi, 98 alıştırma. İçerik hattı artık okunabilirliği, kavram başına ≥ 5 öğeyi ve yanılgı kapsamını hata olarak denetliyor. Bulgu: notlandırıcının hata dökümleri dosya sistemine bağlıydı ve tarayıcıyla CI ayrışıyordu; düzeltildi, testle kanıtlandı. Proje sahibinin inceleme listesi `docs/06-f3-review.md`. Sıradaki: F3.8 (görsel kimlik ve cilalama).
 > v0.25: **F3.7 haritası yazıldı** (`docs/05-f3-mvp0.md` §16). M0–M2: 19 ders × 5 alıştırma + Kartvizit projesi (98 alıştırma). §9.2 I'deki "okunabilirlik puanı CI'da ölçülür" somutlaştı: ders başına Flesch okuma kolaylığı ≥ 70 ve cümle ≤ 25 kelime (B1 için bir vekil, asıl karar proje sahibinin incelemesi). Dersi olan her kavramın katalogdaki yanılgıları en az bir alıştırmada öğretilmek zorunda. Proje adresi `/learn/<modül>/proj-<ad>/`. Kataloğa iki yanılgı eklendi: `mc.quote-ends-string`, `mc.swap-overwrites`.
 > v0.24: **F3.6 tamamlandı:** `packages/gamification` (XP, günlük hedef, seri; her şey olaylardan türetiliyor, hiçbir değer saklanmıyor), ayarlar sayfası (hedef, sade mod, "verimi indir"), yol sayfasında üst çubuk, ders sonunda +XP / hedef / seri. Seri kuralı için proje sahibinin kararı: "art arda en fazla 2 gün dondurulur" kalıyor. Görsel kimlik F3.8'de kalıyor (önce görsel yön dokümanı ve 2–3 seçenek). Bulgular `docs/05-f3-mvp0.md` §15.10'da: zayıf property testleri güçlendirildi, `apps/web`'deki `.svelte` dosyaları artık tip kontrolünden geçiyor, deneme olayı geri bildirimden önce kaydediliyor.
@@ -292,7 +293,7 @@ Sürümler 22 Kasım 2026'da npm'den kontrol edildi.
 | İstatistik grafikleri | `layerchart` | 2.11 | MIT | Svelte'e özgü, SVG tabanlı, erişilebilir |
 | Kutlama efekti | `canvas-confetti` | 1.9 | ISC | Çok küçük, sadece kutlama anında yüklenir (lazy) |
 | Etkileşimli maskot veya animasyon (ileride, isteğe bağlı) | `@rive-app/canvas-lite` | 2.54 | MIT | Durum makineli etkileşimli animasyon, sadece gerektiğinde yüklenir |
-| Fontlar | `@fontsource-variable/inter`, `@fontsource-variable/jetbrains-mono` | 5.3 | OFL-1.1 | Kendi sunucumuzdan servis edilir, çevrimdışı çalışır, Google'a istek gitmez |
+| Fontlar | `@fontsource-variable/lexend` (v0.27: Inter yerine, görsel yön A), `@fontsource-variable/jetbrains-mono` | 5.3 | OFL-1.1 | Kendi sunucumuzdan servis edilir, çevrimdışı çalışır, Google'a istek gitmez |
 | Temel animasyon | Svelte'in yerleşik `transition`, `spring`, `tweened` araçları | — | — | Bağımlılık yok |
 | Ses efektleri | Web Audio API (yerleşik) + CC0 lisanslı sesler | — | — | Kütüphane gerekmez |
 | Rastgele sayı (görev üretimi) | Kendi `mulberry32` + `cyrb53` uygulamamız | — | — | ~20 satır, property testli |

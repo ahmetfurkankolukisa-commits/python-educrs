@@ -82,14 +82,20 @@
     align-items: center;
     gap: var(--space-3);
     min-height: var(--target-min);
-    padding: var(--space-2) var(--space-3);
-    border: 2px solid var(--color-border);
+    padding: var(--space-3) var(--space-4);
+    /* Soft sides and a darker bottom edge: the edge gives the 3:1 boundary (WCAG 1.4.11) and the
+       "pressable" look of direction A (docs/05-f3-mvp0.md §17.6). */
+    border: 2px solid var(--color-border-soft);
+    border-bottom: var(--press) solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-surface);
     color: var(--color-text);
     cursor: pointer;
     touch-action: manipulation;
-    transition: border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
+    transition: border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+  }
+  .choice:active {
+    transform: translateY(2px);
   }
   .tiles .choice {
     min-width: var(--target-min);
@@ -100,7 +106,8 @@
   }
   .choice.selected {
     border-color: var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+    border-bottom-color: var(--color-accent-shadow);
+    background: var(--color-accent-soft);
   }
   .choice.highlight {
     border-color: var(--color-success);
@@ -118,12 +125,16 @@
     flex: 0 0 auto;
     display: inline-grid;
     place-items: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border: 1px solid var(--color-border);
+    width: 1.875rem;
+    height: 1.875rem;
+    border: 2px solid var(--color-border-soft);
     border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
+    font: 600 var(--text-sm) / 1 var(--font-sans);
     color: var(--color-text-muted);
+  }
+  .selected .key {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
   .text {
     font: 16px/1.4 var(--font-mono);

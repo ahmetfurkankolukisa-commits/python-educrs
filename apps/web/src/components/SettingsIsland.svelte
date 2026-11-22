@@ -3,7 +3,7 @@
   // Settings are events like everything else, so they will sync later; nothing leaves the device.
   import { onMount } from "svelte";
   import { t } from "@educrs/i18n";
-  import { GoalPicker, Toggle } from "@educrs/ui";
+  import { Button, GoalPicker, Toggle } from "@educrs/ui";
   import { EVENT } from "@educrs/core";
   import { DAILY_GOALS, settingsOf } from "@educrs/gamification";
   import { localTz, openProgress, type Progress } from "../lib/progress.ts";
@@ -61,9 +61,7 @@
     <section class="mt-10 grid gap-3" aria-labelledby="data-title">
       <h2 id="data-title" class="text-xl font-semibold">{t("settings.data.title")}</h2>
       <p class="text-muted">{t("settings.data.help")}</p>
-      <button type="button" class="min-h-11 justify-self-start rounded-md border-2 border-accent px-5 font-semibold text-accent" onclick={downloadData} data-testid="download-data">
-        {t("settings.data.download")}
-      </button>
+      <div><Button variant="secondary" onclick={downloadData} data-testid="download-data">{t("settings.data.download")}</Button></div>
     </section>
   {/if}
   <p class="mt-6 min-h-6 text-sm" role="status" data-testid="settings-status">{status}</p>

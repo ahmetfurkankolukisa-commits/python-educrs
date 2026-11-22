@@ -2,7 +2,7 @@
   // Editor + Run/Stop + input() box + output. Used by the home page Runner and by lesson code
   // steps (which add a Check button). "Run" is always free; "Check" grades in a fresh worker.
   import { catalog, t, type MessageKey } from "@educrs/i18n";
-  import { CodeEditor } from "@educrs/ui";
+  import { Button, CodeEditor } from "@educrs/ui";
   import { explanationOf, type SandboxClient, type SandboxStatus } from "../lib/sandbox.ts";
 
   interface Props {
@@ -77,34 +77,12 @@
   <CodeEditor bind:value={code} {id} {label} errorLine={highlight} onRun={run} />
 
   <div class="mt-3 flex flex-wrap items-center gap-3">
-    <button
-      type="button"
-      onclick={run}
-      disabled={status !== "ready" || running}
-      class="min-h-11 rounded-md border border-accent px-5 font-semibold text-accent disabled:opacity-50"
-      class:bg-accent={!check}
-      class:text-on-accent={!check}
-    >
-      {t("runner.run")}
-    </button>
-    <button
-      type="button"
-      onclick={() => client.stop()}
-      disabled={!running}
-      class="min-h-11 rounded-md border border-border px-5 font-semibold text-text disabled:opacity-50"
-    >
-      {t("runner.stop")}
-    </button>
+    <Button variant={check ? "secondary" : "primary"} onclick={run} disabled={status !== "ready" || running}>{t("runner.run")}</Button>
+    <Button variant="secondary" onclick={() => client.stop()} disabled={!running}>{t("runner.stop")}</Button>
     {#if check}
-      <button
-        type="button"
-        onclick={check.onclick}
-        disabled={status !== "ready" || check.busy}
-        class="min-h-11 flex-1 rounded-md bg-accent px-6 font-semibold text-on-accent disabled:opacity-50 sm:flex-none"
-        data-testid="check"
-      >
+      <Button onclick={check.onclick} disabled={status !== "ready" || check.busy} data-testid="check">
         {check.busy ? t("lesson.checking") : check.label}
-      </button>
+      </Button>
     {/if}
     <span class="text-sm text-muted" role="status" aria-live="polite" data-testid="runner-status" data-status={shownStatus}>
       {#if status === "loading"}{t("runner.loading")}{:else if status === "failed"}{t("runner.failed", { reason: failReason })}{:else}{t("runner.ready")}{/if}
@@ -120,9 +98,9 @@
         bind:value={answer}
         autocomplete="off"
         placeholder={t("runner.inputLabel")}
-        class="min-h-11 flex-1 rounded-md border border-border bg-code px-3 font-mono text-base text-text sm:text-sm"
+        class="min-h-11 flex-1 rounded-2xl border-2 border-border bg-code px-3 font-mono text-base text-text sm:text-sm"
       />
-      <button type="submit" class="min-h-11 rounded-md bg-accent px-4 font-semibold text-on-accent">{t("runner.send")}</button>
+      <Button type="submit">{t("runner.send")}</Button>
     </form>
   {/if}
 

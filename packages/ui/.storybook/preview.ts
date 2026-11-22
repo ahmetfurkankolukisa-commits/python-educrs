@@ -1,4 +1,5 @@
 import "../src/tokens.css";
+import "../src/fonts.css";
 import "./preview.css";
 import type { Preview } from "@storybook/svelte-vite";
 
