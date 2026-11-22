@@ -3,7 +3,8 @@
   // checks origin + source, accepts only known message types, renders output as text.
   import { t } from "@educrs/i18n";
 
-  const RUN_ORIGIN = import.meta.env.PUBLIC_RUN_ORIGIN ?? "https://educrs-python-run.pages.dev";
+  // Inlined at build time; the build fails if it is missing (scripts/write-headers.mjs).
+  const RUN_ORIGIN = import.meta.env.PUBLIC_RUN_ORIGIN ?? "";
 
   type Status = "loading" | "ready" | "running" | "failed";
   let code = $state('name = input("What is your name? ")\nprint("Hello,", name)');

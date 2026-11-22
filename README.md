@@ -10,7 +10,7 @@ Python runs **in your browser** (Pyodide/WebAssembly) — no installation, no ac
 | Piece | Where | Notes |
 |---|---|---|
 | Learning app | `apps/web` → `python.educrs.com` | Astro (static) + Svelte islands, design tokens from `packages/ui` |
-| Python sandbox | `apps/run` → `*-run.pages.dev` | Pyodide in a worker on a **different site**, strict CSP, no network, no access to the app's storage |
+| Python sandbox | `apps/run` → `python-educrs-run.<account>.workers.dev` | Pyodide in a worker on a **different site**, strict CSP, no network, no access to the app's storage |
 | Domain core | `packages/core` | Ports, registries, event envelope + upcasters. Framework-free (enforced) |
 | Strings | `packages/i18n` | Every UI string goes through `t(key)` |
 | Curriculum map | `content/concepts.toml` | 173 concepts, validated as a DAG; `docs/01-concept-graph.md` is generated |

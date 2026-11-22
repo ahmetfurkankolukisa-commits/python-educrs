@@ -47,6 +47,8 @@ jobs:
         run: pnpm build
       - name: JS budget
         run: pnpm budget
+      - name: Cloudflare Worker configs (dry-run deploy)
+        run: pnpm deploy:check
 
   e2e:
     name: E2E (Chromium, Firefox, WebKit, iPhone)

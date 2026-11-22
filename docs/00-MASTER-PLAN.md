@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.11)
+# Python Öğrenme Sistemi — Ana Plan (v0.12)
 
+> v0.12: **Cloudflare Pages → Cloudflare Workers (sadece statik dosya).** Cloudflare'in Git akışı artık Worker oluşturuyor. Statik dosya istekleri ücretsiz ve sınırsız, `_headers` aynen çalışıyor. Sandbox `python-educrs-run.<hesap>.workers.dev` adresinde kalıyor: `workers.dev` Public Suffix List'te olduğu için `python.educrs.com`'dan ayrı site sayılıyor (doğrulandı). İlk CI koşusu GitHub'da yeşil (PR #1).
 > v0.11: F2 iskeleti kuruldu: pnpm monorepo, `packages/core|i18n|ui`, `apps/web` (Astro + Svelte, canlı Python kutusu), `apps/run` (sandbox), CI, Renovate. Bulgular: TypeScript 7 Astro/Svelte araçlarıyla uyumsuz (TS 6'ya kilitlendi); dependency-cruiser `.astro` dosyalarını okumuyor (kendi tarayıcımız eklendi); CPython 3.15 hata mesajı biçimini değiştirdi (hata açıklayıcısı mesaj metnine değil istisna türüne göre çalışmalı); Storybook F3'e ertelendi (henüz bileşen yok).
 > v0.10: F1 spike sonuçları işlendi (`docs/03-f1-spike-report.md`): CSP'de `'unsafe-eval'` gerekmiyor; Firefox/WebKit için açık `claim`; önceden yüklenmiş modüllerin anlık görüntüsü; notlandırma her zaman taze worker'da.
 > v0.9: Kavram grafiği tamamlandı: 173 kavram, 251 önkoşul bağlantısı, 32 yanılgı, 17 proje (`content/concepts.toml` → `docs/01-concept-graph.md`). Doğrulayıcı ve 13 negatif test hazır (`tools/`). Alıştırma tahmini ~865'e çıktı. **F0 tamamlandı.**
@@ -25,11 +26,11 @@
 | K2 | İçerik dili | Sadece İngilizce (kod tanımlayıcıları da İngilizce; plan belgeleri Türkçe) |
 | K3 | Özellikler | Otomatik kontrollü alıştırma, adım adım görselleştirici, uyarlanabilir öğrenme yolu, projeler + oyunlaştırma |
 | K4 | Kullanıcılar | Herkese açık, hesaplı (cihazlar arası senkron) |
-| K5 | Altyapı | **Cloudflare Pages** (GitHub entegrasyonuyla deploy) + **Firebase** (Auth + Firestore) |
+| K5 | Altyapı | **Cloudflare Workers, sadece statik dosya** (GitHub entegrasyonuyla deploy; v0.12'ye kadar Pages planlanmıştı) + **Firebase** (Auth + Firestore) |
 | K6 | Maliyet | Firebase **Spark** planında kal; bir özellik gerçekten gerektirirse Blaze'e geçilebilir |
 | K7 | Site çatısı | **Astro + Svelte 5** |
 | K8 | Giriş sağlayıcıları | **Google + GitHub** |
-| K9 | Alan adı | **Doğrudan canlı alan adı:** uygulama **`python.educrs.com`** adresinde açılır (onaylandı; educrs.com DNS'i zaten Cloudflare'de). **Sandbox bilerek `<ad>-run.pages.dev` üzerinde kalır** (§3.1). PR'lar `*.pages.dev` önizleme adreslerine gider. |
+| K9 | Alan adı | **Doğrudan canlı alan adı:** uygulama **`python.educrs.com`** adresinde açılır (onaylandı; educrs.com DNS'i zaten Cloudflare'de). **Sandbox bilerek `python-educrs-run.<hesap>.workers.dev` üzerinde kalır** (§3.1). PR'lar `workers.dev` önizleme adreslerine gider. |
 | K10 | Firebase projesi | **Yeni proje.** Identity Platform'a yükseltilmeyecek. |
 | K11 | YZ öğretmen | **Evet, iki kaynak birden:** destekleyen tarayıcıda cihaz-üstü YZ, desteklemeyende Firebase AI Logic (Gemini ücretsiz katmanı). İsteğe bağlı, Sokratik, kota dolunca kibarca kapanır. **13 yaş altı ve hesapsız kullanıcılar sadece cihaz-üstü YZ kullanır**, yani verileri cihazdan çıkmaz. → F10 |
 | K12 | Lisans | **Açık kaynak:** kod MIT, içerik CC BY-SA 4.0. Repo herkese açık. Topluluk katkısı CI doğrulamasıyla kabul edilir. |
@@ -97,7 +98,7 @@ flowchart TB
 | Aralıklı tekrar | **FSRS** (`ts-fsrs`, MIT) | Bilinen en isabetli açık kaynak zamanlama algoritması | SM-2 (eski, daha az isabetli) |
 | Ustalık | **Bayesian Knowledge Tracing (BKT)** | Basit, açıklanabilir, az veriyle çalışır | Derin öğrenme tabanlı KT (veri ve hesap gerektirir) |
 | PWA | **@vite-pwa/astro** (Workbox) | Hazır önbellek stratejileri, güncelleme akışı | Elle yazılmış SW (hata riski) |
-| Hosting | **Cloudflare Pages** (GitHub entegrasyonu), **iki proje:** app (`python.educrs.com`) + sandbox (`*-run.pages.dev`) | Sınırsız statik bant genişliği; `_headers` ile CSP ayarlanabilir; `pages.dev` Public Suffix List'te olduğu için sandbox ayrı bir site sayılır (§3.1) | GitHub Pages (header ayarlanamaz) |
+| Hosting | **Cloudflare Workers, sadece statik dosya** (GitHub entegrasyonu; v0.12), **iki Worker:** app (`python.educrs.com`) + sandbox (`python-educrs-run.<hesap>.workers.dev`) | Sınırsız statik bant genişliği; `_headers` ile CSP ayarlanabilir; `workers.dev` Public Suffix List'te olduğu için sandbox ayrı bir site sayılır (§3.1) | GitHub Pages (header ayarlanamaz) |
 | Hesap | **Firebase Auth** (Google, GitHub) | Spark'ta ücretsiz, hazır SDK | E-posta linki (gönderim limiti), şifre (güvenlik yükü) |
 | Senkron | **Firestore** (doğrudan istemciden, Security Rules ile) | Cloud Functions gerektirmez → Spark'ta kalır | Realtime DB (sorgu yetenekleri zayıf) |
 | Kötüye kullanım | **Security Rules:** hız sınırı + boyut sınırı. App Check **ertelendi.** | reCAPTCHA'nın ücretsiz kotası ayda 10.000 değerlendirme ve kota aşılınca istekler hata veriyor (§9.4 D1) | App Check + reCAPTCHA (Spark'ta ölçeklenmiyor) |
@@ -365,13 +366,13 @@ sequenceDiagram
 ```
 
 **İzolasyon kuralları:**
-- **Sandbox ayrı bir Cloudflare Pages projesinde çalışır:** `<ad>-run.pages.dev`. `pages.dev` Public Suffix List'te olduğu için bu alan adı ana uygulamadan **ayrı bir site** sayılır. Tarayıcı iki sitenin depolamasını, çerezlerini ve service worker'larını tamamen ayırır.
+- **Sandbox ayrı bir Cloudflare Worker'ında çalışır** (sadece statik dosya, v0.12): `python-educrs-run.<hesap>.workers.dev`. `workers.dev` Public Suffix List'te olduğu için (22.11.2026'da doğrulandı) bu adres `python.educrs.com`'dan **ayrı bir site** sayılır. Tarayıcı iki sitenin depolamasını, çerezlerini ve service worker'larını tamamen ayırır. ⚠️ Kayıtlı alan adı `<hesap>.workers.dev` olduğu için aynı hesaptaki iki `workers.dev` adresi birbiriyle *aynı site* sayılır. Bu yüzden uygulama asla `workers.dev`'den servis edilmez (`workers_dev: false`).
 - **Sandbox neden `educrs.com` altında değil?** (v0.7) `run.educrs.com` gibi bir adres, uygulamadan farklı bir **origin** olurdu ama aynı **site** sayılırdı (kayıtlı alan adı ikisinde de `educrs.com`). Bunun üç sakıncası var:
   1. **Süreç paylaşımı:** Tarayıcıların süreç izolasyonu (Site Isolation) siteye göre çalışır. Aynı sitedeki sandbox, uygulamayla aynı süreci paylaşabilir. Bu da Spectre tipi bellek okuma saldırılarına kapı aralar.
   2. **Ortak çerezler:** educrs.com altındaki başka servislerin `Domain=educrs.com` ile yazdığı çerezler sandbox'a da gider.
   3. **SameSite koruması:** SameSite çerez koruması aynı sitedeki sayfalar arasında devreye girmez.
   
-  `pages.dev` ise Public Suffix List'te olduğu için `<ad>-run.pages.dev` tamamen ayrı bir site sayılır, üstelik ücretsiz. Kullanıcı bu adresi hiçbir zaman görmez, adres çubuğunda her zaman `python.educrs.com` yazar. İleride sandbox için ayrı bir alan adı alınırsa (ör. `educrs-run.com`) sadece bir ayar değişir.
+  `workers.dev` ise Public Suffix List'te olduğu için (v0.12, doğrulandı) `python-educrs-run.<hesap>.workers.dev` tamamen ayrı bir site sayılır, üstelik ücretsiz. Kullanıcı bu adresi hiçbir zaman görmez, adres çubuğunda her zaman `python.educrs.com` yazar. İleride sandbox için ayrı bir alan adı alınırsa (ör. `educrs-run.com`) sadece bir ayar değişir.
 - **Sandbox CSP:** `default-src 'self'; connect-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; frame-ancestors https://python.educrs.com`. **F1'de doğrulandı:** Pyodide 314 `'unsafe-eval'` olmadan çalışıyor, `eval` kullanıcı kodu için de engelli kalıyor. Aynı başlık worker script'inin yanıtına da eklenir. Kullanıcı kodu sadece sandbox'ın kendi statik sunucusuna ulaşabilir, orada da değerli hiçbir şey yok.
 - **iframe:** `sandbox="allow-scripts allow-same-origin"`. Buradaki `allow-same-origin` güvenli, çünkü iframe zaten farklı bir sitede. Service worker'ın çalışabilmesi için de iframe'in gerçek bir origin'i olması gerekiyor.
 - **Mesajlaşma:** Ana uygulama iframe'den gelen her mesajı `event.origin` ve şema ile doğrular. Sandbox'a hiçbir zaman kimlik bilgisi gönderilmez.
@@ -1047,7 +1048,7 @@ Bütün açık sorular cevaplandı. Kararlar §0 tablosunda K7–K14 olarak kay�
 |---|---|
 | 1. Çatı | Astro + Svelte 5 (K7) |
 | 2. Giriş sağlayıcıları | Google + GitHub (K8) |
-| 3. Alan adı | Canlı: `python.educrs.com`; sandbox `*-run.pages.dev` (K9, v0.7) |
+| 3. Alan adı | Canlı: `python.educrs.com`; sandbox `python-educrs-run.<hesap>.workers.dev` (K9, v0.12) |
 | 4. Firebase projesi | Yeni proje, Identity Platform yok (K10) |
 | 5. YZ öğretmen | Cihaz-üstü YZ + Firebase AI Logic, F10 (K11) |
 | 6. Açık kaynak | Kod MIT, içerik CC BY-SA (K12) |

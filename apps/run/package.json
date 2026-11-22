@@ -2,7 +2,7 @@
   "name": "run",
   "private": true,
   "type": "module",
-  "description": "Sandbox site (<name>-run.pages.dev): Pyodide in a worker, service-worker sync stdin, strict CSP. Must stay a DIFFERENT SITE from the app (plan §3.1).",
+  "description": "Sandbox site (python-educrs-run.<account>.workers.dev): Pyodide in a worker, service-worker sync stdin, strict CSP. Must stay a DIFFERENT SITE from the app (plan §3.1).",
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/build.mjs && node ../../tools/serve-dist.mjs dist 127.0.0.1 4322"

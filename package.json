@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "pnpm --parallel --filter web --filter run dev",
-    "build": "pnpm --filter run build && pnpm --filter web build",
+    "build": "pnpm --filter run build && PUBLIC_RUN_ORIGIN=${PUBLIC_RUN_ORIGIN:-https://sandbox.invalid} pnpm --filter web build",
     "typecheck": "pnpm -r typecheck",
     "test": "vitest run",
     "test:concepts": "python3 tools/concept_graph.py && python3 tools/tests/test_concept_graph.py",
@@ -21,7 +21,8 @@
     "e2e": "playwright test",
     "build:e2e": "APP_ORIGIN=http://localhost:4321 pnpm --filter run build && PUBLIC_RUN_ORIGIN=http://127.0.0.1:4322 pnpm --filter web build",
     "test:parity": "node tools/tests/python_parity.mjs",
-    "check": "pnpm typecheck && pnpm test && pnpm test:concepts && pnpm test:parity && pnpm lint:deps && pnpm test:boundaries && pnpm build && pnpm budget && pnpm build:e2e && pnpm e2e"
+    "check": "pnpm typecheck && pnpm test && pnpm test:concepts && pnpm test:parity && pnpm lint:deps && pnpm test:boundaries && pnpm build && pnpm budget && pnpm deploy:check && pnpm build:e2e && pnpm e2e",
+    "deploy:check": "WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config apps/run/wrangler.jsonc && WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config apps/web/wrangler.jsonc"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
@@ -30,6 +31,7 @@
     "dependency-cruiser": "18.8.0",
     "fast-check": "4.10.3",
     "typescript": "6.0.3",
-    "vitest": "5.1.1"
+    "vitest": "5.1.1",
+    "wrangler": "4.166.0"
   }
 }

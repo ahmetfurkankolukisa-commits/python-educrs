@@ -1,0 +1,14 @@
+// Cloudflare Worker (static assets only) for the Python sandbox.
+// MUST stay on <name>.<account>.workers.dev — a different site from python.educrs.com
+// (workers.dev is on the Public Suffix List). Never attach an educrs.com domain here.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "python-educrs-run",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": true,
+  "preview_urls": false
+}
