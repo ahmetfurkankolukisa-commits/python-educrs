@@ -1,5 +1,7 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.22)
+# Python Öğrenme Sistemi — Ana Plan (v0.24)
 
+> v0.24: **F3.6 tamamlandı:** `packages/gamification` (XP, günlük hedef, seri; her şey olaylardan türetiliyor, hiçbir değer saklanmıyor), ayarlar sayfası (hedef, sade mod, "verimi indir"), yol sayfasında üst çubuk, ders sonunda +XP / hedef / seri. Seri kuralı için proje sahibinin kararı: "art arda en fazla 2 gün dondurulur" kalıyor. Görsel kimlik F3.8'de kalıyor (önce görsel yön dokümanı ve 2–3 seçenek). Bulgular `docs/05-f3-mvp0.md` §15.10'da: zayıf property testleri güçlendirildi, `apps/web`'deki `.svelte` dosyaları artık tip kontrolünden geçiyor, deneme olayı geri bildirimden önce kaydediliyor.
+> v0.23: **F3.6 haritası yazıldı** (`docs/05-f3-mvp0.md` §15). Üç kural düzeltildi, çünkü üçü de §3.5.5'teki değişmezleri bozuyordu. (1) **XP tekrar çarpanı** aynı gün içinde uygulanıyor ve en iyi çözümden başlayarak sıralanıyor. Zaman sırasına göre sayıldığında, senkronla gelen daha eski bir çözüm toplam XP'yi düşürebiliyordu (karşı örnek: 20 → 15). (2) **Seri yürüyüşü ileri doğru**, çünkü dondurma hakkı zaman içinde ileri doğru kazanılıyor. (3) **"En fazla 2 hak birikir" yerine "art arda en fazla 2 gün dondurulur"**: tavana takılıp boşa giden bir hak yüzünden, geçmişe eklenen bir hedef günü seriyi 51'den 0'a düşürebiliyordu (fast-check buldu). Bir günün hedefi, o gün geçerli olmuş hedeflerin en küçüğü. `exercise.attempt` olayı `difficulty` taşıyor. Yeni olay: `settings.changed`.
 > v0.22: **F3.5 tamamlandı:** adım adım ders akışı (beş adım türü, sarı "Common mix-up" ve kırmızı "Not quite" geri bildirimi, ipucu merdiveni, iki yanlıştan sonra "Show me", ders sonu ekranı), öğrenme yolu ve kalıcı yerel kayıt (Dexie, tembel yükleniyor). İkinci ders `vars.reassign` eklendi. Bulgular `docs/05-f3-mvp0.md` §14.9'da. Bir CI hatası da düzeltildi: iPhone emülasyonunda editör testleri Linux'ta yanlış "tümünü seç" tuşu gönderiyordu.
 > v0.21: **F3.5 haritası yazıldı** (`docs/05-f3-mvp0.md` §14). Yerel kayıt (`packages/store`, Dexie tembel yükleniyor) F3.6'dan F3.5'e alındı: yol durumları ve "kaldığın yerden devam" ona bağlı. MVP-0 olay listesi üç türe indi (`lesson.started`, `exercise.attempt`, `lesson.completed`). `predict-output` yanılgıları öğrenciye gösterilecek mesajı taşıyor.
 > v0.20: **F3.4 tamamlandı:** CodeMirror editörü + mobil sembol çubuğu + Storybook. Bulgu: sıkı CSP CodeMirror'ın `<style>` elemanlarını engelliyordu ve editör stilsiz görünürken testler geçiyordu. Editör artık gölge kökte çalışıyor (CSP'de `'unsafe-inline'` stil yok, sadece `style-src-attr`). JS bütçesi üç kategoriye ayrıldı (ilk boyama 50 KB, adacıklar 60 KB, tembel 160 KB) ve hiçbir parçanın sayılmadan kalamayacağı kuralı eklendi. Her Storybook hikâyesi 3 temada axe ile taranıyor ve tarama her koşuda kendini test ediyor (`docs/05-f3-mvp0.md` §5, §8).
@@ -618,7 +620,7 @@ flowchart LR
 |---|---|
 | **XP + seviye** | Her anlamlı eylem XP kazandırır. Seviye eğrisi ileride yavaşlar ama hiçbir zaman duvara dönüşmez. |
 | **Günlük hedef** | Kullanıcı seçer: 10, 20, 30 veya 50 XP |
-| **Seri + dondurma** | Hedefin tutulduğu ardışık günler. Dondurma hakkı satın alınmaz, her 7 günlük seride 1 tane **kazanılır** (en fazla 2 birikir). |
+| **Seri + dondurma** | Hedefin tutulduğu ardışık günler. Dondurma hakkı satın alınmaz, her 7 günlük seride 1 tane **kazanılır**. v0.23: biriktirmede tavan yok, ama art arda en fazla 2 gün dondurulabilir (`docs/05-f3-mvp0.md` §15.4). |
 | **Kavram taçları (0–5)** | Her kavramın ustalık seviyesi (§3.5.4, madde 6). Taç 2 sonraki kavramların kilidini açar. Tekrarı gelen kavram haritada "çatlak" görünür. Bu bir ceza değil, nazik bir tekrar davetidir. |
 | **Beceri haritası** | Kavram grafiğinin oyun haritası şeklinde gösterimi. Uygulamanın ana gezinme ekranı. |
 | **Günlük görevler** | Her gün 3 kişiselleştirilmiş görev (ör. "2 tekrar yap", "ipucusuz 1 alıştırma çöz") |
@@ -635,7 +637,8 @@ flowchart LR
 xp(deneme) = taban(zorluk) × ipucuÇarpanı × tekrarÇarpanı
   taban:          kolay 10, orta 15, zor 20
   ipucuÇarpanı:   0 ipucu → 1.0 | 1 → 0.75 | 2 → 0.5 | çözüme bakıldı → 0.25
-  tekrarÇarpanı:  aynı alıştırmanın k. başarılı çözümü → 1 / 2^(k−1), en az 1 XP   (XP kasmayı önler)
+  tekrarÇarpanı:  v0.23: AYNI GÜN aynı alıştırmanın değerleri büyükten küçüğe sıralanır,
+                  r. sıradaki → 1 / 2^(r−1), en az 1 XP   (XP kasmayı önler; gerekçe docs/05-f3-mvp0.md §15.2)
 xp(tekrar)  = 5 + (hatırlanabilirlik < 0.7 ise +5)   (unutulmaya yakın konuyu tekrarlamak daha değerli)
 xp(ders)    = 5
 ```
@@ -661,6 +664,8 @@ flowchart TD
   J -- Evet --> K["Dondurma harcanır, seri korunur"] --> E
   J -- Hayır --> L["Seri biter"]
 ```
+> **v0.23 düzeltmesi:** Yukarıdaki şema geriye doğru yürüyor. Ama dondurma hakkı zaman içinde ileri doğru kazanılıyor, bu yüzden geriye yürürken elde hak olup olmadığı bilinemez. Geçerli tanım ileri doğru yürüyen sürüm: `docs/05-f3-mvp0.md` §15.4. Orada "en fazla 2 birikir" yerine "art arda en fazla 2 gün dondurulur" geçerli. Bir günün hedefi, o gün geçerli olmuş hedeflerin en küçüğüdür.
+
 Uygulamada bu hesap baştan sona her seferinde yapılmaz. Reducer içinde artımlı (incremental) yürür. Yukarıdaki tanım, artımlı versiyonun property testlerde karşılaştırıldığı **referans** algoritmadır.
 
 **4. Günlük görevler (v0.5: atama olayıyla sabitlenir):**

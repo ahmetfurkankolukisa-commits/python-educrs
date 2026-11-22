@@ -6,7 +6,7 @@
 
 ## Commands
 - `pnpm run check` — everything CI runs. Needs `pnpm exec playwright install chromium firefox webkit` once.
-- `pnpm test` (vitest), `pnpm typecheck`, `pnpm lint:deps`, `pnpm test:boundaries`, `pnpm test:concepts`, `pnpm test:parity`, `pnpm budget`.
+- `pnpm test` (vitest), `pnpm typecheck` (in `apps/web` it is `astro check` **and** `svelte-check`: `astro check` alone skips `.svelte` files), `pnpm lint:deps`, `pnpm test:boundaries`, `pnpm test:concepts`, `pnpm test:parity`, `pnpm budget`.
 - `pnpm build:e2e && pnpm e2e` — e2e against built sites with the real `_headers`.
 - `pnpm a11y:stories` — builds Storybook (`packages/ui`) and axe-scans every story in all 3 themes; it plants violations (light DOM + editor shadow root) each run and fails if axe misses them. New UI components ship with stories.
 - `pnpm docs:concepts` regenerates `docs/01-concept-graph.md` from `content/concepts.toml`. Never hand-edit the generated doc.
@@ -17,8 +17,9 @@
 - **Sandbox** (`apps/run`) must stay a different *site* from the app (`python-educrs-run.<account>.workers.dev`; workers.dev is on the PSL), CSP without `'unsafe-eval'`, `connect-src 'self'`, `frame-ancestors` = app origin only. Grading always runs in a fresh worker.
 - **Storage**: `dexie` only inside `packages/store` (behind the `LocalStore` port; boundary rule + negative tests, `.astro` scanner too). Workspace packages declare `sideEffects` (ui: CSS only) so the `@educrs/ui` barrel tree-shakes — a module-level side effect there would ship every component to every page; `pnpm budget` shows it.
 - **Editor under CSP**: CodeMirror lives in a shadow root (`EditorView({root})`) so its styles go through `adoptedStyleSheets`; the CSP allows only `style-src-attr 'unsafe-inline'`, never inline `<style>`/`style-src 'unsafe-inline'`. A green test run does not prove the editor is styled — e2e asserts computed styles.
-- **Boundaries** (`.dependency-cruiser.cjs` + `tools/check-astro-imports.mjs`): `packages/core|i18n` import no frameworks; apps import UI libs only via `packages/ui`. Add a negative case to `tools/tests/test_boundaries.mjs` for every new rule.
-- **Event sourcing**: stored events are never rewritten; upcast on read; unknown types preserved; reward rules are versioned and append-only (plan §3.5.6).
+- **Boundaries** (`.dependency-cruiser.cjs` + `tools/check-astro-imports.mjs`): `packages/core|i18n|gamification` import no frameworks; `packages/gamification` imports only `@educrs/core`; apps import UI libs only via `packages/ui`. Add a negative case to `tools/tests/test_boundaries.mjs` for every new rule.
+- **Event sourcing**: stored events are never rewritten; upcast on read; unknown types preserved; reward rules are versioned and append-only (plan §3.5.6) — ruleset 1 is pinned by a frozen test in `packages/gamification/src/rules.test.ts`; change rules by adding a ruleset, never by editing one. XP, goal and streak are derived from events only (docs/05-f3-mvp0.md §15); anything a reward depends on must be in the event payload (e.g. `difficulty`), not looked up in today's content.
+- **Property tests**: give fast-check generators `size: "max"` *and* a `maxLength` (the default size keeps arrays ~10 long and hid broken rules; `size: "max"` alone means 2³¹). Prove each property with a mutation that only it catches.
 - **Versions are pinned.** TypeScript stays < 7 (Astro/Svelte checkers support 5–6). A Pyodide bump changes the Python version: re-run parity + content validation, and update CI's `python-version`.
 - **Infra**: Cloudflare Workers with static assets (two workers: `python-educrs`, `python-educrs-run`; Pages is no longer the default) + Firebase on the **Spark** plan. Never upgrade Firebase Auth to Identity Platform (3k DAU cap). Flag anything that would need Blaze.
 - Verify facts (npm/PyPI/docs) instead of trusting memory; prove checks fire with negative tests.

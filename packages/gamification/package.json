@@ -1,0 +1,16 @@
+{
+  "name": "@educrs/gamification",
+  "private": true,
+  "type": "module",
+  "description": "XP, daily goal and streak, derived from events by pure functions (docs/05-f3-mvp0.md §15). Imports only @educrs/core (enforced by dependency-cruiser).",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@educrs/core": "workspace:*"
+  },
+  "sideEffects": false
+}

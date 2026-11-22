@@ -36,6 +36,10 @@ export const REQUIRED_PAIRS: ReadonlyArray<readonly [string, string, number]> = 
   ["--color-danger", "--color-surface", 4.5],
   ["--color-xp", "--color-surface", 4.5],
   ["--color-streak", "--color-surface", 4.5],
+  // the stats bar sits on the page background (docs/05-f3-mvp0.md §15.7)
+  ["--color-xp", "--color-bg", 4.5],
+  ["--color-streak", "--color-bg", 4.5],
+  ["--color-success", "--color-bg", 3],
   // syntax highlighting must stay readable on the editor background
   ["--color-code-keyword", "--color-code-bg", 4.5],
   ["--color-code-string", "--color-code-bg", 4.5],

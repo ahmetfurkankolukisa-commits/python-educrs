@@ -10,9 +10,9 @@ module.exports = {
   forbidden: [
     {
       name: "core-is-pure",
-      comment: "packages/core and packages/i18n hold domain logic only: no framework, storage, runtime or UI imports.",
+      comment: "packages/core, i18n and gamification hold domain logic only: no framework, storage, runtime or UI imports.",
       severity: "error",
-      from: { path: "^packages/(core|i18n)/" },
+      from: { path: "^packages/(core|i18n|gamification)/" },
       to: { path: INFRA },
     },
     {
@@ -21,6 +21,13 @@ module.exports = {
       severity: "error",
       from: { path: "^packages/core/" },
       to: { path: "^(packages/(?!core/)|apps/)" },
+    },
+    {
+      name: "gamification-depends-only-on-core",
+      comment: "XP, goal and streak are pure functions of events (docs/05-f3-mvp0.md §15.1): packages/gamification may import @educrs/core and nothing else of ours.",
+      severity: "error",
+      from: { path: "^packages/gamification/" },
+      to: { path: "^(packages/(?!core/|gamification/)|apps/)" },
     },
     {
       name: "ui-libs-only-via-packages-ui",
