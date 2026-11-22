@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { editorReady, editorText, setCode } from "./helpers.ts";
+import { editorReady, editorText, modKey, setCode } from "./helpers.ts";
 
 const RUN = "http://127.0.0.1:4322";
 const EVIL = "http://127.0.0.1:4323";
@@ -188,7 +188,7 @@ test.describe("code editor (F3.4)", () => {
   test("Ctrl/Cmd+Enter runs the program", async ({ page }) => {
     await ready(page);
     await setCode(page, 'print("shortcut")');
-    await page.keyboard.press("ControlOrMeta+Enter");
+    await page.keyboard.press(`${await modKey(page)}+Enter`);
     await expect(page.getByTestId("runner-output")).toHaveText("shortcut\n");
   });
 

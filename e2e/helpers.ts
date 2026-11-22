@@ -19,7 +19,7 @@ export async function editorReady(page: Page) {
  */
 export async function setCode(page: Page, code: string) {
   await editorReady(page);
-  const selectAll = await selectAllKey(page);
+  const selectAll = `${await modKey(page)}+A`;
   await expect(async () => {
     await page.locator(".cm-content").click();
     await page.keyboard.press(selectAll);
@@ -29,20 +29,21 @@ export async function setCode(page: Page, code: string) {
 }
 
 /**
- * The select-all shortcut as CodeMirror sees the platform, not as the test host does.
- * CodeMirror binds Mod-a to Cmd on "Mac", and with an iPhone user agent it treats the page as Mac
- * (`mac: ios || /Mac/.test(navigator.platform)` in @codemirror/view). Playwright's ControlOrMeta
- * follows the HOST OS, so on Linux CI the iPhone project sent Ctrl+A — on "Mac" that is the
- * Emacs-style "go to line start" — nothing was selected and every retry pasted on top of the old
- * code (CI PR #6: +2, +16, +44 lines). This mirrors CodeMirror's own detection.
+ * CodeMirror's "Mod" key as CodeMirror sees the platform, not as the test host does. Use it for
+ * every editor shortcut (Mod-a, Mod-Enter) instead of Playwright's ControlOrMeta.
+ * CodeMirror binds Mod to Cmd on "Mac", and with an iPhone user agent it treats the page as Mac
+ * (`mac: ios || /Mac/.test(navigator.platform)` in @codemirror/view). ControlOrMeta follows the
+ * HOST OS, so on Linux CI the iPhone project sent Ctrl+A — on "Mac" that is the Emacs-style "go to
+ * line start" — nothing was selected and every retry pasted on top of the old code (CI PR #6: +2,
+ * +16, +44 lines); Ctrl+Enter likewise did not run. This mirrors CodeMirror's own detection.
  */
-async function selectAllKey(page: Page): Promise<string> {
+export async function modKey(page: Page): Promise<"Meta" | "Control"> {
   const mac = await page.evaluate(() => {
     const safari = /Apple Computer/.test(navigator.vendor);
     const ios = safari && (/Mobile\/\w+/.test(navigator.userAgent) || navigator.maxTouchPoints > 2);
     return ios || /Mac/.test(navigator.platform);
   });
-  return mac ? "Meta+A" : "Control+A";
+  return mac ? "Meta" : "Control";
 }
 
 /** Runs in the page: a paste event carrying `text` (an empty paste deletes the selection). */
