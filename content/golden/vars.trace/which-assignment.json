@@ -1,0 +1,20 @@
+{
+  "answer": "a = b",
+  "grader": 1,
+  "id": "ex:vars.trace/which-assignment",
+  "outcomes": {
+    "a = \"b\"": {
+      "error": null,
+      "stdout": "b\n"
+    },
+    "a = b": {
+      "error": null,
+      "stdout": "dog\n"
+    },
+    "b = a": {
+      "error": null,
+      "stdout": "cat\n"
+    }
+  },
+  "python": "3.14"
+}

@@ -1,0 +1,36 @@
+{
+  "answer": "planet",
+  "grader": 1,
+  "id": "ex:vars.name-error/pick-the-name",
+  "outcomes": {
+    "Mars": {
+      "error": {
+        "lineno": 2,
+        "message": "name 'Mars' is not defined",
+        "name": "Mars",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\nNameError: name 'Mars' is not defined. Did you mean: 'vars'?\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    },
+    "Planet": {
+      "error": {
+        "lineno": 2,
+        "message": "name 'Planet' is not defined",
+        "name": "Planet",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\nNameError: name 'Planet' is not defined. Did you mean: 'planet'?\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    },
+    "planet": {
+      "error": null,
+      "stdout": "Mars\n"
+    }
+  },
+  "python": "3.14"
+}

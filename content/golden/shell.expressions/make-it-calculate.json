@@ -1,0 +1,27 @@
+{
+  "answer": "5 + 5",
+  "grader": 1,
+  "id": "ex:shell.expressions/make-it-calculate",
+  "outcomes": {
+    "\"10": {
+      "error": {
+        "lineno": 1,
+        "message": "unterminated string literal (detected at line 1)",
+        "offset": 7,
+        "text": "print(\"10)",
+        "traceback": "  File \"/main.py\", line 1\n    print(\"10)\n          ^\nSyntaxError: unterminated string literal (detected at line 1)\n",
+        "type": "SyntaxError"
+      },
+      "stdout": ""
+    },
+    "\"5 + 5\"": {
+      "error": null,
+      "stdout": "5 + 5\n"
+    },
+    "5 + 5": {
+      "error": null,
+      "stdout": "10\n"
+    }
+  },
+  "python": "3.14"
+}

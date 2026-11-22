@@ -1,0 +1,8 @@
+id = "ex:vars.trace/two-variables"
+concept = "vars.trace"
+type = "predict-output"
+difficulty = "easy"
+title = "Follow the values"
+prompt = "Trace this program line by line. What does it show?"
+options = ["y y", "x y", "y x"]
+explanation = "`a = b` gives `a` the value of `b`, which is `\"y\"`. Now both hold `\"y\"`."

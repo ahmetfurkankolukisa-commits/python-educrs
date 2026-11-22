@@ -1,0 +1,10 @@
+{
+  "answer": "Wake up\nHave breakfast",
+  "grader": 1,
+  "id": "ex:intro.program/two-instructions",
+  "outcome": {
+    "error": null,
+    "stdout": "Wake up\nHave breakfast\n"
+  },
+  "python": "3.14"
+}

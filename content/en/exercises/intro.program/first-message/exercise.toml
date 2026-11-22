@@ -1,0 +1,19 @@
+id = "ex:intro.program/first-message"
+concept = "intro.program"
+type = "code"
+difficulty = "easy"
+title = "Your own message"
+prompt = """
+Write a program that shows this message:
+
+    I can give instructions.
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Use `print` with the message inside the round brackets."
+
+[[hints]]
+text = "Put the message in quotes: `print(\"I can give instructions.\")`. Check the full stop at the end."

@@ -20,6 +20,7 @@ import builtins
 import contextlib
 import copy
 import io
+import linecache
 import random
 import traceback
 
@@ -166,7 +167,18 @@ def grade(spec, code, seed, filename="/main.py"):
 
     When the learner's code raised, `explanation` carries a structured explainer code (F3.3).
     """
-    result = _grade(spec, code, seed, filename)
+    # Tracebacks must not depend on whether `filename` exists on disk: the browser sandbox writes
+    # /main.py, the content pipeline doesn't, and the source line in the traceback differed
+    # (e2e golden parity, F3.7). Serve the learner's code from memory in both places.
+    previous = linecache.cache.get(filename)
+    linecache.cache[filename] = (len(code), None, code.splitlines(True), filename)
+    try:
+        result = _grade(spec, code, seed, filename)
+    finally:
+        if previous is None:
+            linecache.cache.pop(filename, None)
+        else:
+            linecache.cache[filename] = previous
     err = result.get("error")
     if err and err.get("type") != "InputsMissing":
         result["explanation"] = educrs_explain.explain(err, code)

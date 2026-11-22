@@ -1,0 +1,1 @@
+print('Ada said "Hello"')

@@ -1,0 +1,10 @@
+{
+  "answer": "Hi\nthere",
+  "grader": 1,
+  "id": "ex:strings.escape/new-line",
+  "outcome": {
+    "error": null,
+    "stdout": "Hi\nthere\n"
+  },
+  "python": "3.14"
+}

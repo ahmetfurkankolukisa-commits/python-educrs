@@ -1,0 +1,8 @@
+id = "ex:intro.sequence/three-lines"
+concept = "intro.sequence"
+type = "predict-output"
+difficulty = "easy"
+title = "Ready, steady"
+prompt = "What does this program show?"
+options = ["Ready\nSteady\nGo!", "Go!\nSteady\nReady", "Ready Steady Go!"]
+explanation = "Python runs the lines from top to bottom, so the messages appear in the same order."

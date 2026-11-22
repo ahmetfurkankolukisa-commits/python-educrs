@@ -1,0 +1,14 @@
+id = "ex:vars.assign/name-on-the-left"
+concept = "vars.assign"
+type = "fill-gap"
+difficulty = "easy"
+title = "The name of the variable"
+prompt = "Fill the gap so the program shows `blue`."
+template = """____ = "blue"
+print(colour)"""
+tiles = ["colour", '"colour"', "Colour"]
+answer = "colour"
+explanation = "The name of the variable goes on the left of `=`, with no quotes. Then `print(colour)` can find it."
+
+[tile_misconceptions]
+'"colour"' = { id = "mc.quoted-name", message = "A variable's name has no quotes. With quotes, `\"colour\"` is text, and text can't store a value." }

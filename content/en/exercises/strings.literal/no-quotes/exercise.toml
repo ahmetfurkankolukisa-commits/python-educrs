@@ -1,0 +1,19 @@
+id = "ex:strings.literal/no-quotes"
+concept = "strings.literal"
+type = "code"
+difficulty = "easy"
+title = "Missing quotes"
+prompt = """
+Run this program and read the error. Then fix it so that it shows:
+
+    Welcome
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The error says Python doesn't know `Welcome`. Is it a name, or a piece of text?"
+
+[[hints]]
+text = "Put quotes around the text: `print(\"Welcome\")`."

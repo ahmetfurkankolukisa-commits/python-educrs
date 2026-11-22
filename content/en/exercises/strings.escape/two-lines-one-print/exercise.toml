@@ -1,0 +1,15 @@
+id = "ex:strings.escape/two-lines-one-print"
+concept = "strings.escape"
+type = "fill-gap"
+difficulty = "easy"
+title = "Two lines, one print"
+prompt = """
+Fill the gap so that one `print` shows two lines:
+
+    Roses are red
+    Violets are blue
+"""
+template = 'print("Roses are red____Violets are blue")'
+tiles = ['\n', '/n', 'n']
+answer = '\n'
+explanation = 'A new line is `\n`. It needs a backslash `\`, not a slash `/`.'

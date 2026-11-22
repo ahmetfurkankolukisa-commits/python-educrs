@@ -1,0 +1,8 @@
+id = "ex:shell.expressions/maths"
+concept = "shell.expressions"
+type = "predict-output"
+difficulty = "easy"
+title = "A sum"
+prompt = "What does this program show?"
+options = ["8", "4 + 4", "44"]
+explanation = "`4 + 4` has no quotes, so Python works out its value first. Then `print` shows `8`."

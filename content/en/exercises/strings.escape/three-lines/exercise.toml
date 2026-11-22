@@ -1,0 +1,21 @@
+id = "ex:strings.escape/three-lines"
+concept = "strings.escape"
+type = "code"
+difficulty = "easy"
+title = "Three lines, one print"
+prompt = """
+Use **one** `print` to show these three lines:
+
+    one
+    two
+    three
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = 'Inside a string, `\n` starts a new line.'
+
+[[hints]]
+text = '`print("one\ntwo\nthree")`'

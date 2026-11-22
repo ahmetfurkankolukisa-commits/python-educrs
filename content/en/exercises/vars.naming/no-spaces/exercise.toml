@@ -1,0 +1,19 @@
+id = "ex:vars.naming/no-spaces"
+concept = "vars.naming"
+type = "code"
+difficulty = "easy"
+title = "No spaces"
+prompt = """
+Fix the name of the variable so that the program shows:
+
+    Grace
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Names can't have spaces in them."
+
+[[hints]]
+text = "Join the words with `_`: `my_name`. Change it in both lines."

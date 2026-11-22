@@ -1,0 +1,17 @@
+{
+  "answer": "Error",
+  "grader": 1,
+  "id": "ex:intro.errors-are-normal/missing-bracket",
+  "outcome": {
+    "error": {
+      "lineno": 1,
+      "message": "'(' was never closed",
+      "offset": 6,
+      "text": "print(\"Hello\"",
+      "traceback": "  File \"/main.py\", line 1\n    print(\"Hello\"\n         ^\nSyntaxError: '(' was never closed\n",
+      "type": "SyntaxError"
+    },
+    "stdout": ""
+  },
+  "python": "3.14"
+}

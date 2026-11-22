@@ -1,0 +1,10 @@
+{
+  "answer": "Say \"cheese\"",
+  "grader": 1,
+  "id": "ex:strings.escape/escaped-quote",
+  "outcome": {
+    "error": null,
+    "stdout": "Say \"cheese\"\n"
+  },
+  "python": "3.14"
+}

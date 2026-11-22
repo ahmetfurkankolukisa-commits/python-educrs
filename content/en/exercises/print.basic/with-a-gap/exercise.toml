@@ -1,0 +1,17 @@
+id = "ex:print.basic/with-a-gap"
+concept = "print.basic"
+type = "verbatim"
+difficulty = "easy"
+title = "A program with a gap"
+prompt = """
+Type this program **exactly as it is**, then press **Check**. Press **Run** too, to see the empty line.
+
+```python
+print("Name: Ada")
+print()
+print("Done")
+```
+"""
+
+[[hints]]
+text = "There are three lines. The middle one is `print()` with nothing between the brackets."

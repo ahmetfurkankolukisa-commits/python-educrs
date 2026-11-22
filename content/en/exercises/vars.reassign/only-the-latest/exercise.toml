@@ -1,0 +1,11 @@
+id = "ex:vars.reassign/only-the-latest"
+concept = "vars.reassign"
+type = "predict-output"
+difficulty = "easy"
+title = "Only the latest value"
+prompt = "What does this program show?"
+options = ["high", "low", "low high"]
+explanation = "The second line gives `score` a new value. The old value, `\"low\"`, is gone."
+
+[option_misconceptions]
+"low high" = { id = "mc.var-remembers-history", message = "A variable keeps only its latest value. The old value, `\"low\"`, is gone." }

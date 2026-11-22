@@ -1,0 +1,10 @@
+{
+  "answer": "Python",
+  "grader": 1,
+  "id": "ex:strings.literal/quotes-not-shown",
+  "outcome": {
+    "error": null,
+    "stdout": "Python\n"
+  },
+  "python": "3.14"
+}

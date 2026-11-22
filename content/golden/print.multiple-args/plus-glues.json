@@ -1,0 +1,10 @@
+{
+  "answer": "sunflower",
+  "grader": 1,
+  "id": "ex:print.multiple-args/plus-glues",
+  "outcome": {
+    "error": null,
+    "stdout": "sunflower\n"
+  },
+  "python": "3.14"
+}

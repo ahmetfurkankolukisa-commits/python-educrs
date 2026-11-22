@@ -1,0 +1,8 @@
+id = "ex:print.end-sep/same-line"
+concept = "print.end-sep"
+type = "predict-output"
+difficulty = "easy"
+title = "No new line"
+prompt = "What does this program show?"
+options = ["A B", "A\nB", "AB"]
+explanation = "`end=\" \"` ends the first `print` with a space instead of a new line. So `B` appears on the same line."

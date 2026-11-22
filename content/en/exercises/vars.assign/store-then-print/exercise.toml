@@ -1,0 +1,8 @@
+id = "ex:vars.assign/store-then-print"
+concept = "vars.assign"
+type = "predict-output"
+difficulty = "easy"
+title = "Store, then print"
+prompt = "What does this program show?"
+options = ["rabbit", "pet", "pet = rabbit"]
+explanation = "`pet = \"rabbit\"` stores `\"rabbit\"` in `pet`. Then `print(pet)` shows the value stored in it."

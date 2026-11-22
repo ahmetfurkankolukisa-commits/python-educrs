@@ -1,0 +1,59 @@
+{
+  "grader": 1,
+  "id": "ex:vars.name-error/fix-the-spelling",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 2,
+      "message": "name 'anmial' is not defined",
+      "name": "anmial",
+      "offset": null,
+      "text": "print(anmial)",
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\n    print(anmial)\n          ^^^^^^\nNameError: name 'anmial' is not defined. Did you mean: 'animal'?\n",
+      "type": "NameError"
+    },
+    "explanation": {
+      "id": "name.typo",
+      "lineno": 2,
+      "params": {
+        "name": "anmial",
+        "suggestion": "animal"
+      }
+    },
+    "failed": {
+      "actual": "",
+      "error": {
+        "lineno": 2,
+        "message": "name 'anmial' is not defined",
+        "name": "anmial",
+        "offset": null,
+        "text": "print(anmial)",
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\n    print(anmial)\n          ^^^^^^\nNameError: name 'anmial' is not defined. Did you mean: 'animal'?\n",
+        "type": "NameError"
+      },
+      "expected": "owl\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "runtime",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

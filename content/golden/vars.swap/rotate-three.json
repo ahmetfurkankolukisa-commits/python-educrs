@@ -1,0 +1,39 @@
+{
+  "grader": 1,
+  "id": "ex:vars.swap/rotate-three",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 8,
+    "tests_total": 8
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "a b c\n",
+      "error": null,
+      "expected": "b c a\n",
+      "inputs": {
+        "first": "a",
+        "second": "b",
+        "third": "c"
+      }
+    },
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 8
+  }
+}

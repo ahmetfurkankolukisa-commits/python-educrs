@@ -1,0 +1,10 @@
+{
+  "answer": "coffee tea",
+  "grader": 1,
+  "id": "ex:vars.swap/with-temp",
+  "outcome": {
+    "error": null,
+    "stdout": "coffee tea\n"
+  },
+  "python": "3.14"
+}

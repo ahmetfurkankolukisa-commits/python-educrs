@@ -6,6 +6,7 @@ import { setCode } from "./helpers.ts";
 // Every test starts with a fresh browser context, so a fresh IndexedDB: a brand-new learner.
 
 const VARS_USE = "/learn/m2/vars-use/";
+const FIRST = "/learn/m0/intro-program/";
 const PATH = "/learn/";
 
 const step = (page: Page) => page.getByTestId("lesson-step");
@@ -43,11 +44,15 @@ test.describe("learning path", () => {
     await page.goto(PATH);
     await expect(page.getByTestId("path")).toHaveAttribute("data-loaded", "true");
     const nodes = page.getByTestId("path-node");
-    await expect(nodes).toHaveCount(2);
+    // M0–M2: 19 lessons, plus the business-card project at the end of M1 (docs/05-f3-mvp0.md §16)
+    await expect(nodes).toHaveCount(20);
     await expect(nodes.nth(0)).toHaveAttribute("data-state", "next");
-    await expect(nodes.nth(1)).toHaveAttribute("data-state", "todo");
-    await expect(nodes.nth(0)).toHaveAttribute("href", VARS_USE);
-    await expect(nodes.nth(1)).toHaveAttribute("href", "/learn/m2/vars-reassign/");
+    await expect(nodes.nth(0)).toHaveAttribute("href", FIRST);
+    await expect(page.locator('[data-testid="path-node"][data-state="todo"]')).toHaveCount(19);
+    await expect(nodes.nth(12)).toHaveAttribute("href", "/learn/m1/proj-business-card/");
+    await expect(nodes.nth(12)).toContainText("Project: Business card");
+    await expect(nodes.nth(14)).toHaveAttribute("href", VARS_USE);
+    await expect(nodes.nth(19)).toHaveAttribute("href", "/learn/m2/vars-swap/");
   });
 
   test("the home page links to the path", async ({ page }) => {
@@ -113,16 +118,22 @@ test.describe("a whole lesson", () => {
     await checkExpect(page, "correct");
     await page.getByTestId("feedback-primary").click();
 
+    // 6. predict-output, right the first time
+    await expectStep(page, "predict-output");
+    await choice(page, "soup soup").click();
+    await checkExpect(page, "correct");
+    await page.getByTestId("feedback-primary").click();
+
     // completion: wrong answers never cost anything; first-try is only reported here
     await expect(page.getByTestId("lesson-complete")).toBeVisible();
-    await expect(page.getByTestId("lesson-complete")).toContainText("0 of 4 right on the first try");
-    await expect(page.getByTestId("lesson-progress")).toHaveAttribute("aria-valuenow", "5");
+    await expect(page.getByTestId("lesson-complete")).toContainText("1 of 5 right on the first try");
+    await expect(page.getByTestId("lesson-progress")).toHaveAttribute("aria-valuenow", "6");
     await page.getByRole("link", { name: "Back to the path" }).click();
 
     await expect(page.getByTestId("path")).toHaveAttribute("data-loaded", "true");
-    const nodes = page.getByTestId("path-node");
-    await expect(nodes.nth(0)).toHaveAttribute("data-state", "completed");
-    await expect(nodes.nth(1)).toHaveAttribute("data-state", "next");
+    await expect(page.locator(`[data-testid="path-node"][href="${VARS_USE}"]`)).toHaveAttribute("data-state", "completed");
+    // the first unfinished lesson in path order is next, even if the learner jumped ahead
+    await expect(page.getByTestId("path-node").nth(0)).toHaveAttribute("data-state", "next");
   });
 
   test("the keyboard alone is enough: Enter, number keys, and focus moves to each new card", async ({ page, isMobile }) => {
@@ -168,12 +179,12 @@ test.describe("a whole lesson", () => {
   });
 
   test("leaving mid-lesson and coming back continues at the same step", async ({ page }) => {
-    await openLesson(page);
+    await openLesson(page, FIRST);
     await page.getByTestId("continue").click();
-    await choice(page, "Ada Lovelace").click();
+    await choice(page, "Good morning!").click();
     await checkExpect(page, "correct");
     await page.getByTestId("feedback-primary").click();
-    await expectStep(page, "fill-gap");
+    await expect(step(page)).toHaveAttribute("data-step", "2");
 
     await page.getByTestId("lesson-exit").click();
     await expect(page).toHaveURL(PATH);
@@ -184,8 +195,21 @@ test.describe("a whole lesson", () => {
 
     await first.click();
     await expect(page.getByTestId("lesson")).toHaveAttribute("data-ready", "true");
-    await expectStep(page, "fill-gap");
+    await expect(step(page)).toHaveAttribute("data-step", "2");
     await expect(page.getByTestId("lesson-progress")).toHaveAttribute("aria-valuenow", "2");
+  });
+});
+
+test.describe("projects", () => {
+  test("the business-card project is a lesson too: its first step is graded in the sandbox", async ({ page }) => {
+    await openLesson(page, "/learn/m1/proj-business-card/");
+    await expect(page.locator("h1")).toHaveText("Project: Business card");
+    await page.getByTestId("continue").click();
+    await expectStep(page, "code");
+    await sandboxReady(page);
+    await setCode(page, 'print("Ada Lovelace")\nprint("Programmer")');
+    await checkExpect(page, "correct");
+    await expect(page.getByTestId("lesson-progress")).toHaveAttribute("aria-valuemax", "4");
   });
 });
 

@@ -1,0 +1,2 @@
+animal = "owl"
+print(animal)

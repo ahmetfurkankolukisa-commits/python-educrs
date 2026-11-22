@@ -1,0 +1,20 @@
+id = "ex:proj.business-card/name-and-job"
+concept = "proj.business-card"
+type = "code"
+difficulty = "easy"
+title = "Name and job"
+prompt = """
+Use **one** `print` to show a name and a job on two lines:
+
+    Ada Lovelace
+    Programmer
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = 'Inside a string, `\n` starts a new line.'
+
+[[hints]]
+text = '`print("Ada Lovelace\nProgrammer")`'

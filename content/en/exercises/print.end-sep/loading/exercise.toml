@@ -1,0 +1,19 @@
+id = "ex:print.end-sep/loading"
+concept = "print.end-sep"
+type = "code"
+difficulty = "easy"
+title = "On one line"
+prompt = """
+Change the first `print` so that the program shows this on **one** line:
+
+    Loading... done!
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The first `print` ends with a new line. Use `end=` to change that."
+
+[[hints]]
+text = "`print(\"Loading...\", end=\" \")`"

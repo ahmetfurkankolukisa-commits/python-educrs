@@ -1,0 +1,19 @@
+id = "ex:vars.name-error/too-early"
+concept = "vars.name-error"
+type = "code"
+difficulty = "easy"
+title = "Too early"
+prompt = """
+This program uses `greeting` before it has a value. Fix it so that it shows:
+
+    Hi there
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Python runs the lines from top to bottom. When it runs `print(greeting)`, does `greeting` exist yet?"
+
+[[hints]]
+text = "Swap the two lines."

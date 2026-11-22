@@ -1,0 +1,8 @@
+id = "ex:shell.expressions/text-not-maths"
+concept = "shell.expressions"
+type = "predict-output"
+difficulty = "easy"
+title = "A sum in quotes"
+prompt = "What does this program show?"
+options = ["4 + 4", "8", "Error"]
+explanation = "In quotes, `\"4 + 4\"` is just text, so `print` shows it as it is."

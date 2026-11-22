@@ -1,0 +1,10 @@
+{
+  "answer": "2026-11-22",
+  "grader": 1,
+  "id": "ex:print.end-sep/dash",
+  "outcome": {
+    "error": null,
+    "stdout": "2026-11-22\n"
+  },
+  "python": "3.14"
+}

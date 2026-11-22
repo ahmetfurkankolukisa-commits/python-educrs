@@ -1,0 +1,34 @@
+concept = "vars.trace"
+title = "Tracing a program"
+
+[[steps]]
+kind = "explain"
+text = """
+To understand a program, **trace** it. Go through it line by line, like Python does, and keep track of the current value of each variable. When a variable gets a new value, cross out the old one.
+
+A variable holds a **value**, not a link to another variable. `b = a` copies the value that `a` has right now.
+"""
+example = """a = "red"
+b = a
+a = "blue"
+print(a, b)"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.trace/two-variables"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.trace/copy-then-change"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.trace/print-in-between"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.trace/which-assignment"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.trace/keep-a-backup"

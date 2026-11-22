@@ -1,0 +1,8 @@
+id = "ex:intro.sequence/tick-tock"
+concept = "intro.sequence"
+type = "predict-output"
+difficulty = "easy"
+title = "Tick, tock"
+prompt = "What does this program show?"
+options = ["tick\ntock\ntick", "tick\ntock", "tick\ntick\ntock"]
+explanation = "Each line runs once, in order. The third line shows `tick` again."

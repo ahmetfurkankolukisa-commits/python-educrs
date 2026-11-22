@@ -1,0 +1,20 @@
+id = "ex:comments.basic/turn-off-a-line"
+concept = "comments.basic"
+type = "code"
+difficulty = "easy"
+title = "Switch off a line"
+prompt = """
+This program shows three lines. Turn the **middle** line into a comment so that it shows only:
+
+    Start
+    End
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "A `#` at the start of a line turns it into a comment."
+
+[[hints]]
+text = "Put `#` in front of `print(\"Middle\")`."

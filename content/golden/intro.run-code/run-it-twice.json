@@ -1,0 +1,10 @@
+{
+  "answer": "Hi\nHi",
+  "grader": 1,
+  "id": "ex:intro.run-code/run-it-twice",
+  "outcome": {
+    "error": null,
+    "stdout": "Hi\nHi\n"
+  },
+  "python": "3.14"
+}

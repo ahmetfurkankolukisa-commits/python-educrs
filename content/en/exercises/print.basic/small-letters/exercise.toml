@@ -1,0 +1,14 @@
+id = "ex:print.basic/small-letters"
+concept = "print.basic"
+type = "fill-gap"
+difficulty = "easy"
+title = "Small letters"
+prompt = "Fill the gap so the program shows `Hello`."
+template = '____("Hello")'
+tiles = ["PRINT", "print", "Print"]
+answer = "print"
+explanation = "Python only knows `print` written in small letters."
+
+[tile_misconceptions]
+"PRINT" = { id = "mc.case-insensitive", message = "Python cares about capital letters. It knows `print`, but not `PRINT`." }
+"Print" = { id = "mc.case-insensitive", message = "Python cares about capital letters. It knows `print`, but not `Print`." }

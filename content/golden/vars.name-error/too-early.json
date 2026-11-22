@@ -1,0 +1,59 @@
+{
+  "grader": 1,
+  "id": "ex:vars.name-error/too-early",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "name 'greeting' is not defined",
+      "name": "greeting",
+      "offset": null,
+      "text": "print(greeting)",
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\n    print(greeting)\n          ^^^^^^^^\nNameError: name 'greeting' is not defined\n",
+      "type": "NameError"
+    },
+    "explanation": {
+      "id": "name.before-assign",
+      "lineno": 1,
+      "params": {
+        "line": 2,
+        "name": "greeting"
+      }
+    },
+    "failed": {
+      "actual": "",
+      "error": {
+        "lineno": 1,
+        "message": "name 'greeting' is not defined",
+        "name": "greeting",
+        "offset": null,
+        "text": "print(greeting)",
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 1, in <module>\n    print(greeting)\n          ^^^^^^^^\nNameError: name 'greeting' is not defined\n",
+        "type": "NameError"
+      },
+      "expected": "Hi there\n",
+      "inputs": null
+    },
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "runtime",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 1
+  }
+}

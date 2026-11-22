@@ -1,0 +1,19 @@
+id = "ex:strings.quotes-mixed/quote-a-friend"
+concept = "strings.quotes-mixed"
+type = "code"
+difficulty = "medium"
+title = "Quote a friend"
+prompt = """
+Write a program that shows:
+
+    Ada said "Hello"
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The text has `\"` in it. Put single quotes around the whole text."
+
+[[hints]]
+text = "`print('Ada said \"Hello\"')`"

@@ -1,0 +1,11 @@
+id = "ex:vars.trace/copy-then-change"
+concept = "vars.trace"
+type = "predict-output"
+difficulty = "medium"
+title = "Copy, then change"
+prompt = "Trace this program line by line. What does it show?"
+options = ["two one", "two two", "one one"]
+explanation = "`y = x` copies the value `\"one\"` into `y`. Changing `x` later doesn't change `y`."
+
+[option_misconceptions]
+"two two" = { id = "mc.vars-auto-update", message = "`y = x` copied the value `\"one\"`. Changing `x` later doesn't change `y`." }

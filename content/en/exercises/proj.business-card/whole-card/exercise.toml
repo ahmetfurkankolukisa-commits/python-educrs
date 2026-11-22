@@ -1,0 +1,25 @@
+id = "ex:proj.business-card/whole-card"
+concept = "proj.business-card"
+type = "code"
+difficulty = "medium"
+title = "The whole card"
+prompt = """
+Now print the whole card:
+
+    ****************
+    * Ada Lovelace
+    * Programmer
+    * ada@example.com
+    ****************
+
+Each line of the card is one string. You can use five `print`s, or one `print` with `sep=`.
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = 'Count the stars: the top and bottom lines have 16 of them.'
+
+[[hints]]
+text = '`sep="\n"` puts each value on its own line.'

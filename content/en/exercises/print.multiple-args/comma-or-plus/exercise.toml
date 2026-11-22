@@ -1,0 +1,13 @@
+id = "ex:print.multiple-args/comma-or-plus"
+concept = "print.multiple-args"
+type = "fill-gap"
+difficulty = "easy"
+title = "Comma or plus?"
+prompt = "Fill the gap so the program shows `Good morning`."
+template = 'print("Good"____"morning")'
+tiles = [",", "+", "."]
+answer = ","
+explanation = "A comma separates the values, and `print` adds the space between them."
+
+[tile_misconceptions]
+"+" = { id = "mc.comma-vs-plus", message = "`+` gives `Goodmorning`, with no space. A comma adds the space for you." }

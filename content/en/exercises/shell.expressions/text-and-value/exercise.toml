@@ -1,0 +1,8 @@
+id = "ex:shell.expressions/text-and-value"
+concept = "shell.expressions"
+type = "predict-output"
+difficulty = "medium"
+title = "Text and a sum"
+prompt = "What does this program show?"
+options = ["2 + 2 = 4", "2 + 2 = 2 + 2", "4 = 4"]
+explanation = "The first value is text in quotes, so it is shown as it is. The second, `2 + 2`, is worked out first."

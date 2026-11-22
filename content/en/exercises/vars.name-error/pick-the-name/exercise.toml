@@ -1,0 +1,14 @@
+id = "ex:vars.name-error/pick-the-name"
+concept = "vars.name-error"
+type = "fill-gap"
+difficulty = "easy"
+title = "Which name?"
+prompt = "Fill the gap so the program shows `Mars`."
+template = """planet = "Mars"
+print(____)"""
+tiles = ["Planet", "planet", "Mars"]
+answer = "planet"
+explanation = "The variable is called `planet`, with a small p. Python finds it and shows its value."
+
+[tile_misconceptions]
+"Mars" = { id = "mc.missing-quotes", message = "Without quotes, `Mars` is a name, and there is no variable called `Mars`. The variable that holds the text is `planet`." }

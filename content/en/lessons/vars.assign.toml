@@ -1,0 +1,34 @@
+concept = "vars.assign"
+title = "Assignment"
+
+[[steps]]
+kind = "explain"
+text = """
+A **variable** is a name that stores a value. This line makes a variable called `city` and stores `"Paris"` in it:
+
+    city = "Paris"
+
+The `=` means "store". The name always goes on the **left**, and the value goes on the right.
+"""
+example = """city = "Paris"
+print(city)"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.assign/store-then-print"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.assign/name-on-the-left"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.assign/wrong-way-round"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.assign/swap-the-sides"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.assign/make-a-variable"

@@ -1,0 +1,8 @@
+id = "ex:vars.name-error/spelling"
+concept = "vars.name-error"
+type = "predict-output"
+difficulty = "easy"
+title = "Two spellings"
+prompt = "What happens when you run this program?"
+options = ["red", "color", "Error"]
+explanation = "`color` is spelled differently from `colour`, so Python doesn't know it. It shows a NameError."

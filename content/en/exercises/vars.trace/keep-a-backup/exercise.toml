@@ -1,0 +1,25 @@
+id = "ex:vars.trace/keep-a-backup"
+concept = "vars.trace"
+type = "code"
+difficulty = "medium"
+title = "Keep a backup"
+prompt = """
+Make a variable called `backup` that holds the value of `start`. Then give `start` the value `"zero"`. Print `start`, and then `backup`.
+
+For example, when `start = "ten"` the program shows:
+
+    zero
+    ten
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["start"]
+tests = [{ start = "ten" }, { start = "five" }]
+random = { count = 6, types = { start = "str" } }
+
+[[hints]]
+text = "Copy `start` into `backup` **before** you change `start`."
+
+[[hints]]
+text = "`backup = start`, then `start = \"zero\"`, then the two `print`s."

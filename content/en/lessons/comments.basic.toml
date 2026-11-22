@@ -1,0 +1,32 @@
+concept = "comments.basic"
+title = "Comments"
+
+[[steps]]
+kind = "explain"
+text = """
+A line that starts with `#` is a **comment**. Python ignores it. Comments are notes for the people who read your code.
+
+A `#` can also come after some code. Python ignores everything from the `#` to the end of the line.
+"""
+example = """# This is a note for people
+print("Hi")  # this part is ignored too"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:comments.basic/ignored"
+
+[[steps]]
+kind = "exercise"
+id = "ex:comments.basic/switched-off"
+
+[[steps]]
+kind = "exercise"
+id = "ex:comments.basic/comment-sign"
+
+[[steps]]
+kind = "exercise"
+id = "ex:comments.basic/turn-off-a-line"
+
+[[steps]]
+kind = "exercise"
+id = "ex:comments.basic/note-line"

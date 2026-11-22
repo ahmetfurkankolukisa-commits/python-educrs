@@ -1,0 +1,10 @@
+{
+  "answer": "apple\npear",
+  "grader": 1,
+  "id": "ex:vars.trace/print-in-between",
+  "outcome": {
+    "error": null,
+    "stdout": "apple\npear\n"
+  },
+  "python": "3.14"
+}

@@ -1,0 +1,10 @@
+{
+  "answer": "Good night",
+  "grader": 1,
+  "id": "ex:print.multiple-args/comma-space",
+  "outcome": {
+    "error": null,
+    "stdout": "Good night\n"
+  },
+  "python": "3.14"
+}

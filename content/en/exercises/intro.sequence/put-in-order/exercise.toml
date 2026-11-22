@@ -1,0 +1,21 @@
+id = "ex:intro.sequence/put-in-order"
+concept = "intro.sequence"
+type = "code"
+difficulty = "easy"
+title = "A recipe in order"
+prompt = """
+This recipe is in the wrong order. Move the lines so that the program shows:
+
+    1. Boil water
+    2. Add pasta
+    3. Eat
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Python runs the lines from top to bottom. Which line must come first?"
+
+[[hints]]
+text = "Move `print(\"1. Boil water\")` to the top."

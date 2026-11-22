@@ -1,0 +1,10 @@
+{
+  "answer": "two one",
+  "grader": 1,
+  "id": "ex:vars.trace/copy-then-change",
+  "outcome": {
+    "error": null,
+    "stdout": "two one\n"
+  },
+  "python": "3.14"
+}

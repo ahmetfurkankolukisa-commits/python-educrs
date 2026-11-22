@@ -1,0 +1,31 @@
+concept = "intro.program"
+title = "What is a program?"
+
+[[steps]]
+kind = "explain"
+text = """
+A **program** is a list of instructions for a computer. The computer follows them exactly, one after another.
+
+In Python, `print` is an instruction that shows a message on the screen. The message goes inside the round brackets, in quotes.
+"""
+example = 'print("Hello!")'
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.program/output-or-code"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.program/two-instructions"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.program/pick-the-instruction"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.program/type-a-program"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.program/first-message"

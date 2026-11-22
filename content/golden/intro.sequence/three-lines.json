@@ -1,0 +1,10 @@
+{
+  "answer": "Ready\nSteady\nGo!",
+  "grader": 1,
+  "id": "ex:intro.sequence/three-lines",
+  "outcome": {
+    "error": null,
+    "stdout": "Ready\nSteady\nGo!\n"
+  },
+  "python": "3.14"
+}

@@ -1,0 +1,45 @@
+{
+  "grader": 1,
+  "id": "ex:vars.naming/no-spaces",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  },
+  "starter": {
+    "error": {
+      "lineno": 1,
+      "message": "invalid syntax",
+      "offset": 4,
+      "text": "my name = \"Grace\"",
+      "traceback": "  File \"/main.py\", line 1\n    my name = \"Grace\"\n       ^^^^\nSyntaxError: invalid syntax\n",
+      "type": "SyntaxError"
+    },
+    "explanation": {
+      "id": "syntax.bad-name",
+      "lineno": 1,
+      "params": {
+        "name": "my name",
+        "suggestion": "my_name"
+      }
+    },
+    "failed": null,
+    "grader": 1,
+    "kind": "stdout",
+    "misconception": null,
+    "passed": false,
+    "problem": "syntax",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 0
+  }
+}

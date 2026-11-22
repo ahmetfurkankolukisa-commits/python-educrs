@@ -1,0 +1,8 @@
+id = "ex:strings.quotes-mixed/apostrophe"
+concept = "strings.quotes-mixed"
+type = "predict-output"
+difficulty = "easy"
+title = "A quote inside"
+prompt = "What does this program show?"
+options = ["It's raining", "\"It's raining\"", "Error"]
+explanation = "The `'` is inside double quotes, so it is just part of the text."

@@ -1,0 +1,8 @@
+id = "ex:strings.escape/new-line"
+concept = "strings.escape"
+type = "predict-output"
+difficulty = "easy"
+title = "Backslash n"
+prompt = "What does this program show?"
+options = ["Hi\nthere", 'Hi\nthere', "Hi there"]
+explanation = '`\n` is not shown as two characters. It starts a new line.'

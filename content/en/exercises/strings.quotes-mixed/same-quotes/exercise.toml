@@ -1,0 +1,11 @@
+id = "ex:strings.quotes-mixed/same-quotes"
+concept = "strings.quotes-mixed"
+type = "predict-output"
+difficulty = "easy"
+title = "The same quotes inside"
+prompt = "What happens when you run this program?"
+options = ["It's raining", "It", "Error"]
+explanation = "The second `'` ends the text after `It`. Then Python finds `s raining'`, which it can't understand."
+
+[option_misconceptions]
+"It's raining" = { id = "mc.quote-ends-string", message = "A `'` inside single quotes ends the text. Use double quotes around text that has a `'` in it." }

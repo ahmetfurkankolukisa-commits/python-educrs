@@ -1,0 +1,10 @@
+{
+  "answer": "tick\ntock\ntick",
+  "grader": 1,
+  "id": "ex:intro.sequence/tick-tock",
+  "outcome": {
+    "error": null,
+    "stdout": "tick\ntock\ntick\n"
+  },
+  "python": "3.14"
+}

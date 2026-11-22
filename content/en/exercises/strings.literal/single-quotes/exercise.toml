@@ -1,0 +1,8 @@
+id = "ex:strings.literal/single-quotes"
+concept = "strings.literal"
+type = "predict-output"
+difficulty = "easy"
+title = "Single quotes"
+prompt = "What does this program show?"
+options = ["Hi there", "'Hi there'", "Error"]
+explanation = "Single quotes work just like double quotes. The quotes themselves are not shown."

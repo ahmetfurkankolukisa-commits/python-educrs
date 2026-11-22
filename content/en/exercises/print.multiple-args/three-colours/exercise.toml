@@ -1,0 +1,19 @@
+id = "ex:print.multiple-args/three-colours"
+concept = "print.multiple-args"
+type = "code"
+difficulty = "easy"
+title = "Three colours"
+prompt = """
+Use **one** `print` with commas to show:
+
+    red green blue
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Put each word in its own quotes, with commas between them."
+
+[[hints]]
+text = "`print(\"red\", \"green\", \"blue\")`"

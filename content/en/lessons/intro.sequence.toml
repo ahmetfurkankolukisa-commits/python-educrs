@@ -1,0 +1,33 @@
+concept = "intro.sequence"
+title = "One line after another"
+
+[[steps]]
+kind = "explain"
+text = """
+Python runs a program from the **top** line to the **bottom** line, one line at a time. It never skips ahead.
+
+So the order of the lines is the order of what you see.
+"""
+example = """print("First")
+print("Second")
+print("Third")"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.sequence/three-lines"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.sequence/put-in-order"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.sequence/tick-tock"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.sequence/missing-step"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.sequence/countdown"

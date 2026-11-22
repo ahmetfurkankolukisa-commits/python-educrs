@@ -1,0 +1,11 @@
+id = "ex:vars.use/same-variable-twice"
+concept = "vars.use"
+type = "predict-output"
+difficulty = "easy"
+title = "One variable, two times"
+prompt = "What does this program show?"
+options = ["soup soup", "food food", "soup"]
+explanation = "You can use a variable as often as you like. Here `print` shows its value two times."
+
+[option_misconceptions]
+"food food" = { id = "mc.quoted-name", message = "`food` has no quotes, so Python shows the value stored in it, twice." }

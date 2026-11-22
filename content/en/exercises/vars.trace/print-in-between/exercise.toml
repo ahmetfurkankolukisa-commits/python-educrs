@@ -1,0 +1,8 @@
+id = "ex:vars.trace/print-in-between"
+concept = "vars.trace"
+type = "predict-output"
+difficulty = "easy"
+title = "A print in between"
+prompt = "Trace this program line by line. What does it show?"
+options = ["apple\npear", "pear\npear", "apple\napple"]
+explanation = "The first `print` runs before `fruit` changes, so it shows `apple`. The second one shows the new value."

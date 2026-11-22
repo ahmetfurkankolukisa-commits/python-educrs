@@ -1,0 +1,19 @@
+id = "ex:print.end-sep/date"
+concept = "print.end-sep"
+type = "code"
+difficulty = "easy"
+title = "A date with slashes"
+prompt = """
+Change the program so that it shows the date with slashes:
+
+    22/11/2026
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "`print` puts spaces between the values. `sep=` can change that."
+
+[[hints]]
+text = "Add `sep=\"/\"` inside the brackets, after the last value."

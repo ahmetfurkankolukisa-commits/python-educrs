@@ -1,6 +1,522 @@
 {
   "exercises": [
     {
+      "concept": "comments.basic",
+      "contentHash": "9148f1e8767a2aea",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "#",
+        "expected_output": "Hello!\n",
+        "explanation": "In Python, comments start with `#`. Some other languages use `//` or `--`, but Python doesn't.",
+        "template": "____ TODO: ask for a name\nprint(\"Hello!\")",
+        "tile_feedback": {
+          "--": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.generic",
+              "lineno": 1,
+              "params": {
+                "offset": 1
+              }
+            }
+          },
+          "//": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.generic",
+              "lineno": 1,
+              "params": {
+                "offset": 1
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          "#",
+          "//",
+          "--"
+        ]
+      },
+      "hints": [],
+      "id": "ex:comments.basic/comment-sign",
+      "prompt": "Fill the gap so the first line is a comment and the program shows `Hello!`.",
+      "source": "original",
+      "title": "The comment sign",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "comments.basic",
+      "contentHash": "50ba22f51f9065db",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:comments.basic/ignored",
+      "predict": {
+        "answer": "Hello!",
+        "explanation": "Python ignores the comment, so only `Hello!` is shown.",
+        "option_misconceptions": {},
+        "options": [
+          "Hello!",
+          "Say hello to the user\nHello!",
+          "Error"
+        ],
+        "program": "# Say hello to the user\nprint(\"Hello!\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A note",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "comments.basic",
+      "contentHash": "e2c7c2d460d56d68",
+      "difficulty": "easy",
+      "hints": [
+        "Python stops at the first line, because it is not code.",
+        "Start the first line with `#`."
+      ],
+      "id": "ex:comments.basic/note-line",
+      "misconceptions": [],
+      "prompt": "The first line is a note, but Python tries to run it. Make it a comment so that the program shows:\n\n    Hi!\n",
+      "solution": "# This program says hi\nprint(\"Hi!\")\n",
+      "source": "original",
+      "starter": "This program says hi\nprint(\"Hi!\")\n",
+      "title": "Make it a note",
+      "type": "code"
+    },
+    {
+      "concept": "comments.basic",
+      "contentHash": "9a8f5261f2f9ff1a",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:comments.basic/switched-off",
+      "predict": {
+        "answer": "A\nC",
+        "explanation": "The middle line starts with `#`, so it is a comment and doesn't run. The note after the first line is ignored too.",
+        "option_misconceptions": {},
+        "options": [
+          "A\nC",
+          "A\nB\nC",
+          "A first\nC",
+          "Error"
+        ],
+        "program": "print(\"A\")  # first\n# print(\"B\")\nprint(\"C\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A line switched off",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "comments.basic",
+      "contentHash": "c989a2b7e309fe9a",
+      "difficulty": "easy",
+      "hints": [
+        "A `#` at the start of a line turns it into a comment.",
+        "Put `#` in front of `print(\"Middle\")`."
+      ],
+      "id": "ex:comments.basic/turn-off-a-line",
+      "misconceptions": [],
+      "prompt": "This program shows three lines. Turn the **middle** line into a comment so that it shows only:\n\n    Start\n    End\n",
+      "solution": "print(\"Start\")\n# print(\"Middle\")\nprint(\"End\")\n",
+      "source": "original",
+      "starter": "print(\"Start\")\nprint(\"Middle\")\nprint(\"End\")\n",
+      "title": "Switch off a line",
+      "type": "code"
+    },
+    {
+      "concept": "intro.errors-are-normal",
+      "contentHash": "8f2b647ee99b6c0c",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:intro.errors-are-normal/capital-p",
+      "predict": {
+        "answer": "Error",
+        "explanation": "Python cares about capital letters. It knows `print`, but not `Print`, so it shows an error.",
+        "option_misconceptions": {
+          "Hi": {
+            "id": "mc.case-insensitive",
+            "message": "Python treats `Print` and `print` as two different names. Only `print` shows a message."
+          }
+        },
+        "options": [
+          "Hi",
+          "Error",
+          "print"
+        ],
+        "program": "Print(\"Hi\")\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "A capital letter",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "intro.errors-are-normal",
+      "contentHash": "002ecfd0ee9a797a",
+      "difficulty": "easy",
+      "hints": [
+        "The error is about a bracket. Every `(` needs a `)`.",
+        "Add `)` at the end of the line."
+      ],
+      "id": "ex:intro.errors-are-normal/fix-the-bracket",
+      "misconceptions": [],
+      "prompt": "Run this program and read the error. Then fix it so that it shows:\n\n    Almost there!\n",
+      "solution": "print(\"Almost there!\")\n",
+      "source": "original",
+      "starter": "print(\"Almost there!\"\n",
+      "title": "Fix the bracket",
+      "type": "code"
+    },
+    {
+      "concept": "intro.errors-are-normal",
+      "contentHash": "ffc6aeb93ba4cdb6",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "\"Good job\"",
+        "expected_output": "Good job\n",
+        "explanation": "A message needs a quote at the start and a quote at the end.",
+        "template": "print(____)",
+        "tile_feedback": {
+          "\"Good job": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.unterminated-string",
+              "lineno": 1,
+              "params": {
+                "quote": "\""
+              }
+            }
+          },
+          "Good job": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.missing-quotes",
+              "lineno": 1,
+              "params": {
+                "text": "Good job"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "Good job": {
+            "id": "mc.missing-quotes",
+            "message": "Without quotes, Python thinks `Good` and `job` are names. Text needs quotes: `\"Good job\"`."
+          }
+        },
+        "tiles": [
+          "\"Good job\"",
+          "Good job",
+          "\"Good job"
+        ]
+      },
+      "hints": [],
+      "id": "ex:intro.errors-are-normal/fix-the-quotes",
+      "prompt": "Fill the gap so the program shows `Good job`.",
+      "source": "original",
+      "title": "Quotes at both ends",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "intro.errors-are-normal",
+      "contentHash": "3e4d1c2eea15d1b1",
+      "difficulty": "easy",
+      "hints": [
+        "The error says Python doesn't know a name. Which word is spelled wrong?",
+        "`pritn` should be `print`."
+      ],
+      "id": "ex:intro.errors-are-normal/fix-the-typo",
+      "misconceptions": [],
+      "prompt": "This program has a typing mistake. Run it and read the error. Then fix it so that it shows:\n\n    Mistakes are how we learn.\n",
+      "solution": "print(\"Mistakes are how we learn.\")\n",
+      "source": "original",
+      "starter": "pritn(\"Mistakes are how we learn.\")\n",
+      "title": "Fix the typing mistake",
+      "type": "code"
+    },
+    {
+      "concept": "intro.errors-are-normal",
+      "contentHash": "01b4a3b7d0f4fc0a",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:intro.errors-are-normal/missing-bracket",
+      "predict": {
+        "answer": "Error",
+        "explanation": "The `(` is never closed, so Python can't understand the line. It shows an error instead.",
+        "option_misconceptions": {},
+        "options": [
+          "Hello",
+          "Error",
+          "print(\"Hello\""
+        ],
+        "program": "print(\"Hello\"\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "What happens?",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "intro.program",
+      "contentHash": "f58d729341d977b1",
+      "difficulty": "easy",
+      "hints": [
+        "Use `print` with the message inside the round brackets.",
+        "Put the message in quotes: `print(\"I can give instructions.\")`. Check the full stop at the end."
+      ],
+      "id": "ex:intro.program/first-message",
+      "misconceptions": [],
+      "prompt": "Write a program that shows this message:\n\n    I can give instructions.\n",
+      "solution": "print(\"I can give instructions.\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Your own message",
+      "type": "code"
+    },
+    {
+      "concept": "intro.program",
+      "contentHash": "44bed6b9adfac71d",
+      "difficulty": "easy",
+      "hints": [
+        "The quotes show Python where the message starts and ends."
+      ],
+      "id": "ex:intro.program/output-or-code",
+      "predict": {
+        "answer": "Good morning!",
+        "explanation": "`print` shows only the message. The word `print`, the brackets and the quotes are part of the instruction, not of the message.",
+        "option_misconceptions": {},
+        "options": [
+          "Good morning!",
+          "print(\"Good morning!\")",
+          "\"Good morning!\"",
+          "Error"
+        ],
+        "program": "print(\"Good morning!\")\n"
+      },
+      "prompt": "This program has one instruction. What does it show on the screen?",
+      "source": "original",
+      "title": "What appears on the screen?",
+      "type": "predict-output"
+    },
+    {
+      "concept": "intro.program",
+      "contentHash": "5c7cbf48c44019c9",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "print",
+        "expected_output": "Python is fun\n",
+        "explanation": "`print` is the instruction that shows a message. Python only knows it with small letters.",
+        "template": "____(\"Python is fun\")",
+        "tile_feedback": {
+          "Print": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.case",
+              "lineno": 1,
+              "params": {
+                "name": "Print",
+                "suggestion": "print"
+              }
+            }
+          },
+          "pritn": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.typo",
+              "lineno": 1,
+              "params": {
+                "name": "pritn",
+                "suggestion": "print"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "Print": {
+            "id": "mc.case-insensitive",
+            "message": "Python cares about capital letters. `Print` is not the same as `print`, so Python doesn't know it."
+          }
+        },
+        "tiles": [
+          "print",
+          "pritn",
+          "Print"
+        ]
+      },
+      "hints": [],
+      "id": "ex:intro.program/pick-the-instruction",
+      "prompt": "Fill the gap so the program shows `Python is fun`.",
+      "source": "original",
+      "title": "Pick the instruction",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "intro.program",
+      "contentHash": "814077f711567f6e",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:intro.program/two-instructions",
+      "predict": {
+        "answer": "Wake up\nHave breakfast",
+        "explanation": "The computer follows the instructions in order, from top to bottom. Each `print` shows its message on a new line.",
+        "option_misconceptions": {},
+        "options": [
+          "Wake up\nHave breakfast",
+          "Have breakfast\nWake up",
+          "Wake up Have breakfast",
+          "Error"
+        ],
+        "program": "print(\"Wake up\")\nprint(\"Have breakfast\")\n"
+      },
+      "prompt": "This program has two instructions. What does it show?",
+      "source": "original",
+      "title": "Two instructions",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "verbatim",
+        "target": "print(\"Computers follow instructions.\")\n"
+      },
+      "concept": "intro.program",
+      "contentHash": "dc1a3bfd448a74eb",
+      "difficulty": "easy",
+      "hints": [
+        "Type the word `print`, then `(`, then the message in double quotes, then `)`."
+      ],
+      "id": "ex:intro.program/type-a-program",
+      "prompt": "Type this program into the editor **exactly as it is**, then press **Check**:\n\n```python\nprint(\"Computers follow instructions.\")\n```\n",
+      "source": "original",
+      "starter": "",
+      "title": "Type a program",
+      "type": "verbatim"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "intro.run-code",
+      "contentHash": "4ed2e309c57ceda6",
+      "difficulty": "easy",
+      "hints": [
+        "Only the text inside the quotes needs to change.",
+        "Replace `world` with `Python`. Keep the comma and the `!`."
+      ],
+      "id": "ex:intro.run-code/change-the-message",
+      "misconceptions": [],
+      "prompt": "This program shows `Hello, world!`. Change it so that it shows:\n\n    Hello, Python!\n\nPress **Run** to try it as often as you like. Then press **Check**.\n",
+      "solution": "print(\"Hello, Python!\")\n",
+      "source": "original",
+      "starter": "print(\"Hello, world!\")\n",
+      "title": "Change the message",
+      "type": "code"
+    },
+    {
+      "concept": "intro.run-code",
+      "contentHash": "d0de3b2d0dc16aab",
+      "difficulty": "easy",
+      "fill": {
+        "answer": ")",
+        "expected_output": "Ready to run\n",
+        "explanation": "Every `(` needs a `)` to close it. Here the `)` at the end was missing.",
+        "template": "print(\"Ready to run\"____",
+        "tile_feedback": {
+          "\"": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.unterminated-string",
+              "lineno": 1,
+              "params": {
+                "quote": "\""
+              }
+            }
+          },
+          "(": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.unbalanced-brackets",
+              "lineno": 1,
+              "params": {
+                "char": "(",
+                "missing": ")"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          ")",
+          "(",
+          "\""
+        ]
+      },
+      "hints": [],
+      "id": "ex:intro.run-code/close-the-bracket",
+      "prompt": "This line is missing its last character. Which one makes it show `Ready to run`?",
+      "source": "original",
+      "title": "The last character",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "intro.run-code",
+      "contentHash": "5a0282fcdac46132",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:intro.run-code/run-it-twice",
+      "predict": {
+        "answer": "Hi\nHi",
+        "explanation": "There are two `print` instructions, so the message appears twice. Each one is on its own line.",
+        "option_misconceptions": {},
+        "options": [
+          "Hi\nHi",
+          "Hi",
+          "HiHi",
+          "Error"
+        ],
+        "program": "print(\"Hi\")\nprint(\"Hi\")\n"
+      },
+      "prompt": "What does **Run** show for this program?",
+      "source": "original",
+      "title": "The same line twice",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "intro.run-code",
+      "contentHash": "c6fb674e1eb3c372",
+      "difficulty": "easy",
+      "hints": [
+        "Each line of output needs its own `print`.",
+        "Write two lines of code: `print(\"Line one\")` and then `print(\"Line two\")`."
+      ],
+      "id": "ex:intro.run-code/two-lines",
+      "misconceptions": [],
+      "prompt": "Write a program that shows these two lines:\n\n    Line one\n    Line two\n",
+      "solution": "print(\"Line one\")\nprint(\"Line two\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Two lines",
+      "type": "code"
+    },
+    {
       "check": {
         "kind": "verbatim",
         "target": "print(\"I am learning Python!\")\n"
@@ -22,6 +538,146 @@
       "check": {
         "kind": "stdout"
       },
+      "concept": "intro.sequence",
+      "contentHash": "b6eae0de87ab21d3",
+      "difficulty": "easy",
+      "hints": [
+        "You need four `print` lines, one for each line of output.",
+        "Put the lines in the order you want them to appear. `print(\"3\")` comes first."
+      ],
+      "id": "ex:intro.sequence/countdown",
+      "misconceptions": [],
+      "prompt": "Write a program that counts down like this:\n\n    3\n    2\n    1\n    Go!\n",
+      "solution": "print(\"3\")\nprint(\"2\")\nprint(\"1\")\nprint(\"Go!\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Countdown",
+      "type": "code"
+    },
+    {
+      "concept": "intro.sequence",
+      "contentHash": "6cee6330bbe2bc61",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "print(\"Get dressed\")",
+        "expected_output": "Get up\nGet dressed\nGo to school\n",
+        "explanation": "The middle line runs second, so it must show the middle step.",
+        "template": "print(\"Get up\")\n____\nprint(\"Go to school\")",
+        "tile_feedback": {
+          "print(\"Get up\")": {
+            "output": "Get up\nGet up\nGo to school\n"
+          },
+          "print(\"Go to school\")": {
+            "output": "Get up\nGo to school\nGo to school\n"
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          "print(\"Get dressed\")",
+          "print(\"Go to school\")",
+          "print(\"Get up\")"
+        ]
+      },
+      "hints": [],
+      "id": "ex:intro.sequence/missing-step",
+      "prompt": "Fill the gap so the program shows the three steps in order:\n\n    Get up\n    Get dressed\n    Go to school\n",
+      "source": "original",
+      "title": "The missing step",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "intro.sequence",
+      "contentHash": "8efaa4a9b00a56e7",
+      "difficulty": "easy",
+      "hints": [
+        "Python runs the lines from top to bottom. Which line must come first?",
+        "Move `print(\"1. Boil water\")` to the top."
+      ],
+      "id": "ex:intro.sequence/put-in-order",
+      "misconceptions": [],
+      "prompt": "This recipe is in the wrong order. Move the lines so that the program shows:\n\n    1. Boil water\n    2. Add pasta\n    3. Eat\n",
+      "solution": "print(\"1. Boil water\")\nprint(\"2. Add pasta\")\nprint(\"3. Eat\")\n",
+      "source": "original",
+      "starter": "print(\"2. Add pasta\")\nprint(\"3. Eat\")\nprint(\"1. Boil water\")\n",
+      "title": "A recipe in order",
+      "type": "code"
+    },
+    {
+      "concept": "intro.sequence",
+      "contentHash": "501fb25205f96c1b",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:intro.sequence/three-lines",
+      "predict": {
+        "answer": "Ready\nSteady\nGo!",
+        "explanation": "Python runs the lines from top to bottom, so the messages appear in the same order.",
+        "option_misconceptions": {},
+        "options": [
+          "Ready\nSteady\nGo!",
+          "Go!\nSteady\nReady",
+          "Ready Steady Go!",
+          "Error"
+        ],
+        "program": "print(\"Ready\")\nprint(\"Steady\")\nprint(\"Go!\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Ready, steady",
+      "type": "predict-output"
+    },
+    {
+      "concept": "intro.sequence",
+      "contentHash": "1b810154a26b8b4a",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:intro.sequence/tick-tock",
+      "predict": {
+        "answer": "tick\ntock\ntick",
+        "explanation": "Each line runs once, in order. The third line shows `tick` again.",
+        "option_misconceptions": {},
+        "options": [
+          "tick\ntock\ntick",
+          "tick\ntock",
+          "tick\ntick\ntock",
+          "Error"
+        ],
+        "program": "print(\"tick\")\nprint(\"tock\")\nprint(\"tick\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Tick, tock",
+      "type": "predict-output"
+    },
+    {
+      "concept": "print.basic",
+      "contentHash": "be59d7930ac00b5a",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:print.basic/empty-line",
+      "predict": {
+        "answer": "A\n\nB",
+        "explanation": "`print()` with nothing inside shows an empty line, so there is a gap between `A` and `B`.",
+        "option_misconceptions": {},
+        "options": [
+          "A\n\nB",
+          "A\nB",
+          "A\n()\nB",
+          "Error"
+        ],
+        "program": "print(\"A\")\nprint()\nprint(\"B\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Nothing inside",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
       "concept": "print.basic",
       "contentHash": "aab8fd8477ee9240",
       "difficulty": "easy",
@@ -37,6 +693,1372 @@
       "starter": "# Write your program below this line\n",
       "title": "Say hello to the world",
       "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "print.basic",
+      "contentHash": "ddd6edc4a78d2b6b",
+      "difficulty": "easy",
+      "hints": [
+        "Use one `print` for each line of the poem.",
+        "Start with `print(\"Roses are red\")`, then add two more lines."
+      ],
+      "id": "ex:print.basic/short-poem",
+      "misconceptions": [],
+      "prompt": "Write a program that shows this short poem:\n\n    Roses are red\n    Violets are blue\n    Python is fun\n",
+      "solution": "print(\"Roses are red\")\nprint(\"Violets are blue\")\nprint(\"Python is fun\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "A short poem",
+      "type": "code"
+    },
+    {
+      "concept": "print.basic",
+      "contentHash": "b8ed05a2ce6ae24a",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "print",
+        "expected_output": "Hello\n",
+        "explanation": "Python only knows `print` written in small letters.",
+        "template": "____(\"Hello\")",
+        "tile_feedback": {
+          "PRINT": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.case",
+              "lineno": 1,
+              "params": {
+                "name": "PRINT",
+                "suggestion": "print"
+              }
+            }
+          },
+          "Print": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.case",
+              "lineno": 1,
+              "params": {
+                "name": "Print",
+                "suggestion": "print"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "PRINT": {
+            "id": "mc.case-insensitive",
+            "message": "Python cares about capital letters. It knows `print`, but not `PRINT`."
+          },
+          "Print": {
+            "id": "mc.case-insensitive",
+            "message": "Python cares about capital letters. It knows `print`, but not `Print`."
+          }
+        },
+        "tiles": [
+          "PRINT",
+          "print",
+          "Print"
+        ]
+      },
+      "hints": [],
+      "id": "ex:print.basic/small-letters",
+      "prompt": "Fill the gap so the program shows `Hello`.",
+      "source": "original",
+      "title": "Small letters",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "kind": "verbatim",
+        "target": "print(\"Name: Ada\")\nprint()\nprint(\"Done\")\n"
+      },
+      "concept": "print.basic",
+      "contentHash": "01297ccc3b9c892b",
+      "difficulty": "easy",
+      "hints": [
+        "There are three lines. The middle one is `print()` with nothing between the brackets."
+      ],
+      "id": "ex:print.basic/with-a-gap",
+      "prompt": "Type this program **exactly as it is**, then press **Check**. Press **Run** too, to see the empty line.\n\n```python\nprint(\"Name: Ada\")\nprint()\nprint(\"Done\")\n```\n",
+      "source": "original",
+      "starter": "",
+      "title": "A program with a gap",
+      "type": "verbatim"
+    },
+    {
+      "concept": "print.end-sep",
+      "contentHash": "9b29a85b66ecd5d7",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:print.end-sep/dash",
+      "predict": {
+        "answer": "2026-11-22",
+        "explanation": "`sep=\"-\"` puts a `-` between the values instead of a space. Nothing is added after the last value.",
+        "option_misconceptions": {},
+        "options": [
+          "2026-11-22",
+          "2026 11 22",
+          "2026-11-22-",
+          "Error"
+        ],
+        "program": "print(\"2026\", \"11\", \"22\", sep=\"-\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A different separator",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "print.end-sep",
+      "contentHash": "d0a4527ba6ce74f6",
+      "difficulty": "easy",
+      "hints": [
+        "`print` puts spaces between the values. `sep=` can change that.",
+        "Add `sep=\"/\"` inside the brackets, after the last value."
+      ],
+      "id": "ex:print.end-sep/date",
+      "misconceptions": [],
+      "prompt": "Change the program so that it shows the date with slashes:\n\n    22/11/2026\n",
+      "solution": "print(\"22\", \"11\", \"2026\", sep=\"/\")\n",
+      "source": "original",
+      "starter": "print(\"22\", \"11\", \"2026\")\n",
+      "title": "A date with slashes",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "print.end-sep",
+      "contentHash": "84a48b24c67e020a",
+      "difficulty": "easy",
+      "hints": [
+        "The first `print` ends with a new line. Use `end=` to change that.",
+        "`print(\"Loading...\", end=\" \")`"
+      ],
+      "id": "ex:print.end-sep/loading",
+      "misconceptions": [],
+      "prompt": "Change the first `print` so that the program shows this on **one** line:\n\n    Loading... done!\n",
+      "solution": "print(\"Loading...\", end=\" \")\nprint(\"done!\")\n",
+      "source": "original",
+      "starter": "print(\"Loading...\")\nprint(\"done!\")\n",
+      "title": "On one line",
+      "type": "code"
+    },
+    {
+      "concept": "print.end-sep",
+      "contentHash": "2050dbf8c22cfa3c",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "sep=\"\"",
+        "expected_output": "Hahaha\n",
+        "explanation": "`sep=\"\"` puts nothing between the values, so they are glued together.",
+        "template": "print(\"Ha\", \"ha\", \"ha\", ____)",
+        "tile_feedback": {
+          "end=\"\"": {
+            "output": "Ha ha ha"
+          },
+          "sep=\" \"": {
+            "output": "Ha ha ha\n"
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          "sep=\"\"",
+          "sep=\" \"",
+          "end=\"\""
+        ]
+      },
+      "hints": [],
+      "id": "ex:print.end-sep/no-spaces",
+      "prompt": "Fill the gap so the program shows `Hahaha`.",
+      "source": "original",
+      "title": "Nothing in between",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "print.end-sep",
+      "contentHash": "cf71466a8381d832",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:print.end-sep/same-line",
+      "predict": {
+        "answer": "A B",
+        "explanation": "`end=\" \"` ends the first `print` with a space instead of a new line. So `B` appears on the same line.",
+        "option_misconceptions": {},
+        "options": [
+          "A B",
+          "A\nB",
+          "AB",
+          "Error"
+        ],
+        "program": "print(\"A\", end=\" \")\nprint(\"B\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "No new line",
+      "type": "predict-output"
+    },
+    {
+      "concept": "print.multiple-args",
+      "contentHash": "20f462b2d9e93fc6",
+      "difficulty": "easy",
+      "fill": {
+        "answer": ",",
+        "expected_output": "Good morning\n",
+        "explanation": "A comma separates the values, and `print` adds the space between them.",
+        "template": "print(\"Good\"____\"morning\")",
+        "tile_feedback": {
+          "+": {
+            "output": "Goodmorning\n"
+          },
+          ".": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.generic",
+              "lineno": 1,
+              "params": {
+                "offset": 14
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "+": {
+            "id": "mc.comma-vs-plus",
+            "message": "`+` gives `Goodmorning`, with no space. A comma adds the space for you."
+          }
+        },
+        "tiles": [
+          ",",
+          "+",
+          "."
+        ]
+      },
+      "hints": [],
+      "id": "ex:print.multiple-args/comma-or-plus",
+      "prompt": "Fill the gap so the program shows `Good morning`.",
+      "source": "original",
+      "title": "Comma or plus?",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "print.multiple-args",
+      "contentHash": "21fcd1c6d3dfb6ed",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:print.multiple-args/comma-space",
+      "predict": {
+        "answer": "Good night",
+        "explanation": "A comma separates the values, and `print` puts a space between them.",
+        "option_misconceptions": {
+          "Goodnight": {
+            "id": "mc.comma-vs-plus",
+            "message": "A comma puts a space between the values. Only `+` glues text together without a space."
+          }
+        },
+        "options": [
+          "Good night",
+          "Goodnight",
+          "Good, night",
+          "Error"
+        ],
+        "program": "print(\"Good\", \"night\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Two values",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "print.multiple-args",
+      "contentHash": "f7b7ebbff124e880",
+      "difficulty": "easy",
+      "hints": [
+        "Each `+` glues two strings with no space between them.",
+        "Replace each `+` with a comma."
+      ],
+      "id": "ex:print.multiple-args/fix-the-spaces",
+      "misconceptions": [
+        {
+          "id": "mc.comma-vs-plus",
+          "message": "`+` adds no spaces. Use commas between the values, and `print` adds the spaces.",
+          "program": "print(\"I like\" + \"Python\" + \"and pizza\")\n"
+        }
+      ],
+      "prompt": "This program glues the words together. Change it so that it shows:\n\n    I like Python and pizza\n",
+      "solution": "print(\"I like\", \"Python\", \"and pizza\")\n",
+      "source": "original",
+      "starter": "print(\"I like\" + \"Python\" + \"and pizza\")\n",
+      "title": "Fix the spaces",
+      "type": "code"
+    },
+    {
+      "concept": "print.multiple-args",
+      "contentHash": "af06bef1e8395b1b",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:print.multiple-args/plus-glues",
+      "predict": {
+        "answer": "sunflower",
+        "explanation": "`+` glues the two strings together, with no space between them.",
+        "option_misconceptions": {
+          "sun flower": {
+            "id": "mc.comma-vs-plus",
+            "message": "`+` glues the strings together with no space. Only a comma adds a space."
+          }
+        },
+        "options": [
+          "sunflower",
+          "sun flower",
+          "Error"
+        ],
+        "program": "print(\"sun\" + \"flower\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A plus sign",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "print.multiple-args",
+      "contentHash": "09fd28cccc079086",
+      "difficulty": "easy",
+      "hints": [
+        "Put each word in its own quotes, with commas between them.",
+        "`print(\"red\", \"green\", \"blue\")`"
+      ],
+      "id": "ex:print.multiple-args/three-colours",
+      "misconceptions": [],
+      "prompt": "Use **one** `print` with commas to show:\n\n    red green blue\n",
+      "solution": "print(\"red\", \"green\", \"blue\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Three colours",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "proj.business-card",
+      "contentHash": "ffeb7f7ac632e4b0",
+      "difficulty": "medium",
+      "hints": [
+        "Right now `print` puts a space between the values. `sep=` changes that.",
+        "`sep=\" | \"` puts a space, a `|` and a space between the values."
+      ],
+      "id": "ex:proj.business-card/contact-line",
+      "misconceptions": [],
+      "prompt": "Show the contact details on one line, with ` | ` between them:\n\n    ada@example.com | 555-0100 | London\n\nKeep the three values and add `sep=`.\n",
+      "solution": "print(\"ada@example.com\", \"555-0100\", \"London\", sep=\" | \")\n",
+      "source": "original",
+      "starter": "print(\"ada@example.com\", \"555-0100\", \"London\")\n",
+      "title": "Contact details",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "proj.business-card",
+      "contentHash": "5009260244d9788f",
+      "difficulty": "easy",
+      "hints": [
+        "Inside a string, `\\n` starts a new line.",
+        "`print(\"Ada Lovelace\\nProgrammer\")`"
+      ],
+      "id": "ex:proj.business-card/name-and-job",
+      "misconceptions": [],
+      "prompt": "Use **one** `print` to show a name and a job on two lines:\n\n    Ada Lovelace\n    Programmer\n",
+      "solution": "print(\"Ada Lovelace\\nProgrammer\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Name and job",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "proj.business-card",
+      "contentHash": "3742660a25498fd6",
+      "difficulty": "medium",
+      "hints": [
+        "Count the stars: the top and bottom lines have 16 of them.",
+        "`sep=\"\\n\"` puts each value on its own line."
+      ],
+      "id": "ex:proj.business-card/whole-card",
+      "misconceptions": [],
+      "prompt": "Now print the whole card:\n\n    ****************\n    * Ada Lovelace\n    * Programmer\n    * ada@example.com\n    ****************\n\nEach line of the card is one string. You can use five `print`s, or one `print` with `sep=`.\n",
+      "solution": "print(\"****************\", \"* Ada Lovelace\", \"* Programmer\", \"* ada@example.com\", \"****************\", sep=\"\\n\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "The whole card",
+      "type": "code"
+    },
+    {
+      "concept": "shell.expressions",
+      "contentHash": "e0a4616d22cef776",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "5 + 5",
+        "expected_output": "10\n",
+        "explanation": "Without quotes, `5 + 5` is an expression. Python works out its value, `10`.",
+        "template": "print(____)",
+        "tile_feedback": {
+          "\"10": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.unterminated-string",
+              "lineno": 1,
+              "params": {
+                "quote": "\""
+              }
+            }
+          },
+          "\"5 + 5\"": {
+            "output": "5 + 5\n"
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          "5 + 5",
+          "\"5 + 5\"",
+          "\"10"
+        ]
+      },
+      "hints": [],
+      "id": "ex:shell.expressions/make-it-calculate",
+      "prompt": "Fill the gap so the program shows `10`.",
+      "source": "original",
+      "title": "Let Python work it out",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "shell.expressions",
+      "contentHash": "3cc7ee801d1f4485",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:shell.expressions/maths",
+      "predict": {
+        "answer": "8",
+        "explanation": "`4 + 4` has no quotes, so Python works out its value first. Then `print` shows `8`.",
+        "option_misconceptions": {},
+        "options": [
+          "8",
+          "4 + 4",
+          "44",
+          "Error"
+        ],
+        "program": "print(4 + 4)\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A sum",
+      "type": "predict-output"
+    },
+    {
+      "concept": "shell.expressions",
+      "contentHash": "9a869bd24a6056dd",
+      "difficulty": "medium",
+      "hints": [],
+      "id": "ex:shell.expressions/text-and-value",
+      "predict": {
+        "answer": "2 + 2 = 4",
+        "explanation": "The first value is text in quotes, so it is shown as it is. The second, `2 + 2`, is worked out first.",
+        "option_misconceptions": {},
+        "options": [
+          "2 + 2 = 4",
+          "2 + 2 = 2 + 2",
+          "4 = 4",
+          "Error"
+        ],
+        "program": "print(\"2 + 2 =\", 2 + 2)\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Text and a sum",
+      "type": "predict-output"
+    },
+    {
+      "concept": "shell.expressions",
+      "contentHash": "b3c7245650d98fa1",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:shell.expressions/text-not-maths",
+      "predict": {
+        "answer": "4 + 4",
+        "explanation": "In quotes, `\"4 + 4\"` is just text, so `print` shows it as it is.",
+        "option_misconceptions": {},
+        "options": [
+          "4 + 4",
+          "8",
+          "Error"
+        ],
+        "program": "print(\"4 + 4\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A sum in quotes",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "shell.expressions",
+      "contentHash": "0faa45fbb78539e0",
+      "difficulty": "easy",
+      "hints": [
+        "Python works out an expression without quotes. `print(2 + 3)` shows `5`.",
+        "`print(7 * 6)`"
+      ],
+      "id": "ex:shell.expressions/times",
+      "misconceptions": [],
+      "prompt": "In Python, `*` means \"times\". Use `print` to make Python work out 7 times 6. The program shows:\n\n    42\n",
+      "solution": "print(7 * 6)\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Seven times six",
+      "type": "code"
+    },
+    {
+      "concept": "strings.escape",
+      "contentHash": "7986d069d36c98ac",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:strings.escape/escaped-quote",
+      "predict": {
+        "answer": "Say \"cheese\"",
+        "explanation": "`\\\"` is a quote that doesn't end the text. The backslash is not shown.",
+        "option_misconceptions": {},
+        "options": [
+          "Say \"cheese\"",
+          "Say \\\"cheese\\\"",
+          "Error"
+        ],
+        "program": "print(\"Say \\\"cheese\\\"\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A quote with a backslash",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "strings.escape",
+      "contentHash": "ad2fe032384ab2c7",
+      "difficulty": "medium",
+      "hints": [
+        "A backslash starts a special character. Here `\\n` became a new line.",
+        "Write each backslash twice. `\\\\` shows one backslash."
+      ],
+      "id": "ex:strings.escape/folder-name",
+      "misconceptions": [],
+      "prompt": "Show this folder name exactly:\n\n    C:\\docs\\new\n\nRun the program first. The `\\n` in it does something you don't want.\n",
+      "solution": "print(\"C:\\\\docs\\\\new\")\n",
+      "source": "original",
+      "starter": "print(\"C:\\docs\\new\")\n",
+      "title": "A folder name",
+      "type": "code"
+    },
+    {
+      "concept": "strings.escape",
+      "contentHash": "0340bdf583a7ab51",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:strings.escape/new-line",
+      "predict": {
+        "answer": "Hi\nthere",
+        "explanation": "`\\n` is not shown as two characters. It starts a new line.",
+        "option_misconceptions": {},
+        "options": [
+          "Hi\nthere",
+          "Hi\\nthere",
+          "Hi there",
+          "Error"
+        ],
+        "program": "print(\"Hi\\nthere\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Backslash n",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "strings.escape",
+      "contentHash": "690f193a43f63bcb",
+      "difficulty": "easy",
+      "hints": [
+        "Inside a string, `\\n` starts a new line.",
+        "`print(\"one\\ntwo\\nthree\")`"
+      ],
+      "id": "ex:strings.escape/three-lines",
+      "misconceptions": [],
+      "prompt": "Use **one** `print` to show these three lines:\n\n    one\n    two\n    three\n",
+      "solution": "print(\"one\\ntwo\\nthree\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Three lines, one print",
+      "type": "code"
+    },
+    {
+      "concept": "strings.escape",
+      "contentHash": "b6fdf2698f6e4a5d",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "\\n",
+        "expected_output": "Roses are red\nViolets are blue\n",
+        "explanation": "A new line is `\\n`. It needs a backslash `\\`, not a slash `/`.",
+        "template": "print(\"Roses are red____Violets are blue\")",
+        "tile_feedback": {
+          "/n": {
+            "output": "Roses are red/nViolets are blue\n"
+          },
+          "n": {
+            "output": "Roses are rednViolets are blue\n"
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          "\\n",
+          "/n",
+          "n"
+        ]
+      },
+      "hints": [],
+      "id": "ex:strings.escape/two-lines-one-print",
+      "prompt": "Fill the gap so that one `print` shows two lines:\n\n    Roses are red\n    Violets are blue\n",
+      "source": "original",
+      "title": "Two lines, one print",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "strings.literal",
+      "contentHash": "a5020381ae3de297",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "\"Good morning\"",
+        "expected_output": "Good morning\n",
+        "explanation": "Text needs straight quotes at the start and at the end.",
+        "template": "print(____)",
+        "tile_feedback": {
+          "Good morning": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.missing-quotes",
+              "lineno": 1,
+              "params": {
+                "text": "Good morning"
+              }
+            }
+          },
+          "“Good morning”": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.smart-quotes",
+              "lineno": 1,
+              "params": {
+                "char": "“"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "Good morning": {
+            "id": "mc.missing-quotes",
+            "message": "Without quotes, Python thinks `Good` and `morning` are names. Text needs quotes: `\"Good morning\"`."
+          },
+          "“Good morning”": {
+            "id": "mc.smart-quotes",
+            "message": "These are curly quotes, the kind a phone or a word processor adds. Python only understands straight quotes: `\"`."
+          }
+        },
+        "tiles": [
+          "\"Good morning\"",
+          "Good morning",
+          "“Good morning”"
+        ]
+      },
+      "hints": [],
+      "id": "ex:strings.literal/add-the-quotes",
+      "prompt": "Fill the gap so the program shows `Good morning`.",
+      "source": "original",
+      "title": "Straight quotes",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "strings.literal",
+      "contentHash": "040f012d22037d5c",
+      "difficulty": "easy",
+      "hints": [
+        "Look closely at the quotes. Are they straight or curly?",
+        "Delete the curly quotes and type straight ones: `\"`."
+      ],
+      "id": "ex:strings.literal/curly-quotes",
+      "misconceptions": [],
+      "prompt": "This line was copied from a document, so it has curly quotes. Fix it so that it shows:\n\n    Hello from my phone\n",
+      "solution": "print(\"Hello from my phone\")\n",
+      "source": "original",
+      "starter": "print(“Hello from my phone”)\n",
+      "title": "Copied from a document",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "strings.literal",
+      "contentHash": "6531a8e75dcc573e",
+      "difficulty": "easy",
+      "hints": [
+        "The error says Python doesn't know `Welcome`. Is it a name, or a piece of text?",
+        "Put quotes around the text: `print(\"Welcome\")`."
+      ],
+      "id": "ex:strings.literal/no-quotes",
+      "misconceptions": [],
+      "prompt": "Run this program and read the error. Then fix it so that it shows:\n\n    Welcome\n",
+      "solution": "print(\"Welcome\")\n",
+      "source": "original",
+      "starter": "print(Welcome)\n",
+      "title": "Missing quotes",
+      "type": "code"
+    },
+    {
+      "concept": "strings.literal",
+      "contentHash": "05df327f839310a8",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:strings.literal/quotes-not-shown",
+      "predict": {
+        "answer": "Python",
+        "explanation": "The quotes only tell Python where the text starts and ends. They are not shown.",
+        "option_misconceptions": {},
+        "options": [
+          "Python",
+          "\"Python\"",
+          "Error"
+        ],
+        "program": "print(\"Python\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Are the quotes shown?",
+      "type": "predict-output"
+    },
+    {
+      "concept": "strings.literal",
+      "contentHash": "b57d38651413d8d2",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:strings.literal/single-quotes",
+      "predict": {
+        "answer": "Hi there",
+        "explanation": "Single quotes work just like double quotes. The quotes themselves are not shown.",
+        "option_misconceptions": {},
+        "options": [
+          "Hi there",
+          "'Hi there'",
+          "Error"
+        ],
+        "program": "print('Hi there')\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Single quotes",
+      "type": "predict-output"
+    },
+    {
+      "concept": "strings.quotes-mixed",
+      "contentHash": "00857eb18c474ca7",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:strings.quotes-mixed/apostrophe",
+      "predict": {
+        "answer": "It's raining",
+        "explanation": "The `'` is inside double quotes, so it is just part of the text.",
+        "option_misconceptions": {},
+        "options": [
+          "It's raining",
+          "\"It's raining\"",
+          "Error"
+        ],
+        "program": "print(\"It's raining\")\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "A quote inside",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "strings.quotes-mixed",
+      "contentHash": "9d17b912cee2cc1b",
+      "difficulty": "easy",
+      "hints": [
+        "The text has a `'` in it. Which quotes should go around it?",
+        "Use double quotes: `print(\"Don't panic!\")`."
+      ],
+      "id": "ex:strings.quotes-mixed/dont-panic",
+      "misconceptions": [],
+      "prompt": "Write a program that shows:\n\n    Don't panic!\n",
+      "solution": "print(\"Don't panic!\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Don't panic",
+      "type": "code"
+    },
+    {
+      "concept": "strings.quotes-mixed",
+      "contentHash": "33364dc1397134a8",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "'She said \"hi\"'",
+        "expected_output": "She said \"hi\"\n",
+        "explanation": "The text has `\"` in it, so single quotes go around it.",
+        "template": "print(____)",
+        "tile_feedback": {
+          "\"She said \"hi\"\"": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.missing-comma",
+              "lineno": 1,
+              "params": {
+                "left": "\"She said \"",
+                "right": "hi"
+              }
+            }
+          },
+          "She said hi": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.missing-quotes",
+              "lineno": 1,
+              "params": {
+                "text": "She said hi"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "\"She said \"hi\"\"": {
+            "id": "mc.quote-ends-string",
+            "message": "The `\"` before `hi` ends the text. Use single quotes around text that has `\"` in it."
+          },
+          "She said hi": {
+            "id": "mc.missing-quotes",
+            "message": "Without quotes, Python thinks these words are names. Text needs quotes around it."
+          }
+        },
+        "tiles": [
+          "'She said \"hi\"'",
+          "\"She said \"hi\"\"",
+          "She said hi"
+        ]
+      },
+      "hints": [],
+      "id": "ex:strings.quotes-mixed/outer-quotes",
+      "prompt": "Fill the gap so the program shows:\n\n    She said \"hi\"\n",
+      "source": "original",
+      "title": "Pick the outer quotes",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "strings.quotes-mixed",
+      "contentHash": "effeab11712cf759",
+      "difficulty": "medium",
+      "hints": [
+        "The text has `\"` in it. Put single quotes around the whole text.",
+        "`print('Ada said \"Hello\"')`"
+      ],
+      "id": "ex:strings.quotes-mixed/quote-a-friend",
+      "misconceptions": [],
+      "prompt": "Write a program that shows:\n\n    Ada said \"Hello\"\n",
+      "solution": "print('Ada said \"Hello\"')\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Quote a friend",
+      "type": "code"
+    },
+    {
+      "concept": "strings.quotes-mixed",
+      "contentHash": "acade7dd00b69f6d",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:strings.quotes-mixed/same-quotes",
+      "predict": {
+        "answer": "Error",
+        "explanation": "The second `'` ends the text after `It`. Then Python finds `s raining'`, which it can't understand.",
+        "option_misconceptions": {
+          "It's raining": {
+            "id": "mc.quote-ends-string",
+            "message": "A `'` inside single quotes ends the text. Use double quotes around text that has a `'` in it."
+          }
+        },
+        "options": [
+          "It's raining",
+          "It",
+          "Error"
+        ],
+        "program": "print('It's raining')\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "The same quotes inside",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "vars.assign",
+      "contentHash": "f505e7e6cf0bcab0",
+      "difficulty": "easy",
+      "hints": [
+        "Start with the name, then `=`, then the text in quotes.",
+        "`greeting = \"Good morning\"`, then `print(greeting)`."
+      ],
+      "id": "ex:vars.assign/make-a-variable",
+      "misconceptions": [],
+      "prompt": "Make a variable called `greeting` that stores `Good morning`. Then print the variable. The program shows:\n\n    Good morning\n",
+      "solution": "greeting = \"Good morning\"\nprint(greeting)\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Your first variable",
+      "type": "code"
+    },
+    {
+      "concept": "vars.assign",
+      "contentHash": "e9268f8f298d0c28",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "colour",
+        "expected_output": "blue\n",
+        "explanation": "The name of the variable goes on the left of `=`, with no quotes. Then `print(colour)` can find it.",
+        "template": "____ = \"blue\"\nprint(colour)",
+        "tile_feedback": {
+          "\"colour\"": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.generic",
+              "lineno": 1,
+              "params": {
+                "offset": 1
+              }
+            }
+          },
+          "Colour": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.case",
+              "lineno": 2,
+              "params": {
+                "name": "colour",
+                "suggestion": "Colour"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "\"colour\"": {
+            "id": "mc.quoted-name",
+            "message": "A variable's name has no quotes. With quotes, `\"colour\"` is text, and text can't store a value."
+          }
+        },
+        "tiles": [
+          "colour",
+          "\"colour\"",
+          "Colour"
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.assign/name-on-the-left",
+      "prompt": "Fill the gap so the program shows `blue`.",
+      "source": "original",
+      "title": "The name of the variable",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "vars.assign",
+      "contentHash": "b50f65aec1fad81d",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.assign/store-then-print",
+      "predict": {
+        "answer": "rabbit",
+        "explanation": "`pet = \"rabbit\"` stores `\"rabbit\"` in `pet`. Then `print(pet)` shows the value stored in it.",
+        "option_misconceptions": {},
+        "options": [
+          "rabbit",
+          "pet",
+          "pet = rabbit",
+          "Error"
+        ],
+        "program": "pet = \"rabbit\"\nprint(pet)\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Store, then print",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "vars.assign",
+      "contentHash": "cf91dc2d8688e689",
+      "difficulty": "easy",
+      "hints": [
+        "The error is about the first line. Which side of `=` should the name be on?",
+        "Write `name = \"Ada\"`: the name on the left, the value on the right."
+      ],
+      "id": "ex:vars.assign/swap-the-sides",
+      "misconceptions": [],
+      "prompt": "Run this program and read the error. Fix it so that it stores the name and shows:\n\n    Ada\n",
+      "solution": "name = \"Ada\"\nprint(name)\n",
+      "source": "original",
+      "starter": "\"Ada\" = name\nprint(name)\n",
+      "title": "Swap the sides",
+      "type": "code"
+    },
+    {
+      "concept": "vars.assign",
+      "contentHash": "261451689c234b03",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.assign/wrong-way-round",
+      "predict": {
+        "answer": "Error",
+        "explanation": "The name must be on the left of `=`. Python can't store a value in a piece of text, so it shows an error.",
+        "option_misconceptions": {
+          "Ada": {
+            "id": "mc.assign-direction",
+            "message": "`=` only works one way: the name on the left, the value on the right. `\"Ada\" = name` is an error."
+          }
+        },
+        "options": [
+          "Ada",
+          "name",
+          "Error"
+        ],
+        "program": "\"Ada\" = name\nprint(name)\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "The wrong way round",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "inputs": [
+          "city"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "city": "str"
+          }
+        },
+        "tests": [
+          {
+            "city": "Rome"
+          },
+          {
+            "city": "New York"
+          }
+        ]
+      },
+      "concept": "vars.name-error",
+      "contentHash": "893e2c2821689167",
+      "difficulty": "easy",
+      "hints": [
+        "Capital letters matter in names.",
+        "`City` should be `city`."
+      ],
+      "id": "ex:vars.name-error/capital-c",
+      "misconceptions": [],
+      "prompt": "Fix the NameError. The program should show `I am in` and then the city. For example, when `city = \"Rome\"`:\n\n    I am in Rome\n\nYour program must work for **any** city.\n",
+      "solution": "city = \"Rome\"\nprint(\"I am in\", city)\n",
+      "source": "original",
+      "starter": "city = \"Rome\"\nprint(\"I am in\", City)\n",
+      "title": "A capital letter",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "vars.name-error",
+      "contentHash": "4c96a41e9da93a3e",
+      "difficulty": "easy",
+      "hints": [
+        "The error names the word Python doesn't know. Compare it with the name of the variable.",
+        "`anmial` should be `animal`."
+      ],
+      "id": "ex:vars.name-error/fix-the-spelling",
+      "misconceptions": [],
+      "prompt": "Run this program and read the error. Then fix it so that it shows:\n\n    owl\n",
+      "solution": "animal = \"owl\"\nprint(animal)\n",
+      "source": "original",
+      "starter": "animal = \"owl\"\nprint(anmial)\n",
+      "title": "Fix the spelling",
+      "type": "code"
+    },
+    {
+      "concept": "vars.name-error",
+      "contentHash": "d127c59140073c53",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "planet",
+        "expected_output": "Mars\n",
+        "explanation": "The variable is called `planet`, with a small p. Python finds it and shows its value.",
+        "template": "planet = \"Mars\"\nprint(____)",
+        "tile_feedback": {
+          "Mars": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.typo",
+              "lineno": 2,
+              "params": {
+                "name": "Mars",
+                "suggestion": "vars"
+              }
+            }
+          },
+          "Planet": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.case",
+              "lineno": 2,
+              "params": {
+                "name": "Planet",
+                "suggestion": "planet"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "Mars": {
+            "id": "mc.missing-quotes",
+            "message": "Without quotes, `Mars` is a name, and there is no variable called `Mars`. The variable that holds the text is `planet`."
+          }
+        },
+        "tiles": [
+          "Planet",
+          "planet",
+          "Mars"
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.name-error/pick-the-name",
+      "prompt": "Fill the gap so the program shows `Mars`.",
+      "source": "original",
+      "title": "Which name?",
+      "type": "fill-gap"
+    },
+    {
+      "concept": "vars.name-error",
+      "contentHash": "6d0410e2bdadebd3",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.name-error/spelling",
+      "predict": {
+        "answer": "Error",
+        "explanation": "`color` is spelled differently from `colour`, so Python doesn't know it. It shows a NameError.",
+        "option_misconceptions": {},
+        "options": [
+          "red",
+          "color",
+          "Error"
+        ],
+        "program": "colour = \"red\"\nprint(color)\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "Two spellings",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "vars.name-error",
+      "contentHash": "bb202d7ff71494d9",
+      "difficulty": "easy",
+      "hints": [
+        "Python runs the lines from top to bottom. When it runs `print(greeting)`, does `greeting` exist yet?",
+        "Swap the two lines."
+      ],
+      "id": "ex:vars.name-error/too-early",
+      "misconceptions": [],
+      "prompt": "This program uses `greeting` before it has a value. Fix it so that it shows:\n\n    Hi there\n",
+      "solution": "greeting = \"Hi there\"\nprint(greeting)\n",
+      "source": "original",
+      "starter": "print(greeting)\ngreeting = \"Hi there\"\n",
+      "title": "Too early",
+      "type": "code"
+    },
+    {
+      "concept": "vars.naming",
+      "contentHash": "f07c01e90350eb78",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.naming/capital-letters",
+      "predict": {
+        "answer": "Error",
+        "explanation": "`Name` with a capital N is a different name. Python doesn't know it, so it shows an error.",
+        "option_misconceptions": {},
+        "options": [
+          "Ada",
+          "Name",
+          "Error"
+        ],
+        "program": "name = \"Ada\"\nprint(Name)\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "Capital letters",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "vars.naming",
+      "contentHash": "be0c56925b41d710",
+      "difficulty": "easy",
+      "hints": [
+        "Names can't have spaces in them.",
+        "Join the words with `_`: `my_name`. Change it in both lines."
+      ],
+      "id": "ex:vars.naming/no-spaces",
+      "misconceptions": [],
+      "prompt": "Fix the name of the variable so that the program shows:\n\n    Grace\n",
+      "solution": "my_name = \"Grace\"\nprint(my_name)\n",
+      "source": "original",
+      "starter": "my name = \"Grace\"\nprint(my name)\n",
+      "title": "No spaces",
+      "type": "code"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "vars.naming",
+      "contentHash": "45c543cddac3b7b6",
+      "difficulty": "medium",
+      "hints": [
+        "After `print = \"Hello\"`, the name `print` holds text. It can't show anything any more.",
+        "Use another name, like `message`, in both lines."
+      ],
+      "id": "ex:vars.naming/rename-it",
+      "misconceptions": [],
+      "prompt": "Run this program and read the error. The name of the variable is the problem. Rename the variable so that the program shows:\n\n    Hello\n",
+      "solution": "message = \"Hello\"\nprint(message)\n",
+      "source": "original",
+      "starter": "print = \"Hello\"\nprint(print)\n",
+      "title": "Rename the variable",
+      "type": "code"
+    },
+    {
+      "concept": "vars.naming",
+      "contentHash": "c13df3c4af9891a2",
+      "difficulty": "medium",
+      "hints": [],
+      "id": "ex:vars.naming/taken-name",
+      "predict": {
+        "answer": "Error",
+        "explanation": "After `print = \"Hi\"`, the name `print` stores text. Text can't show anything, so the second line is an error.",
+        "option_misconceptions": {
+          "Hi": {
+            "id": "mc.shadow-builtin",
+            "message": "After `print = \"Hi\"`, the name `print` stores text and no longer shows things. Don't use `print` as a variable name."
+          }
+        },
+        "options": [
+          "Hi",
+          "print",
+          "Error"
+        ],
+        "program": "print = \"Hi\"\nprint(print)\n"
+      },
+      "prompt": "What happens when you run this program?",
+      "source": "original",
+      "title": "A name that is taken",
+      "type": "predict-output"
+    },
+    {
+      "concept": "vars.naming",
+      "contentHash": "315d76bbd58b13fb",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "full_name",
+        "expected_output": "Ada Lovelace\n",
+        "explanation": "Names can't have spaces or `-` in them. Use `_` to join words: `full_name`.",
+        "template": "____ = \"Ada Lovelace\"\nprint(full_name)",
+        "tile_feedback": {
+          "full name": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.bad-name",
+              "lineno": 1,
+              "params": {
+                "name": "full name",
+                "suggestion": "full_name"
+              }
+            }
+          },
+          "full-name": {
+            "error": "SyntaxError",
+            "explanation": {
+              "id": "syntax.generic",
+              "lineno": 1,
+              "params": {
+                "offset": 1
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {},
+        "tiles": [
+          "full_name",
+          "full name",
+          "full-name"
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.naming/valid-name",
+      "prompt": "Fill the gap with a name that works, so the program shows `Ada Lovelace`.",
+      "source": "original",
+      "title": "A name that works",
+      "type": "fill-gap"
     },
     {
       "concept": "vars.reassign",
@@ -130,6 +2152,34 @@
     },
     {
       "concept": "vars.reassign",
+      "contentHash": "eb94fdfa6ff50f03",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.reassign/only-the-latest",
+      "predict": {
+        "answer": "high",
+        "explanation": "The second line gives `score` a new value. The old value, `\"low\"`, is gone.",
+        "option_misconceptions": {
+          "low high": {
+            "id": "mc.var-remembers-history",
+            "message": "A variable keeps only its latest value. The old value, `\"low\"`, is gone."
+          }
+        },
+        "options": [
+          "high",
+          "low",
+          "low high",
+          "Error"
+        ],
+        "program": "score = \"low\"\nscore = \"high\"\nprint(score)\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "Only the latest value",
+      "type": "predict-output"
+    },
+    {
+      "concept": "vars.reassign",
       "contentHash": "bcf095a05574aa16",
       "difficulty": "medium",
       "hints": [],
@@ -156,6 +2206,369 @@
       "source": "original",
       "title": "Does b change too?",
       "type": "predict-output"
+    },
+    {
+      "check": {
+        "inputs": [
+          "mood"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "mood": "str"
+          }
+        },
+        "tests": [
+          {
+            "mood": "sleepy"
+          },
+          {
+            "mood": "grumpy"
+          }
+        ]
+      },
+      "concept": "vars.reassign",
+      "contentHash": "6efb865bc347cb4a",
+      "difficulty": "easy",
+      "hints": [
+        "Give `mood` a new value with `=`, then print it again.",
+        "Add `mood = \"awake\"` and then `print(mood)`."
+      ],
+      "id": "ex:vars.reassign/wake-up",
+      "misconceptions": [],
+      "prompt": "The program shows `mood`. Add two lines: give `mood` the value `\"awake\"`, then show it again.\n\nFor example, when `mood = \"sleepy\"` the program shows:\n\n    sleepy\n    awake\n\nYour program must work for **any** first mood.\n",
+      "solution": "mood = \"sleepy\"\nprint(mood)\nmood = \"awake\"\nprint(mood)\n",
+      "source": "original",
+      "starter": "mood = \"sleepy\"\nprint(mood)\n",
+      "title": "Wake up",
+      "type": "code"
+    },
+    {
+      "concept": "vars.swap",
+      "contentHash": "fbc2a5c54455c859",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "b = temp",
+        "expected_output": "coffee tea\n",
+        "explanation": "The old value of `a` is safe in `temp`, so `b = temp` finishes the swap.",
+        "template": "a = \"tea\"\nb = \"coffee\"\ntemp = a\na = b\n____\nprint(a, b)",
+        "tile_feedback": {
+          "b = a": {
+            "output": "coffee coffee\n"
+          },
+          "temp = b": {
+            "output": "coffee coffee\n"
+          }
+        },
+        "tile_misconceptions": {
+          "b = a": {
+            "id": "mc.swap-overwrites",
+            "message": "`a` already holds `\"coffee\"` now. The old value of `a` is in `temp`, so use `b = temp`."
+          }
+        },
+        "tiles": [
+          "b = temp",
+          "b = a",
+          "temp = b"
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.swap/finish-the-swap",
+      "prompt": "Fill the gap so that `a` and `b` swap their values. The program shows `coffee tea`.",
+      "source": "original",
+      "title": "Finish the swap",
+      "type": "fill-gap"
+    },
+    {
+      "check": {
+        "inputs": [
+          "first",
+          "second",
+          "third"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "first": "str",
+            "second": "str",
+            "third": "str"
+          }
+        },
+        "tests": [
+          {
+            "first": "a",
+            "second": "b",
+            "third": "c"
+          },
+          {
+            "first": "red",
+            "second": "green",
+            "third": "blue"
+          }
+        ]
+      },
+      "concept": "vars.swap",
+      "contentHash": "63e4c7a54d4de481",
+      "difficulty": "hard",
+      "hints": [
+        "Only one value would be lost: the old value of `first`. Keep it in `temp` before anything else.",
+        "`temp = first`, then `first = second`, then `second = third`, then `third = temp`."
+      ],
+      "id": "ex:vars.swap/rotate-three",
+      "misconceptions": [],
+      "prompt": "Move every value one place to the left:\n\n- `first` gets the value of `second`.\n- `second` gets the value of `third`.\n- `third` gets the old value of `first`.\n\nThen show them with `print(first, second, third)`. For example, when the values are `\"a\"`, `\"b\"` and `\"c\"`:\n\n    b c a\n",
+      "solution": "first = \"a\"\nsecond = \"b\"\nthird = \"c\"\ntemp = first\nfirst = second\nsecond = third\nthird = temp\nprint(first, second, third)\n",
+      "source": "original",
+      "starter": "first = \"a\"\nsecond = \"b\"\nthird = \"c\"\nprint(first, second, third)\n",
+      "title": "Move every value",
+      "type": "code"
+    },
+    {
+      "check": {
+        "inputs": [
+          "a",
+          "b"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "a": "str",
+            "b": "str"
+          }
+        },
+        "tests": [
+          {
+            "a": "cat",
+            "b": "dog"
+          },
+          {
+            "a": "up",
+            "b": "down"
+          }
+        ]
+      },
+      "concept": "vars.swap",
+      "contentHash": "53f99b52555dc350",
+      "difficulty": "medium",
+      "hints": [
+        "If you write `a = b` first, the old value of `a` is lost. Save it first.",
+        "Use a third variable: `temp = a`, then `a = b`, then `b = temp`."
+      ],
+      "id": "ex:vars.swap/swap-two",
+      "misconceptions": [
+        {
+          "id": "mc.swap-overwrites",
+          "message": "After `a = b`, the old value of `a` is gone, so `b = a` copies the new one back. Keep the old value in a third variable first.",
+          "program": "a = \"cat\"\nb = \"dog\"\na = b\nb = a\nprint(a, b)\n"
+        }
+      ],
+      "prompt": "Swap the values of `a` and `b`. Then show them with `print(a, b)`.\n\nFor example, when `a = \"cat\"` and `b = \"dog\"` the program shows:\n\n    dog cat\n\nYour program must work for **any** two values.\n",
+      "solution": "a = \"cat\"\nb = \"dog\"\ntemp = a\na = b\nb = temp\nprint(a, b)\n",
+      "source": "original",
+      "starter": "a = \"cat\"\nb = \"dog\"\nprint(a, b)\n",
+      "title": "Swap two values",
+      "type": "code"
+    },
+    {
+      "concept": "vars.swap",
+      "contentHash": "b937d52ed111de7a",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.swap/with-temp",
+      "predict": {
+        "answer": "coffee tea",
+        "explanation": "`temp` keeps `\"tea\"` safe, so it can go into `y` at the end.",
+        "option_misconceptions": {},
+        "options": [
+          "coffee tea",
+          "tea coffee",
+          "coffee coffee",
+          "Error"
+        ],
+        "program": "x = \"tea\"\ny = \"coffee\"\ntemp = x\nx = y\ny = temp\nprint(x, y)\n"
+      },
+      "prompt": "Trace this program. What does it show?",
+      "source": "original",
+      "title": "A swap that works",
+      "type": "predict-output"
+    },
+    {
+      "concept": "vars.swap",
+      "contentHash": "36e537d9617cbd59",
+      "difficulty": "medium",
+      "hints": [],
+      "id": "ex:vars.swap/without-temp",
+      "predict": {
+        "answer": "right right",
+        "explanation": "After `a = b`, both hold `\"right\"`, and `\"left\"` is gone. So `b = a` gives `b` the value `\"right\"` again.",
+        "option_misconceptions": {
+          "right left": {
+            "id": "mc.swap-overwrites",
+            "message": "After `a = b`, the old value of `a` is gone. `b = a` can only copy `\"right\"` back."
+          }
+        },
+        "options": [
+          "right right",
+          "right left",
+          "left left",
+          "Error"
+        ],
+        "program": "a = \"left\"\nb = \"right\"\na = b\nb = a\nprint(a, b)\n"
+      },
+      "prompt": "This program tries to swap `a` and `b`. Trace it. What does it show?",
+      "source": "original",
+      "title": "A swap that fails",
+      "type": "predict-output"
+    },
+    {
+      "concept": "vars.trace",
+      "contentHash": "752a781d26e40b33",
+      "difficulty": "medium",
+      "hints": [],
+      "id": "ex:vars.trace/copy-then-change",
+      "predict": {
+        "answer": "two one",
+        "explanation": "`y = x` copies the value `\"one\"` into `y`. Changing `x` later doesn't change `y`.",
+        "option_misconceptions": {
+          "two two": {
+            "id": "mc.vars-auto-update",
+            "message": "`y = x` copied the value `\"one\"`. Changing `x` later doesn't change `y`."
+          }
+        },
+        "options": [
+          "two one",
+          "two two",
+          "one one",
+          "Error"
+        ],
+        "program": "x = \"one\"\ny = x\nx = \"two\"\nprint(x, y)\n"
+      },
+      "prompt": "Trace this program line by line. What does it show?",
+      "source": "original",
+      "title": "Copy, then change",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "inputs": [
+          "start"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "start": "str"
+          }
+        },
+        "tests": [
+          {
+            "start": "ten"
+          },
+          {
+            "start": "five"
+          }
+        ]
+      },
+      "concept": "vars.trace",
+      "contentHash": "be3de89677f87092",
+      "difficulty": "medium",
+      "hints": [
+        "Copy `start` into `backup` **before** you change `start`.",
+        "`backup = start`, then `start = \"zero\"`, then the two `print`s."
+      ],
+      "id": "ex:vars.trace/keep-a-backup",
+      "misconceptions": [],
+      "prompt": "Make a variable called `backup` that holds the value of `start`. Then give `start` the value `\"zero\"`. Print `start`, and then `backup`.\n\nFor example, when `start = \"ten\"` the program shows:\n\n    zero\n    ten\n",
+      "solution": "start = \"ten\"\nbackup = start\nstart = \"zero\"\nprint(start)\nprint(backup)\n",
+      "source": "original",
+      "starter": "start = \"ten\"\n",
+      "title": "Keep a backup",
+      "type": "code"
+    },
+    {
+      "concept": "vars.trace",
+      "contentHash": "a3241a88cd7e52b3",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.trace/print-in-between",
+      "predict": {
+        "answer": "apple\npear",
+        "explanation": "The first `print` runs before `fruit` changes, so it shows `apple`. The second one shows the new value.",
+        "option_misconceptions": {},
+        "options": [
+          "apple\npear",
+          "pear\npear",
+          "apple\napple",
+          "Error"
+        ],
+        "program": "fruit = \"apple\"\nprint(fruit)\nfruit = \"pear\"\nprint(fruit)\n"
+      },
+      "prompt": "Trace this program line by line. What does it show?",
+      "source": "original",
+      "title": "A print in between",
+      "type": "predict-output"
+    },
+    {
+      "concept": "vars.trace",
+      "contentHash": "cb31cb476b1e03c8",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.trace/two-variables",
+      "predict": {
+        "answer": "y y",
+        "explanation": "`a = b` gives `a` the value of `b`, which is `\"y\"`. Now both hold `\"y\"`.",
+        "option_misconceptions": {},
+        "options": [
+          "y y",
+          "x y",
+          "y x",
+          "Error"
+        ],
+        "program": "a = \"x\"\nb = \"y\"\na = b\nprint(a, b)\n"
+      },
+      "prompt": "Trace this program line by line. What does it show?",
+      "source": "original",
+      "title": "Follow the values",
+      "type": "predict-output"
+    },
+    {
+      "concept": "vars.trace",
+      "contentHash": "1623140b7f557fb1",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "a = b",
+        "expected_output": "dog\n",
+        "explanation": "`a = b` gives `a` the value of `b`, which is `\"dog\"`.",
+        "template": "a = \"cat\"\nb = \"dog\"\n____\nprint(a)",
+        "tile_feedback": {
+          "a = \"b\"": {
+            "output": "b\n"
+          },
+          "b = a": {
+            "output": "cat\n"
+          }
+        },
+        "tile_misconceptions": {
+          "b = a": {
+            "id": "mc.assign-direction",
+            "message": "`b = a` changes `b`, not `a`. The variable on the left of `=` is the one that gets the new value."
+          }
+        },
+        "tiles": [
+          "b = a",
+          "a = b",
+          "a = \"b\""
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.trace/which-assignment",
+      "prompt": "Fill the gap so the program shows `dog`.",
+      "source": "original",
+      "title": "Which way?",
+      "type": "fill-gap"
     },
     {
       "concept": "vars.use",
@@ -278,6 +2691,34 @@
       "type": "predict-output"
     },
     {
+      "concept": "vars.use",
+      "contentHash": "a48d409ace38e6ed",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.use/same-variable-twice",
+      "predict": {
+        "answer": "soup soup",
+        "explanation": "You can use a variable as often as you like. Here `print` shows its value two times.",
+        "option_misconceptions": {
+          "food food": {
+            "id": "mc.quoted-name",
+            "message": "`food` has no quotes, so Python shows the value stored in it, twice."
+          }
+        },
+        "options": [
+          "soup soup",
+          "food food",
+          "soup",
+          "Error"
+        ],
+        "program": "food = \"soup\"\nprint(food, food)\n"
+      },
+      "prompt": "What does this program show?",
+      "source": "original",
+      "title": "One variable, two times",
+      "type": "predict-output"
+    },
+    {
       "check": {
         "kind": "verbatim",
         "target": "city = \"Lisbon\"\nprint(\"I live in\", city)\n"
@@ -299,8 +2740,556 @@
   "grader": 1,
   "lessons": [
     {
+      "concept": "comments.basic",
+      "contentHash": "adc1a159ffaf28b1",
+      "id": "lesson:comments.basic",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "# This is a note for people\nprint(\"Hi\")  # this part is ignored too",
+          "example_output": "Hi\n",
+          "kind": "explain",
+          "text": "A line that starts with `#` is a **comment**. Python ignores it. Comments are notes for the people who read your code.\n\nA `#` can also come after some code. Python ignores everything from the `#` to the end of the line."
+        },
+        {
+          "id": "ex:comments.basic/ignored",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:comments.basic/switched-off",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:comments.basic/comment-sign",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:comments.basic/turn-off-a-line",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:comments.basic/note-line",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Comments"
+    },
+    {
+      "concept": "intro.errors-are-normal",
+      "contentHash": "bbd24e7658192555",
+      "id": "lesson:intro.errors-are-normal",
+      "module": "M0",
+      "steps": [
+        {
+          "kind": "explain",
+          "text": "Everyone gets errors, even experts. An error is not a failure. It is Python telling you that it didn't understand something.\n\nWhen there is an error, the program stops. The message tells you **which line** has the problem and **what kind** of problem it is. Read it, fix the line and run again."
+        },
+        {
+          "id": "ex:intro.errors-are-normal/missing-bracket",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.errors-are-normal/fix-the-typo",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.errors-are-normal/capital-p",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.errors-are-normal/fix-the-bracket",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.errors-are-normal/fix-the-quotes",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Errors help you"
+    },
+    {
+      "concept": "intro.program",
+      "contentHash": "9e34c7e330b5c8c0",
+      "id": "lesson:intro.program",
+      "module": "M0",
+      "steps": [
+        {
+          "example": "print(\"Hello!\")",
+          "example_output": "Hello!\n",
+          "kind": "explain",
+          "text": "A **program** is a list of instructions for a computer. The computer follows them exactly, one after another.\n\nIn Python, `print` is an instruction that shows a message on the screen. The message goes inside the round brackets, in quotes."
+        },
+        {
+          "id": "ex:intro.program/output-or-code",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.program/two-instructions",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.program/pick-the-instruction",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.program/type-a-program",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.program/first-message",
+          "kind": "exercise"
+        }
+      ],
+      "title": "What is a program?"
+    },
+    {
+      "concept": "intro.run-code",
+      "contentHash": "9c5825b7803c08e2",
+      "id": "lesson:intro.run-code",
+      "module": "M0",
+      "steps": [
+        {
+          "kind": "explain",
+          "text": "The box with code in it is the **editor**. You can type in it.\n\nPress **Run** to see what your program does. You can run it as often as you like.\n\nWhen an exercise has a **Check** button, press it when you are done. Check runs your program and tells you if it does what the exercise asks."
+        },
+        {
+          "id": "ex:intro.run-code/type-and-run",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.run-code/change-the-message",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.run-code/run-it-twice",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.run-code/two-lines",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.run-code/close-the-bracket",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Running code"
+    },
+    {
+      "concept": "intro.sequence",
+      "contentHash": "b8ff9639f55dbc19",
+      "id": "lesson:intro.sequence",
+      "module": "M0",
+      "steps": [
+        {
+          "example": "print(\"First\")\nprint(\"Second\")\nprint(\"Third\")",
+          "example_output": "First\nSecond\nThird\n",
+          "kind": "explain",
+          "text": "Python runs a program from the **top** line to the **bottom** line, one line at a time. It never skips ahead.\n\nSo the order of the lines is the order of what you see."
+        },
+        {
+          "id": "ex:intro.sequence/three-lines",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.sequence/put-in-order",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.sequence/tick-tock",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.sequence/missing-step",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:intro.sequence/countdown",
+          "kind": "exercise"
+        }
+      ],
+      "title": "One line after another"
+    },
+    {
+      "concept": "print.basic",
+      "contentHash": "e84fce3c43e9c7cc",
+      "id": "lesson:print.basic",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(\"Line one\")\nprint()\nprint(\"Line three\")",
+          "example_output": "Line one\n\nLine three\n",
+          "kind": "explain",
+          "text": "`print` shows what you put inside its round brackets. Text goes in quotes. Every `print` starts on a new line.\n\nWith nothing inside the brackets, `print()` shows an empty line."
+        },
+        {
+          "id": "ex:print.basic/empty-line",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.basic/small-letters",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.basic/hello-world",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.basic/with-a-gap",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.basic/short-poem",
+          "kind": "exercise"
+        }
+      ],
+      "title": "print()"
+    },
+    {
+      "concept": "print.end-sep",
+      "contentHash": "37e84c40104a6053",
+      "id": "lesson:print.end-sep",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(\"a\", \"b\", \"c\", sep=\"-\")\nprint(\"no new line\", end=\"!\")\nprint()",
+          "example_output": "a-b-c\nno new line!\n",
+          "kind": "explain",
+          "text": "`print` puts a space between values and starts a new line at the end. You can change both:\n\n- `sep=` sets what goes **between** the values.\n- `end=` sets what comes **after** the last value."
+        },
+        {
+          "id": "ex:print.end-sep/dash",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.end-sep/same-line",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.end-sep/no-spaces",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.end-sep/loading",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.end-sep/date",
+          "kind": "exercise"
+        }
+      ],
+      "title": "sep= and end="
+    },
+    {
+      "concept": "print.multiple-args",
+      "contentHash": "d1d3eb0be3b4b789",
+      "id": "lesson:print.multiple-args",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(\"Hello\", \"Ada\")\nprint(\"Hello\" + \"Ada\")",
+          "example_output": "Hello Ada\nHelloAda\n",
+          "kind": "explain",
+          "text": "`print` can show several values. Separate them with commas, and `print` puts a space between them.\n\nThe `+` sign is different. It glues two strings together with **no** space."
+        },
+        {
+          "id": "ex:print.multiple-args/comma-space",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.multiple-args/plus-glues",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.multiple-args/comma-or-plus",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.multiple-args/three-colours",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:print.multiple-args/fix-the-spaces",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Several values in one print"
+    },
+    {
+      "concept": "proj.business-card",
+      "contentHash": "e3011fc2952e4aa1",
+      "id": "lesson:proj.business-card",
+      "module": "M1",
+      "steps": [
+        {
+          "kind": "explain",
+          "text": "Time for a small project! You will print a business card, step by step.\n\nUse what you know: `print`, strings, new lines, `sep=` and `end=`."
+        },
+        {
+          "id": "ex:proj.business-card/name-and-job",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:proj.business-card/contact-line",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:proj.business-card/whole-card",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Project: Business card"
+    },
+    {
+      "concept": "shell.expressions",
+      "contentHash": "bf1fe0e2bebfc9a3",
+      "id": "lesson:shell.expressions",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(2 + 3)\nprint(\"2 + 3\")",
+          "example_output": "5\n2 + 3\n",
+          "kind": "explain",
+          "text": "Python can do sums. `2 + 3` is an **expression**: Python works out its value, `5`, before `print` shows it.\n\nIn quotes, `\"2 + 3\"` is just text, so Python shows it as it is. You will learn much more about numbers later."
+        },
+        {
+          "id": "ex:shell.expressions/maths",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:shell.expressions/text-not-maths",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:shell.expressions/make-it-calculate",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:shell.expressions/times",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:shell.expressions/text-and-value",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Expressions have values"
+    },
+    {
+      "concept": "strings.escape",
+      "contentHash": "39d3118d9e902933",
+      "id": "lesson:strings.escape",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(\"Line one\\nLine two\")\nprint(\"Name:\\tAda\")",
+          "example_output": "Line one\nLine two\nName:\tAda\n",
+          "kind": "explain",
+          "text": "A backslash `\\` inside a string starts a special character:\n\n- `\\n` starts a new line.\n- `\\t` adds a tab, a wide space.\n- `\\\"` and `\\'` are quotes that don't end the text.\n- `\\\\` is one backslash."
+        },
+        {
+          "id": "ex:strings.escape/new-line",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.escape/two-lines-one-print",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.escape/escaped-quote",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.escape/three-lines",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.escape/folder-name",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Escape sequences"
+    },
+    {
+      "concept": "strings.literal",
+      "contentHash": "fc2d3798ff738581",
+      "id": "lesson:strings.literal",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(\"double quotes\")\nprint('single quotes')",
+          "example_output": "double quotes\nsingle quotes\n",
+          "kind": "explain",
+          "text": "Text in Python is called a **string**. A string goes inside quotes: `\"Hello\"` or `'Hello'`. Both kinds work, but the start and the end must match.\n\nWithout quotes, Python thinks a word is the name of something. Then it shows an error."
+        },
+        {
+          "id": "ex:strings.literal/quotes-not-shown",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.literal/single-quotes",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.literal/no-quotes",
+          "kind": "exercise"
+        },
+        {
+          "kind": "explain",
+          "text": "Watch out for curly quotes like “this”. Phones and word processors often add them. Python only understands straight quotes: `\"` and `'`."
+        },
+        {
+          "id": "ex:strings.literal/add-the-quotes",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.literal/curly-quotes",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Text needs quotes"
+    },
+    {
+      "concept": "strings.quotes-mixed",
+      "contentHash": "6087a705ef662308",
+      "id": "lesson:strings.quotes-mixed",
+      "module": "M1",
+      "steps": [
+        {
+          "example": "print(\"It's sunny\")\nprint('She said \"hi\"')",
+          "example_output": "It's sunny\nShe said \"hi\"\n",
+          "kind": "explain",
+          "text": "What if the text itself has a quote in it, like `It's`? Put the other kind of quote around it:\n\n- `\"It's sunny\"` has a `'` inside, so it uses `\"` around it.\n- `'She said \"hi\"'` has a `\"` inside, so it uses `'` around it.\n\nIf the quote inside is the same kind as the ones around it, Python thinks the text ends there."
+        },
+        {
+          "id": "ex:strings.quotes-mixed/apostrophe",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.quotes-mixed/same-quotes",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.quotes-mixed/outer-quotes",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.quotes-mixed/dont-panic",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:strings.quotes-mixed/quote-a-friend",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Quotes inside text"
+    },
+    {
+      "concept": "vars.assign",
+      "contentHash": "ca9dd9b13902164d",
+      "id": "lesson:vars.assign",
+      "module": "M2",
+      "steps": [
+        {
+          "example": "city = \"Paris\"\nprint(city)",
+          "example_output": "Paris\n",
+          "kind": "explain",
+          "text": "A **variable** is a name that stores a value. This line makes a variable called `city` and stores `\"Paris\"` in it:\n\n    city = \"Paris\"\n\nThe `=` means \"store\". The name always goes on the **left**, and the value goes on the right."
+        },
+        {
+          "id": "ex:vars.assign/store-then-print",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.assign/name-on-the-left",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.assign/wrong-way-round",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.assign/swap-the-sides",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.assign/make-a-variable",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Assignment"
+    },
+    {
+      "concept": "vars.name-error",
+      "contentHash": "50859b2967f6d9d1",
+      "id": "lesson:vars.name-error",
+      "module": "M2",
+      "steps": [
+        {
+          "kind": "explain",
+          "text": "A **NameError** means Python doesn't know a name. There are three usual reasons:\n\n- a typing mistake, like `nmae` instead of `name`\n- missing quotes around some text\n- using a variable before the line that gives it a value\n\nThe error shows the name and the line. Check those first."
+        },
+        {
+          "id": "ex:vars.name-error/spelling",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.name-error/fix-the-spelling",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.name-error/pick-the-name",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.name-error/too-early",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.name-error/capital-c",
+          "kind": "exercise"
+        }
+      ],
+      "title": "NameError"
+    },
+    {
+      "concept": "vars.naming",
+      "contentHash": "953c45f04555f242",
+      "id": "lesson:vars.naming",
+      "module": "M2",
+      "steps": [
+        {
+          "example": "first_name = \"Grace\"\nprint(first_name)",
+          "example_output": "Grace\n",
+          "kind": "explain",
+          "text": "You choose the names of your variables, but there are rules:\n\n- Use letters, digits and `_`. No spaces.\n- Don't start with a digit.\n- Capital letters matter: `name` and `Name` are different.\n- Don't use names Python already uses, like `print`.\n\nGood names say what the value is, like `first_name`."
+        },
+        {
+          "id": "ex:vars.naming/capital-letters",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.naming/valid-name",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.naming/taken-name",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.naming/rename-it",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.naming/no-spaces",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Naming rules"
+    },
+    {
       "concept": "vars.reassign",
-      "contentHash": "72f351b8dd59b417",
+      "contentHash": "6676e894515289e2",
       "id": "lesson:vars.reassign",
       "module": "M2",
       "steps": [
@@ -321,13 +3310,91 @@
         {
           "id": "ex:vars.reassign/give-new-value",
           "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.reassign/only-the-latest",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.reassign/wake-up",
+          "kind": "exercise"
         }
       ],
       "title": "Giving a variable a new value"
     },
     {
+      "concept": "vars.swap",
+      "contentHash": "c8d1f8571244e870",
+      "id": "lesson:vars.swap",
+      "module": "M2",
+      "steps": [
+        {
+          "example": "a = \"left\"\nb = \"right\"\ntemp = a\na = b\nb = temp\nprint(a, b)",
+          "example_output": "right left\n",
+          "kind": "explain",
+          "text": "To swap the values of `a` and `b`, you might write `a = b` and then `b = a`. But after `a = b`, the old value of `a` is gone!\n\nThe fix is a third variable that keeps a copy first:\n\n    temp = a\n    a = b\n    b = temp"
+        },
+        {
+          "id": "ex:vars.swap/without-temp",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.swap/with-temp",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.swap/finish-the-swap",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.swap/swap-two",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.swap/rotate-three",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Order of updates"
+    },
+    {
+      "concept": "vars.trace",
+      "contentHash": "8e70b3060781a04f",
+      "id": "lesson:vars.trace",
+      "module": "M2",
+      "steps": [
+        {
+          "example": "a = \"red\"\nb = a\na = \"blue\"\nprint(a, b)",
+          "example_output": "blue red\n",
+          "kind": "explain",
+          "text": "To understand a program, **trace** it. Go through it line by line, like Python does, and keep track of the current value of each variable. When a variable gets a new value, cross out the old one.\n\nA variable holds a **value**, not a link to another variable. `b = a` copies the value that `a` has right now."
+        },
+        {
+          "id": "ex:vars.trace/two-variables",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.trace/copy-then-change",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.trace/print-in-between",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.trace/which-assignment",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.trace/keep-a-backup",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Tracing a program"
+    },
+    {
       "concept": "vars.use",
-      "contentHash": "41e2711e67aa998d",
+      "contentHash": "d797095ff4add10b",
       "id": "lesson:vars.use",
       "module": "M2",
       "steps": [
@@ -352,6 +3419,10 @@
         {
           "id": "ex:vars.use/greet-by-name",
           "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.use/same-variable-twice",
+          "kind": "exercise"
         }
       ],
       "title": "Using variables"
@@ -360,8 +3431,38 @@
   "path": [
     {
       "lessons": [
+        "lesson:intro.program",
+        "lesson:intro.run-code",
+        "lesson:intro.sequence",
+        "lesson:intro.errors-are-normal"
+      ],
+      "module": "M0",
+      "title": "What is programming?"
+    },
+    {
+      "lessons": [
+        "lesson:print.basic",
+        "lesson:strings.literal",
+        "lesson:strings.quotes-mixed",
+        "lesson:strings.escape",
+        "lesson:print.multiple-args",
+        "lesson:print.end-sep",
+        "lesson:comments.basic",
+        "lesson:shell.expressions",
+        "lesson:proj.business-card"
+      ],
+      "module": "M1",
+      "title": "print, strings, comments"
+    },
+    {
+      "lessons": [
+        "lesson:vars.assign",
         "lesson:vars.use",
-        "lesson:vars.reassign"
+        "lesson:vars.reassign",
+        "lesson:vars.naming",
+        "lesson:vars.name-error",
+        "lesson:vars.trace",
+        "lesson:vars.swap"
       ],
       "module": "M2",
       "title": "Variables"

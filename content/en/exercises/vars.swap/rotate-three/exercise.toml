@@ -1,0 +1,28 @@
+id = "ex:vars.swap/rotate-three"
+concept = "vars.swap"
+type = "code"
+difficulty = "hard"
+title = "Move every value"
+prompt = """
+Move every value one place to the left:
+
+- `first` gets the value of `second`.
+- `second` gets the value of `third`.
+- `third` gets the old value of `first`.
+
+Then show them with `print(first, second, third)`. For example, when the values are `"a"`, `"b"` and `"c"`:
+
+    b c a
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["first", "second", "third"]
+tests = [{ first = "a", second = "b", third = "c" }, { first = "red", second = "green", third = "blue" }]
+random = { count = 6, types = { first = "str", second = "str", third = "str" } }
+
+[[hints]]
+text = "Only one value would be lost: the old value of `first`. Keep it in `temp` before anything else."
+
+[[hints]]
+text = "`temp = first`, then `first = second`, then `second = third`, then `third = temp`."

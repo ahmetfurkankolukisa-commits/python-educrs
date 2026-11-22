@@ -1,0 +1,19 @@
+id = "ex:strings.quotes-mixed/dont-panic"
+concept = "strings.quotes-mixed"
+type = "code"
+difficulty = "easy"
+title = "Don't panic"
+prompt = """
+Write a program that shows:
+
+    Don't panic!
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The text has a `'` in it. Which quotes should go around it?"
+
+[[hints]]
+text = "Use double quotes: `print(\"Don't panic!\")`."

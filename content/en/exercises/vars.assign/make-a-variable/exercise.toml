@@ -1,0 +1,19 @@
+id = "ex:vars.assign/make-a-variable"
+concept = "vars.assign"
+type = "code"
+difficulty = "easy"
+title = "Your first variable"
+prompt = """
+Make a variable called `greeting` that stores `Good morning`. Then print the variable. The program shows:
+
+    Good morning
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Start with the name, then `=`, then the text in quotes."
+
+[[hints]]
+text = "`greeting = \"Good morning\"`, then `print(greeting)`."

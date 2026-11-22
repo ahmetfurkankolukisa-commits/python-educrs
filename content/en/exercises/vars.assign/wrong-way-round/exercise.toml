@@ -1,0 +1,11 @@
+id = "ex:vars.assign/wrong-way-round"
+concept = "vars.assign"
+type = "predict-output"
+difficulty = "easy"
+title = "The wrong way round"
+prompt = "What happens when you run this program?"
+options = ["Ada", "name", "Error"]
+explanation = "The name must be on the left of `=`. Python can't store a value in a piece of text, so it shows an error."
+
+[option_misconceptions]
+"Ada" = { id = "mc.assign-direction", message = "`=` only works one way: the name on the left, the value on the right. `\"Ada\" = name` is an error." }

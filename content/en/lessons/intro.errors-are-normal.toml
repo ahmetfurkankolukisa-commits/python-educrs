@@ -1,0 +1,30 @@
+concept = "intro.errors-are-normal"
+title = "Errors help you"
+
+[[steps]]
+kind = "explain"
+text = """
+Everyone gets errors, even experts. An error is not a failure. It is Python telling you that it didn't understand something.
+
+When there is an error, the program stops. The message tells you **which line** has the problem and **what kind** of problem it is. Read it, fix the line and run again.
+"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.errors-are-normal/missing-bracket"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.errors-are-normal/fix-the-typo"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.errors-are-normal/capital-p"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.errors-are-normal/fix-the-bracket"
+
+[[steps]]
+kind = "exercise"
+id = "ex:intro.errors-are-normal/fix-the-quotes"

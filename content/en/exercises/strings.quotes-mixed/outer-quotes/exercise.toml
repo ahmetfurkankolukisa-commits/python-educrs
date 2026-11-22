@@ -1,0 +1,18 @@
+id = "ex:strings.quotes-mixed/outer-quotes"
+concept = "strings.quotes-mixed"
+type = "fill-gap"
+difficulty = "easy"
+title = "Pick the outer quotes"
+prompt = """
+Fill the gap so the program shows:
+
+    She said "hi"
+"""
+template = "print(____)"
+tiles = ["'She said \"hi\"'", "\"She said \"hi\"\"", "She said hi"]
+answer = "'She said \"hi\"'"
+explanation = "The text has `\"` in it, so single quotes go around it."
+
+[tile_misconceptions]
+"\"She said \"hi\"\"" = { id = "mc.quote-ends-string", message = "The `\"` before `hi` ends the text. Use single quotes around text that has `\"` in it." }
+"She said hi" = { id = "mc.missing-quotes", message = "Without quotes, Python thinks these words are names. Text needs quotes around it." }

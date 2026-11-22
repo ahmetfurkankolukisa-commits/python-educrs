@@ -1,0 +1,21 @@
+id = "ex:strings.escape/folder-name"
+concept = "strings.escape"
+type = "code"
+difficulty = "medium"
+title = "A folder name"
+prompt = '''
+Show this folder name exactly:
+
+    C:\docs\new
+
+Run the program first. The `\n` in it does something you don't want.
+'''
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = 'A backslash starts a special character. Here `\n` became a new line.'
+
+[[hints]]
+text = 'Write each backslash twice. `\\` shows one backslash.'

@@ -1,0 +1,35 @@
+concept = "strings.quotes-mixed"
+title = "Quotes inside text"
+
+[[steps]]
+kind = "explain"
+text = """
+What if the text itself has a quote in it, like `It's`? Put the other kind of quote around it:
+
+- `"It's sunny"` has a `'` inside, so it uses `"` around it.
+- `'She said "hi"'` has a `"` inside, so it uses `'` around it.
+
+If the quote inside is the same kind as the ones around it, Python thinks the text ends there.
+"""
+example = """print("It's sunny")
+print('She said "hi"')"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.quotes-mixed/apostrophe"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.quotes-mixed/same-quotes"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.quotes-mixed/outer-quotes"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.quotes-mixed/dont-panic"
+
+[[steps]]
+kind = "exercise"
+id = "ex:strings.quotes-mixed/quote-a-friend"

@@ -1,0 +1,19 @@
+id = "ex:vars.assign/swap-the-sides"
+concept = "vars.assign"
+type = "code"
+difficulty = "easy"
+title = "Swap the sides"
+prompt = """
+Run this program and read the error. Fix it so that it stores the name and shows:
+
+    Ada
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The error is about the first line. Which side of `=` should the name be on?"
+
+[[hints]]
+text = "Write `name = \"Ada\"`: the name on the left, the value on the right."

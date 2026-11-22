@@ -1,0 +1,19 @@
+id = "ex:vars.name-error/fix-the-spelling"
+concept = "vars.name-error"
+type = "code"
+difficulty = "easy"
+title = "Fix the spelling"
+prompt = """
+Run this program and read the error. Then fix it so that it shows:
+
+    owl
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "The error names the word Python doesn't know. Compare it with the name of the variable."
+
+[[hints]]
+text = "`anmial` should be `animal`."

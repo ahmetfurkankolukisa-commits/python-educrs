@@ -1,0 +1,17 @@
+{
+  "answer": "Error",
+  "grader": 1,
+  "id": "ex:strings.quotes-mixed/same-quotes",
+  "outcome": {
+    "error": {
+      "lineno": 1,
+      "message": "unterminated string literal (detected at line 1)",
+      "offset": 20,
+      "text": "print('It's raining')",
+      "traceback": "  File \"/main.py\", line 1\n    print('It's raining')\n                       ^\nSyntaxError: unterminated string literal (detected at line 1)\n",
+      "type": "SyntaxError"
+    },
+    "stdout": ""
+  },
+  "python": "3.14"
+}

@@ -1,0 +1,11 @@
+id = "ex:vars.naming/taken-name"
+concept = "vars.naming"
+type = "predict-output"
+difficulty = "medium"
+title = "A name that is taken"
+prompt = "What happens when you run this program?"
+options = ["Hi", "print", "Error"]
+explanation = "After `print = \"Hi\"`, the name `print` stores text. Text can't show anything, so the second line is an error."
+
+[option_misconceptions]
+"Hi" = { id = "mc.shadow-builtin", message = "After `print = \"Hi\"`, the name `print` stores text and no longer shows things. Don't use `print` as a variable name." }

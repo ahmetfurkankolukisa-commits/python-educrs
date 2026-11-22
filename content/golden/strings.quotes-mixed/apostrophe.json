@@ -1,0 +1,10 @@
+{
+  "answer": "It's raining",
+  "grader": 1,
+  "id": "ex:strings.quotes-mixed/apostrophe",
+  "outcome": {
+    "error": null,
+    "stdout": "It's raining\n"
+  },
+  "python": "3.14"
+}

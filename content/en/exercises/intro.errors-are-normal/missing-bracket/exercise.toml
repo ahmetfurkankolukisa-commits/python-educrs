@@ -1,0 +1,8 @@
+id = "ex:intro.errors-are-normal/missing-bracket"
+concept = "intro.errors-are-normal"
+type = "predict-output"
+difficulty = "easy"
+title = "What happens?"
+prompt = "What happens when you run this program?"
+options = ["Hello", "Error", 'print("Hello"']
+explanation = "The `(` is never closed, so Python can't understand the line. It shows an error instead."

@@ -1,0 +1,40 @@
+concept = "vars.swap"
+title = "Order of updates"
+
+[[steps]]
+kind = "explain"
+text = """
+To swap the values of `a` and `b`, you might write `a = b` and then `b = a`. But after `a = b`, the old value of `a` is gone!
+
+The fix is a third variable that keeps a copy first:
+
+    temp = a
+    a = b
+    b = temp
+"""
+example = """a = "left"
+b = "right"
+temp = a
+a = b
+b = temp
+print(a, b)"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.swap/without-temp"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.swap/with-temp"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.swap/finish-the-swap"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.swap/swap-two"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.swap/rotate-three"

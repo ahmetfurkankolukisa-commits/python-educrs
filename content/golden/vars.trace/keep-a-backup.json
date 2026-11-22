@@ -1,0 +1,37 @@
+{
+  "grader": 1,
+  "id": "ex:vars.trace/keep-a-backup",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 8,
+    "tests_total": 8
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "",
+      "error": null,
+      "expected": "zero\nten\n",
+      "inputs": {
+        "start": "ten"
+      }
+    },
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 8
+  }
+}

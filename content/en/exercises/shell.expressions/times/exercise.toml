@@ -1,0 +1,19 @@
+id = "ex:shell.expressions/times"
+concept = "shell.expressions"
+type = "code"
+difficulty = "easy"
+title = "Seven times six"
+prompt = """
+In Python, `*` means "times". Use `print` to make Python work out 7 times 6. The program shows:
+
+    42
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Python works out an expression without quotes. `print(2 + 3)` shows `5`."
+
+[[hints]]
+text = "`print(7 * 6)`"

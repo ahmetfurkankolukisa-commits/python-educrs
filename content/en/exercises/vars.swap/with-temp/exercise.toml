@@ -1,0 +1,8 @@
+id = "ex:vars.swap/with-temp"
+concept = "vars.swap"
+type = "predict-output"
+difficulty = "easy"
+title = "A swap that works"
+prompt = "Trace this program. What does it show?"
+options = ["coffee tea", "tea coffee", "coffee coffee"]
+explanation = "`temp` keeps `\"tea\"` safe, so it can go into `y` at the end."

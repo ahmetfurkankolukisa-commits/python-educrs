@@ -1,0 +1,62 @@
+{
+  "grader": 1,
+  "id": "ex:vars.swap/swap-two",
+  "misconceptions": {
+    "mc.swap-overwrites": {
+      "error": null,
+      "failed": {
+        "actual": "dog dog\n",
+        "error": null,
+        "expected": "dog cat\n",
+        "inputs": {
+          "a": "cat",
+          "b": "dog"
+        }
+      },
+      "grader": 1,
+      "kind": "program-with-inputs",
+      "misconception": {
+        "id": "mc.swap-overwrites",
+        "message": "After `a = b`, the old value of `a` is gone, so `b = a` copies the new one back. Keep the old value in a third variable first."
+      },
+      "passed": false,
+      "problem": "wrong-output",
+      "seed": 1,
+      "tests_passed": 0,
+      "tests_total": 8
+    }
+  },
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 8,
+    "tests_total": 8
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "cat dog\n",
+      "error": null,
+      "expected": "dog cat\n",
+      "inputs": {
+        "a": "cat",
+        "b": "dog"
+      }
+    },
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 8
+  }
+}

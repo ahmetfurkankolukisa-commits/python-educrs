@@ -59,6 +59,21 @@ class Stdout(unittest.TestCase):
         self.assertEqual(r["error"]["lineno"], 2)
         self.assertNotIn("educrs_grader", r["error"]["traceback"])
 
+    def test_traceback_source_line_does_not_depend_on_the_file_system(self):
+        # The browser sandbox writes /main.py, the content pipeline doesn't; both must report the
+        # learner's own line (e2e golden parity found the difference, F3.7).
+        import linecache, os, tempfile
+        code = 'x = 1\nprint(Hello)'
+        missing = os.path.join(tempfile.mkdtemp(), "nowhere", "main.py")
+        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as f:
+            f.write("something = 'else'\nentirely_different()\n")
+        for filename in (missing, f.name):
+            r = g.grade(HELLO, code, 1, filename=filename)
+            self.assertEqual(r["error"]["text"], "print(Hello)", filename)
+            self.assertIn("print(Hello)", r["error"]["traceback"], filename)
+            self.assertNotIn(filename, linecache.cache)  # nothing left behind
+        os.unlink(f.name)
+
 
 class ProgramWithInputs(unittest.TestCase):
     def test_correct_passes_all_tests_including_own_values(self):

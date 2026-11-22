@@ -1,0 +1,31 @@
+id = "ex:vars.swap/swap-two"
+concept = "vars.swap"
+type = "code"
+difficulty = "medium"
+title = "Swap two values"
+prompt = """
+Swap the values of `a` and `b`. Then show them with `print(a, b)`.
+
+For example, when `a = "cat"` and `b = "dog"` the program shows:
+
+    dog cat
+
+Your program must work for **any** two values.
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["a", "b"]
+tests = [{ a = "cat", b = "dog" }, { a = "up", b = "down" }]
+random = { count = 6, types = { a = "str", b = "str" } }
+
+[[hints]]
+text = "If you write `a = b` first, the old value of `a` is lost. Save it first."
+
+[[hints]]
+text = "Use a third variable: `temp = a`, then `a = b`, then `b = temp`."
+
+[[misconceptions]]
+id = "mc.swap-overwrites"
+program = "wrong/no-temp.py"
+message = "After `a = b`, the old value of `a` is gone, so `b = a` copies the new one back. Keep the old value in a third variable first."

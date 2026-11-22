@@ -1,0 +1,18 @@
+{
+  "answer": "Error",
+  "grader": 1,
+  "id": "ex:vars.name-error/spelling",
+  "outcome": {
+    "error": {
+      "lineno": 2,
+      "message": "name 'color' is not defined",
+      "name": "color",
+      "offset": null,
+      "text": null,
+      "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\nNameError: name 'color' is not defined. Did you mean: 'colour'?\n",
+      "type": "NameError"
+    },
+    "stdout": ""
+  },
+  "python": "3.14"
+}
