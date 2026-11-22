@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
 // Sandbox protocol v1 (docs/05-f3-mvp0.md §6) and grading in a fresh worker (§3.1).
@@ -39,7 +40,7 @@ async function check(page: Page, code: string, spec: object, seed = 7): Promise<
   return { ...r, grade: r.extra ? JSON.parse(r.extra) : null };
 }
 
-const HELLO = { kind: "stdout", expected: "hello\n" };
+const HELLO = { check: { kind: "stdout" }, solution: 'print("hello")\n' };
 
 test.describe("handshake + origin allowlist", () => {
   test("an allowed preview origin can use the sandbox", async ({ page }) => {
@@ -75,7 +76,7 @@ test.describe("grading runs in a fresh worker", () => {
     expect(ok.status).toBe("ok");
     expect(ok.grade).toMatchObject({ passed: true, seed: 7 });
     const bad = await check(page, 'print("bye")', HELLO);
-    expect(bad.grade).toMatchObject({ passed: false, actual: "bye\n", expected: "hello\n" });
+    expect(bad.grade).toMatchObject({ passed: false, problem: "wrong-output", failed: { actual: "bye\n", expected: "hello\n" } });
   });
 
   test("every check gets a brand-new interpreter, whatever ran before", async ({ page }) => {
@@ -117,6 +118,47 @@ test.describe("grading runs in a fresh worker", () => {
     await ready(page);
     const r = await check(page, 'name = input()\nprint(name)', HELLO);
     expect(r.grade?.passed).toBe(false);
-    expect(String(r.grade?.error)).toContain("EOFError");
+    expect((r.grade?.error as { type?: string } | null)?.type).toBe("EOFError");
   });
 });
+
+// ------------------------------------------------------------------ browser == CI
+type Exercise = { id: string; type: string; starter?: string; solution?: string; check: { kind: string; target?: string }; misconceptions?: { id: string; program: string }[] };
+const bundle = JSON.parse(readFileSync("content/build/exercises.json", "utf8")) as { exercises: Exercise[] };
+const golden = (id: string) => {
+  const [concept, slug] = id.slice(3).split("/");
+  return JSON.parse(readFileSync(`content/golden/${concept}/${slug}.json`, "utf8"));
+};
+const strip = (g: Record<string, unknown> | null) => {
+  if (!g) return g;
+  const { worker_runs: _ignored, ...rest } = g;
+  return rest;
+};
+
+test.describe("browser grading matches the CI golden files exactly", () => {
+  for (const ex of bundle.exercises.filter((e) => e.type !== "predict-output")) {
+    test(ex.id, async ({ page }) => {
+      await ready(page);
+      const g = golden(ex.id);
+      const reference = ex.type === "verbatim" ? ex.check.target! : ex.solution!;
+      expect(strip((await check(page, reference, ex, 1)).grade)).toEqual(g.solution);
+      if (g.starter) expect(strip((await check(page, ex.starter ?? "", ex, 1)).grade)).toEqual(g.starter);
+      for (const m of ex.misconceptions ?? []) {
+        const r = await check(page, m.program, ex, 1);
+        expect(strip(r.grade), m.id).toEqual(g.misconceptions[m.id]);
+        expect((r.grade?.misconception as { id: string } | null)?.id).toBe(m.id);
+      }
+    });
+  }
+
+  test("same seed gives the same grade; a hard-coded answer fails on generated inputs", async ({ page }) => {
+    await ready(page);
+    const ex = bundle.exercises.find((e) => e.id === "ex:vars.use/greet-by-name")!;
+    const hardcoded = 'name = "Ada"\nprint("Hello, Ada")';
+    const a = await check(page, hardcoded, ex, 99);
+    const b = await check(page, hardcoded, ex, 99);
+    expect(strip(a.grade)).toEqual(strip(b.grade));
+    expect(a.grade).toMatchObject({ passed: false, problem: "wrong-output" });
+  });
+});
+

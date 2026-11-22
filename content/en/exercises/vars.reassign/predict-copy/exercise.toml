@@ -1,0 +1,14 @@
+id = "ex:vars.reassign/predict-copy"
+concept = "vars.reassign"
+type = "predict-output"
+difficulty = "medium"
+title = "Does b change too?"
+prompt = "What will this program print? Decide **before** you run it."
+options = ["cat", "dog", "a", "b"]
+explanation = """
+`b = a` makes `b` refer to the value `"cat"` at that moment. Giving `a` a new value later
+does not change `b` — so the program prints `cat`.
+"""
+
+[option_misconceptions]
+"dog" = "mc.vars-auto-update"

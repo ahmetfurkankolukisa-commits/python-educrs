@@ -1,0 +1,36 @@
+id = "ex:vars.use/greet-by-name"
+concept = "vars.use"
+type = "code"
+difficulty = "easy"
+title = "Greet someone by name"
+prompt = """
+The program starts with a variable called `name`. Make it print `Hello,` followed by the name.
+
+For example, when `name = "Ada"` the program prints:
+
+    Hello, Ada
+
+Your program must work for **any** name, not just Ada.
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["name"]
+tests = [{ name = "Ada" }, { name = "Grace Hopper" }]
+random = { count = 6, types = { name = "str" } }
+
+[[hints]]
+text = "The name is already stored in the variable `name`. How do you print the value of a variable?"
+
+[[hints]]
+text = "`print` can show several values separated by commas: `print(\"Hello,\", name)`."
+
+[[misconceptions]]
+id = "mc.quoted-name"
+program = "wrong/quoted-name.py"
+message = "Your program printed the word `name` itself. Remove the quotes around `name` to print what the variable holds."
+
+[[misconceptions]]
+id = "mc.comma-vs-plus"
+program = "wrong/plus-no-space.py"
+message = "`+` glues text together without a space. Use a comma, `print(\"Hello,\", name)`, and Python adds the space for you."

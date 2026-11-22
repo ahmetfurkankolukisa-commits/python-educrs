@@ -1,0 +1,15 @@
+id = "ex:intro.run-code/type-and-run"
+concept = "intro.run-code"
+type = "verbatim"
+difficulty = "easy"
+title = "Your very first program"
+prompt = """
+Type this line into the editor **exactly as it is**, then press **Run**:
+
+```python
+print("I am learning Python!")
+```
+"""
+
+[[hints]]
+text = "Copy each character: the word `print`, the round brackets, and the double quotes around the text."

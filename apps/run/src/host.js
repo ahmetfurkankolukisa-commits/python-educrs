@@ -12,7 +12,8 @@
 const APP_ORIGIN = "__APP_ORIGIN__"; // exact production origin, replaced at build time
 const PREVIEW_ORIGIN_REGEX = "__PREVIEW_ORIGIN_REGEX__"; // anchored regex or "" (no previews)
 const PROTOCOL = 1;
-const CHECK_TIMEOUT_MS = 10_000;
+const CHECK_TIMEOUT_MS = 10_000;       // learner code + grading, once the worker is ready
+const CHECK_START_TIMEOUT_MS = 45_000; // a fresh worker must load Python within this (slow devices)
 
 const previewRe = PREVIEW_ORIGIN_REGEX ? new RegExp(PREVIEW_ORIGIN_REGEX) : null;
 const originAllowed = (o) => o === APP_ORIGIN || (previewRe !== null && previewRe.test(o));
@@ -132,7 +133,9 @@ function finishCheck(result) {
 async function startCheck(m) {
   if (currentCheck) { toApp({ type: "result", runId: m.runId, status: "error", error: "busy" }); return; }
   const slot = takeFreshSlot();
-  currentCheck = { runId: m.runId, started: performance.now(), slot, timer: 0 };
+  // The deadline starts NOW: a worker that never finishes loading must not hang the check forever.
+  const startTimer = setTimeout(() => finishCheck({ status: "timeout", error: `grading worker did not start within ${CHECK_START_TIMEOUT_MS} ms` }), CHECK_START_TIMEOUT_MS);
+  currentCheck = { runId: m.runId, started: performance.now(), slot, timer: startTimer };
   slot.handler = (wm) => {
     if (!wm || typeof wm !== "object" || wm.type !== "result" || !currentCheck || wm.runId !== m.runId) return;
     finishCheck({ status: wm.status, error: str(wm.error) ? wm.error : null, extra: str(wm.extra) ? wm.extra : null });
@@ -144,6 +147,7 @@ async function startCheck(m) {
     return;
   }
   if (!currentCheck || currentCheck.slot !== slot) return;
+  clearTimeout(startTimer);
   currentCheck.timer = setTimeout(() => finishCheck({ status: "timeout", error: `no result after ${CHECK_TIMEOUT_MS} ms` }), CHECK_TIMEOUT_MS);
   // Grading never blocks on input(): specs provide inputs explicitly.
   slot.post({ type: "run", runId: m.runId, code: m.code, mode: "check", spec: m.spec, seed: m.seed, stdinMode: "prefill" });

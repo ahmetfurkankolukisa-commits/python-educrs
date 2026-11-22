@@ -35,6 +35,8 @@ jobs:
       - run: pnpm test
       - name: Concept graph (validator + negative tests)
         run: pnpm test:concepts
+      - name: Content pipeline (Pyodide writes, CPython 3.14 must agree) + grader tests
+        run: pnpm test:content
       - name: CPython vs Pyodide parity (enforced on equal minor versions)
         run: pnpm test:parity
         env:

@@ -1512,6 +1512,43 @@ concepts = ["gen.basic"]
 belief = "A generator can be looped over again and again."
 detect = "predict"
 
+# --- M0–M2 first-minute mistakes (F3 design §4)
+[[misconception]]
+id = "mc.missing-quotes"
+concepts = ["strings.literal"]
+belief = "Text can be written without quotes: print(Hello)."
+detect = "exception"
+
+[[misconception]]
+id = "mc.smart-quotes"
+concepts = ["strings.literal"]
+belief = "Curly quotes copied from a document or phone keyboard work like plain quotes."
+detect = "exception"
+
+[[misconception]]
+id = "mc.case-insensitive"
+concepts = ["print.basic"]
+belief = "Python ignores capital letters, so Print works like print."
+detect = "exception"
+
+[[misconception]]
+id = "mc.shadow-builtin"
+concepts = ["vars.naming"]
+belief = "Any word can be a variable name, even print."
+detect = "exception"
+
+[[misconception]]
+id = "mc.assign-direction"
+concepts = ["vars.assign"]
+belief = "Assignment works both ways, so \"Ada\" = name is the same as name = \"Ada\"."
+detect = "exception"
+
+[[misconception]]
+id = "mc.comma-vs-plus"
+concepts = ["print.multiple-args"]
+belief = "print(\"Hi\" + name) and print(\"Hi\", name) print exactly the same thing."
+detect = "behavioral"
+
 # ================================================================ projects
 [[project]]
 id = "proj.business-card"

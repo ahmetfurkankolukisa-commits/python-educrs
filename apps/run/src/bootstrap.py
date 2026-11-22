@@ -11,6 +11,9 @@ from traceback import TracebackException as _TE  # bound now: user patching `tra
 
 from pyodide.code import eval_code_async
 
+sys.path.insert(0, "/educrs")  # the worker writes packages/grader/educrs_grader.py here
+import educrs_grader  # noqa: E402  imported BEFORE the snapshots below, so it is restored too
+
 MAIN = "/main.py"
 _BDICT = builtins.__dict__
 _BUILTINS = dict(_BDICT)
@@ -127,38 +130,19 @@ async def run_user(code, mode="run", spec=None, seed=0):
         _restore()
 
 
-# ---------------------------------------------------------------- grading (F3.1: minimal; F3.2 replaces)
-def _normalise(text):
-    lines = text.replace("\r\n", "\n").rstrip("\n").split("\n")
-    return "\n".join(line.rstrip() for line in lines)
-
-
+# ---------------------------------------------------------------- grading (shared grader, F3.2)
 def _check(code, spec_json, seed):
-    """Grade in THIS (fresh) worker. Output is captured, never streamed to the learner."""
-    import contextlib
-    import io
-    import random
-
-    spec = json.loads(spec_json or "{}")
-    kind = spec.get("kind")
-    result = {"seed": seed, "worker_runs": _RUNS}
-    if kind != "stdout":
-        return json.dumps({**result, "passed": False, "error": f"unsupported check kind {kind!r}"})
-    random.seed(seed)
-    _write_main(code)
-    buf = io.StringIO()
-    err = None
+    """Grade in THIS (fresh) worker with the same grader CI uses. Output is captured, not streamed."""
+    _write_main(code)  # so tracebacks can show the learner's source lines
     try:
-        with contextlib.redirect_stdout(buf):
-            exec(compile(code, MAIN, "exec"), _new_globals())
-    except SystemExit:
-        pass
-    except BaseException as e:  # noqa: BLE001
-        err = _format_exc(e)
-    expected = spec.get("expected", "")
-    actual = buf.getvalue()
-    passed = err is None and _normalise(actual) == _normalise(expected)
-    return json.dumps({**result, "passed": passed, "expected": expected, "actual": actual, "error": err})
+        spec = json.loads(spec_json or "{}")
+        result = educrs_grader.grade(spec, code, seed, filename=MAIN)
+    except educrs_grader.ContentError as exc:
+        result = {"passed": False, "problem": "content-error", "error": {"type": "ContentError", "message": str(exc)}}
+    except (KeyError, TypeError, ValueError) as exc:
+        result = {"passed": False, "problem": "bad-spec", "error": {"type": type(exc).__name__, "message": str(exc)}}
+    result["worker_runs"] = _RUNS
+    return json.dumps(result)
 
 
 def _probe():

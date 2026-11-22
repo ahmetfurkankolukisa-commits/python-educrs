@@ -9,7 +9,7 @@ Thanks for helping beginners learn Python! Every change is checked by CI, so you
    - Concept ids are permanent — never rename or reuse one.
    - List only *direct, necessary* prerequisites; the validator rejects redundant ones.
    - Run `pnpm test:concepts`, then `pnpm docs:concepts` to regenerate `docs/01-concept-graph.md` (never edit that file by hand).
-3. **Every misconception check needs a triggering example program** (plan §3.2).
+3. **Exercises** live in `content/en/exercises/<concept>/<slug>/` (`exercise.toml` + `.py` files). Run `pnpm content` after any change and commit the regenerated `content/build/` and `content/golden/` files; CI rejects stale ones. Every misconception needs a wrong program that triggers it (plan §3.2). Expected outputs and predict-output answers are computed, never typed.
 4. **UI strings** go through `t("namespace.key")` from `@educrs/i18n` — no hard-coded text in components.
 5. **Third-party UI libraries** are imported only inside `packages/ui`. `pnpm lint:deps` enforces this and the other boundaries.
 6. **Colours** come from `packages/ui/src/tokens.css`; contrast is unit-tested in every theme.

@@ -1,0 +1,82 @@
+{
+  "grader": 1,
+  "id": "ex:vars.use/greet-by-name",
+  "misconceptions": {
+    "mc.comma-vs-plus": {
+      "error": null,
+      "failed": {
+        "actual": "Hello,Ada\n",
+        "error": null,
+        "expected": "Hello, Ada\n",
+        "inputs": {
+          "name": "Ada"
+        }
+      },
+      "grader": 1,
+      "kind": "program-with-inputs",
+      "misconception": {
+        "id": "mc.comma-vs-plus",
+        "message": "`+` glues text together without a space. Use a comma, `print(\"Hello,\", name)`, and Python adds the space for you."
+      },
+      "passed": false,
+      "problem": "wrong-output",
+      "seed": 1,
+      "tests_passed": 0,
+      "tests_total": 8
+    },
+    "mc.quoted-name": {
+      "error": null,
+      "failed": {
+        "actual": "Hello, name\n",
+        "error": null,
+        "expected": "Hello, Ada\n",
+        "inputs": {
+          "name": "Ada"
+        }
+      },
+      "grader": 1,
+      "kind": "program-with-inputs",
+      "misconception": {
+        "id": "mc.quoted-name",
+        "message": "Your program printed the word `name` itself. Remove the quotes around `name` to print what the variable holds."
+      },
+      "passed": false,
+      "problem": "wrong-output",
+      "seed": 1,
+      "tests_passed": 0,
+      "tests_total": 8
+    }
+  },
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 8,
+    "tests_total": 8
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "",
+      "error": null,
+      "expected": "Hello, Ada\n",
+      "inputs": {
+        "name": "Ada"
+      }
+    },
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 8
+  }
+}
