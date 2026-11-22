@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { catalog, format, locales, t } from "./index.ts";
+import { catalog, format, locales, plural, t } from "./index.ts";
 
 describe("i18n", () => {
   it("looks up and interpolates", () => {
@@ -16,6 +16,20 @@ describe("i18n", () => {
       for (const [key, value] of Object.entries(catalog(loc))) {
         expect(value.trim(), `${loc}:${key}`).not.toBe("");
         expect(value.replace(/\{\w+\}/g, ""), `${loc}:${key} has a malformed placeholder`).not.toMatch(/[{}]/);
+      }
+    }
+  });
+
+  it("plural() picks the English form for n", () => {
+    expect([0, 1, 2].map((n) => plural("stats.freezes", n))).toEqual(["0 streak freezes", "1 streak freeze", "2 streak freezes"]);
+  });
+
+  it("every plural key has both forms", () => {
+    for (const loc of locales) {
+      const keys = Object.keys(catalog(loc));
+      for (const k of keys.filter((k) => /\.(one|other)$/.test(k))) {
+        const base = k.replace(/\.(one|other)$/, "");
+        expect(keys, `${loc}:${base}`).toEqual(expect.arrayContaining([`${base}.one`, `${base}.other`]));
       }
     }
   });

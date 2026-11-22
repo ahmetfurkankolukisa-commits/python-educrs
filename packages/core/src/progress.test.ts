@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
 import { EventRegistry, type StoredEvent } from "./events.ts";
-import { EVENT, monotonic, newEvent, nextLesson, pathStates, registerLearningEvents, resumePoint, uuidv7, type EventContext } from "./progress.ts";
+import { EVENT, lessonRun, monotonic, newEvent, nextLesson, pathStates, registerLearningEvents, resumePoint, uuidv7, type EventContext } from "./progress.ts";
 import type { PathModule } from "./content.ts";
 
 let clock = 1_000;
@@ -41,6 +41,23 @@ describe("event envelope", () => {
     const e = started("lesson:a");
     expect(e).toMatchObject({ type: "lesson.started", v: 1, rs: 1, tz: 180, dev: "dev-1" });
     expect(reg.upcast(e).understood).toBe(true);
+  });
+});
+
+describe("lessonRun (§15.7: XP this lesson)", () => {
+  it("is empty before the lesson was ever started", () => {
+    expect(lessonRun([attempt("lesson:vars.use", 1, true)], "lesson:vars.use")).toEqual([]);
+  });
+
+  it("holds the events after the LAST start, earlier visits of a resumed run included, other lessons excluded", () => {
+    const old = [started("lesson:vars.use"), attempt("lesson:vars.use", 1, true), completed("lesson:vars.use")];
+    const s2 = started("lesson:vars.use");
+    const a1 = attempt("lesson:vars.use", 1, true);
+    const other = attempt("lesson:vars.reassign", 1, true);
+    const a2 = attempt("lesson:vars.use", 2, false);
+    const done = completed("lesson:vars.use");
+    const run = lessonRun([done, ...old, a2, other, s2, a1], "lesson:vars.use");
+    expect(run.map((e) => e.id)).toEqual([a1, a2, done].map((e) => e.id));
   });
 });
 

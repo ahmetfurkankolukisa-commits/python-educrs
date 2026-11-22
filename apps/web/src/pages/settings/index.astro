@@ -1,0 +1,11 @@
+---
+import Base from "../../layouts/Base.astro";
+import SettingsIsland from "../../components/SettingsIsland.svelte";
+import { t } from "@educrs/i18n";
+---
+
+<Base title={`${t("settings.title")} · Learn Python`}>
+  <a class="inline-flex min-h-11 items-center font-semibold text-accent" href="/learn/">← {t("settings.back")}</a>
+  <h1 class="mt-4 text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
+  <SettingsIsland client:load />
+</Base>

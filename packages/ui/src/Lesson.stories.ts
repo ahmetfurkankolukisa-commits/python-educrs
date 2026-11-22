@@ -98,3 +98,27 @@ export const CompleteLast: StoryObj<typeof LessonComplete> = {
   render: (args) => ({ Component: LessonComplete, props: args }),
   args: { lessonTitle: "Giving a variable a new value", exercises: 3, firstTry: 0, nextHref: null, pathHref: "#" },
 };
+export const CompleteRewards: StoryObj<typeof LessonComplete> = {
+  name: "Lesson complete (XP, goal reached now, streak)",
+  render: (args) => ({ Component: LessonComplete, props: args }),
+  args: {
+    lessonTitle: "Using variables", exercises: 4, firstTry: 2, nextHref: "#", pathHref: "#",
+    rewards: { xp: 45, todayXp: 45, goal: 20, goalReachedNow: true, streak: 3 },
+  },
+};
+export const CompleteGoalNotYet: StoryObj<typeof LessonComplete> = {
+  name: "Lesson complete (goal not reached yet, no streak)",
+  render: (args) => ({ Component: LessonComplete, props: args }),
+  args: {
+    lessonTitle: "Giving a variable a new value", exercises: 3, firstTry: 1, nextHref: null, pathHref: "#",
+    rewards: { xp: 18, todayXp: 18, goal: 30, goalReachedNow: false, streak: 0 },
+  },
+};
+export const CompletePlain: StoryObj<typeof LessonComplete> = {
+  name: "Lesson complete (plain mode)",
+  render: (args) => ({ Component: LessonComplete, props: args }),
+  args: {
+    lessonTitle: "Using variables", exercises: 4, firstTry: 2, nextHref: "#", pathHref: "#", plain: true,
+    rewards: { xp: 45, todayXp: 45, goal: 20, goalReachedNow: true, streak: 3 },
+  },
+};

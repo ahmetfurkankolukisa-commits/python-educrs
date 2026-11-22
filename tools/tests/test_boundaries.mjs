@@ -18,6 +18,8 @@ const CASES = [
   { name: "core imports a framework", file: "packages/core/src/__violation.ts", body: 'import "svelte";\nexport {};\n', rule: "core-is-pure" },
   { name: "i18n imports a framework", file: "packages/i18n/src/__violation.ts", body: 'import "astro";\nexport {};\n', rule: "core-is-pure" },
   { name: "core imports another package", file: "packages/core/src/__violation.ts", body: 'import "../../i18n/src/index.ts";\nexport {};\n', rule: "core-depends-on-nothing-internal" },
+  { name: "gamification imports a framework", file: "packages/gamification/src/__violation.ts", body: 'import "svelte";\nexport {};\n', rule: "core-is-pure" },
+  { name: "gamification imports the store", file: "packages/gamification/src/__violation.ts", body: 'import "../../store/src/index.ts";\nexport {};\n', rule: "gamification-depends-only-on-core" },
   { name: "package imports an app", file: "packages/ui/src/__violation.ts", body: 'import "../../../apps/web/astro.config.mjs";\nexport {};\n', rule: "packages-never-import-apps" },
   { name: "app .ts uses UI lib directly", file: "apps/web/src/__violation.ts", body: 'import "bits-ui";\nexport {};\n', rule: "ui-libs-only-via-packages-ui" },
   { name: "app .svelte uses UI lib directly", file: "apps/web/src/components/__Violation.svelte", body: '<script lang="ts">\n  import "bits-ui";\n</script>\n', rule: "ui-libs-only-via-packages-ui" },

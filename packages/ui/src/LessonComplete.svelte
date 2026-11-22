@@ -1,8 +1,20 @@
 <script lang="ts">
-  // End-of-lesson screen (docs/05-f3-mvp0.md §13.5). "Right on the first try" is shown here
-  // only; it never affects XP (no penalty for wrong answers). XP and streak arrive in F3.6.
-  import { onMount } from "svelte";
+  // End-of-lesson screen (docs/05-f3-mvp0.md §13.5, §15.7). "Right on the first try" is shown
+  // here only and never affects XP (no penalty for wrong answers). Plain mode shows the plain
+  // facts: no badge, no numbers, no celebration (plan §3.5.1 #4).
+  import { onMount, type Snippet } from "svelte";
   import { t } from "@educrs/i18n";
+  import GoalRing from "./GoalRing.svelte";
+
+  interface Rewards {
+    /** XP this lesson added. */
+    xp: number;
+    todayXp: number;
+    goal: number;
+    /** This lesson is what reached today's goal (celebrate once). */
+    goalReachedNow: boolean;
+    streak: number;
+  }
 
   interface Props {
     lessonTitle: string;
@@ -10,20 +22,51 @@
     firstTry: number;
     nextHref?: string | null;
     pathHref: string;
+    /** null while the numbers are being worked out, or when there are none to show. */
+    rewards?: Rewards | null;
+    plain?: boolean;
+    /** Extra content above the buttons (e.g. the daily goal question). */
+    children?: Snippet;
   }
-  let { lessonTitle, exercises, firstTry, nextHref = null, pathHref }: Props = $props();
+  let { lessonTitle, exercises, firstTry, nextHref = null, pathHref, rewards = null, plain = false, children }: Props = $props();
   let heading = $state<HTMLHeadingElement>();
   onMount(() => heading?.focus());
+  const met = $derived(!!rewards && rewards.todayXp >= rewards.goal);
 </script>
 
-<section class="done" data-testid="lesson-complete">
-  <svg class="badge" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <circle cx="32" cy="32" r="29" />
-    <path d="M19 33l9 9 17-18" />
-  </svg>
+<section class="done" data-testid="lesson-complete" data-plain={plain}>
+  {#if !plain}
+    <svg class="badge" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <circle cx="32" cy="32" r="29" />
+      <path d="M19 33l9 9 17-18" />
+    </svg>
+  {/if}
   <h1 tabindex="-1" bind:this={heading}>{t("lesson.complete.title")}</h1>
   <p class="lesson">{lessonTitle}</p>
-  <p class="stat">{t("lesson.complete.firstTry", { n: firstTry, m: exercises })}</p>
+  {#if !plain}
+    <p class="stat">{t("lesson.complete.firstTry", { n: firstTry, m: exercises })}</p>
+    {#if rewards}
+      <ul class="rewards" data-testid="rewards">
+        <li class="xp" data-testid="reward-xp" data-xp={rewards.xp}>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 2 4.5 13.5h6.2L9.8 22l9.4-12.2h-6.4z" /></svg>
+          {t("lesson.complete.xp", { n: rewards.xp })}
+        </li>
+        <li class="goal" class:celebrate={rewards.goalReachedNow} data-testid="reward-goal" data-met={met}>
+          <GoalRing value={rewards.todayXp} goal={rewards.goal} label={t("stats.goal.label")} valueText={t("stats.goal.value", { n: rewards.todayXp, m: rewards.goal })} />
+          <span>{met ? t("lesson.complete.goalReached") : t("stats.goal.value", { n: rewards.todayXp, m: rewards.goal })}</span>
+        </li>
+        {#if rewards.streak > 0}
+          <li class="streak" data-testid="reward-streak" data-days={rewards.streak}>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 2.5c.6 3.2 4.8 5.4 4.8 10.3a4.8 4.8 0 0 1-9.6 0c0-2.3 1.2-3.9 2.4-5 .1 1.6.8 2.7 1.8 3.3-.4-3 .1-5.9.6-8.6z" />
+            </svg>
+            {t("lesson.complete.streak", { n: rewards.streak })}
+          </li>
+        {/if}
+      </ul>
+    {/if}
+  {/if}
+  {@render children?.()}
   <div class="actions">
     {#if nextHref}<a class="btn primary" href={nextHref}>{t("lesson.complete.next")}</a>{/if}
     <a class="btn" class:primary={!nextHref} href={pathHref}>{t("lesson.complete.path")}</a>
@@ -62,6 +105,46 @@
   .stat {
     margin: 0;
     font-size: var(--text-lg);
+  }
+  .rewards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rewards li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    font-weight: 600;
+  }
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .xp {
+    color: var(--color-xp);
+  }
+  .xp .icon {
+    fill: var(--color-xp);
+  }
+  .streak {
+    color: var(--color-streak);
+  }
+  .streak .icon {
+    fill: var(--color-streak);
+  }
+  .goal.celebrate {
+    border-color: var(--color-success);
+    animation: pop var(--motion-base) var(--ease-out);
   }
   .actions {
     display: flex;

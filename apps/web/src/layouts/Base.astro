@@ -27,8 +27,12 @@ const { title = t("site.title"), description = t("site.description") } = Astro.p
     <main class="mx-auto w-full max-w-3xl px-4 py-10">
       <slot />
     </main>
-    <footer class="mx-auto w-full max-w-3xl px-4 pb-10 text-sm text-muted">
-      {t("footer.license")}
+    <footer class="mx-auto flex w-full max-w-3xl flex-wrap items-center gap-x-6 gap-y-2 px-4 pb-10 text-sm text-muted">
+      <nav aria-label={t("footer.nav")} class="flex gap-4">
+        <a class="inline-flex min-h-11 items-center underline" href="/learn/">{t("nav.path")}</a>
+        <a class="inline-flex min-h-11 items-center underline" href="/settings/">{t("nav.settings")}</a>
+      </nav>
+      <span>{t("footer.license")}</span>
     </footer>
   </body>
 </html>

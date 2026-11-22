@@ -2,16 +2,17 @@
   "name": "web",
   "private": true,
   "type": "module",
-  "description": "python.educrs.com — the learning app (Astro static output + Svelte islands).",
+  "description": "python.educrs.com \u2014 the learning app (Astro static output + Svelte islands).",
   "scripts": {
     "dev": "astro dev --port 4321",
     "build": "astro build && node scripts/write-headers.mjs",
     "preview": "node ../../tools/serve-dist.mjs dist localhost 4321",
-    "typecheck": "astro check"
+    "typecheck": "astro check && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings"
   },
   "dependencies": {
     "@astrojs/svelte": "9.1.6",
     "@educrs/core": "workspace:*",
+    "@educrs/gamification": "workspace:*",
     "@educrs/i18n": "workspace:*",
     "@educrs/store": "workspace:*",
     "@educrs/ui": "workspace:*",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "svelte-check": "4.7.8",
     "typescript": "6.0.3"
   }
 }

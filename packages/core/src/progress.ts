@@ -9,13 +9,19 @@ export const EVENT = {
   lessonStarted: "lesson.started",
   attempt: "exercise.attempt",
   lessonCompleted: "lesson.completed",
+  /** `{ dailyGoal?: 10 | 20 | 30 | 50, plainMode?: boolean }` (docs/05-f3-mvp0.md §15.3). */
+  settingsChanged: "settings.changed",
 } as const;
 
 /** Reward ruleset active when events are written (plan §3.5.6). Append-only: bump, never edit. */
 export const REWARD_RULESET = 1;
 
 export function registerLearningEvents(reg: EventRegistry): EventRegistry {
-  return reg.register(EVENT.lessonStarted, 1).register(EVENT.attempt, 1).register(EVENT.lessonCompleted, 1);
+  return reg
+    .register(EVENT.lessonStarted, 1)
+    .register(EVENT.attempt, 1)
+    .register(EVENT.lessonCompleted, 1)
+    .register(EVENT.settingsChanged, 1);
 }
 
 // ------------------------------------------------------------------ ids + envelopes
@@ -87,6 +93,17 @@ export function resumePoint(events: readonly StoredEvent[], lesson: Pick<Lesson,
     if (Number.isSafeInteger(s) && (s as number) > best && (s as number) < lesson.steps.length) best = s as number;
   }
   return { step: best + 1, start: false };
+}
+
+/**
+ * The events of the current run of a lesson: everything for it after its last `lesson.started`
+ * (attempts from an earlier visit of a resumed lesson included). Used for "XP this lesson".
+ */
+export function lessonRun(events: readonly StoredEvent[], lessonId: string): StoredEvent[] {
+  const mine = events.filter((e) => pstr(e, "lessonId") === lessonId).sort(compareEvents);
+  let startIdx = -1;
+  mine.forEach((e, i) => { if (e.type === EVENT.lessonStarted) startIdx = i; });
+  return startIdx < 0 ? [] : mine.slice(startIdx + 1);
 }
 
 export type NodeState = "completed" | "next" | "todo";

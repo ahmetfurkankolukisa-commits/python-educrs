@@ -3,16 +3,17 @@
   // pure reducer in @educrs/core; this component wires it to the sandbox, the store and the UI.
   import { onMount, tick } from "svelte";
   import { catalog, t, type MessageKey } from "@educrs/i18n";
-  import { ChoiceList, CodeBlock, FeedbackPanel, GapFill, HintLadder, LessonComplete, LessonHeader, Markdown } from "@educrs/ui";
+  import { ChoiceList, CodeBlock, FeedbackPanel, GapFill, GoalPicker, HintLadder, LessonComplete, LessonHeader, Markdown } from "@educrs/ui";
   import {
-    EVENT, canReveal, checkFeedback, fillFeedback, flow, monotonic, newEvent, parseGrade, predictFeedback, resumePoint, revealRatio,
-    startFlow, summary, type EventContext, type Exercise, type Explanation, type Feedback, type FlowAction, type FlowState, type Lesson,
-    type LocalStore, type StepKind, type Tone,
+    EVENT, canReveal, checkFeedback, fillFeedback, flow, lessonRun, parseGrade, predictFeedback, resumePoint, revealRatio,
+    startFlow, summary, type Exercise, type Explanation, type Feedback, type FlowAction, type FlowState, type Lesson,
+    type StepKind, type Tone,
   } from "@educrs/core";
-  import { openLocalStore } from "@educrs/store";
+  import { DAILY_GOALS, progressOf } from "@educrs/gamification";
   import CodeWorkspace from "./CodeWorkspace.svelte";
   import SandboxFrame from "./SandboxFrame.svelte";
   import { SandboxClient, type SandboxStatus } from "../lib/sandbox.ts";
+  import { nowLocal, openProgress, type Progress } from "../lib/progress.ts";
 
   interface Props {
     lesson: Lesson;
@@ -22,13 +23,12 @@
   }
   let { lesson, exercises, pathHref, nextHref }: Props = $props();
 
-  const kinds: StepKind[] = lesson.steps.map((s) => s.kind);
+  const kinds = $derived<StepKind[]>(lesson.steps.map((s) => s.kind));
   const client = new SandboxClient(import.meta.env.PUBLIC_RUN_ORIGIN ?? "");
   let sandbox = $state<SandboxStatus>("loading");
   let failReason = $state("");
 
-  let store: LocalStore | null = null;
-  let ctx: EventContext | null = null;
+  let progress: Progress | null = null;
   let fs = $state<FlowState | null>(null); // null until we know where to resume
   let choice = $state<string | null>(null);
   let code = $state("");
@@ -37,6 +37,14 @@
   let announce = $state("");
   let heading = $state<HTMLHeadingElement>();
   let stepStarted = 0;
+
+  // End of lesson (docs/05-f3-mvp0.md §15.7): XP this run added, today's goal, streak, plain mode.
+  interface Rewards { xp: number; todayXp: number; goal: number; goalReachedNow: boolean; streak: number }
+  let rewards = $state<Rewards | null>(null);
+  let plainMode = $state(false);
+  let askGoal = $state(false);
+  let chosenGoal = $state<number | null>(null);
+  let goalSaved = $state("");
 
   const step = $derived(fs ? lesson.steps[fs.step] : undefined);
   const ex = $derived(step?.kind === "exercise" ? exercises[step.id] : undefined);
@@ -49,31 +57,49 @@
     : null);
 
   async function record(type: string, p: Record<string, unknown>) {
-    if (!store || !ctx) return;
-    try {
-      await store.append([newEvent(ctx, type, p)]);
-    } catch {
-      // Storage failing must never stop the lesson; progress is just not saved.
-    }
+    await progress?.record(type, p);
+  }
+
+  async function finish() {
+    await record(EVENT.lessonCompleted, { lessonId: lesson.id, contentHash: lesson.contentHash });
+    if (!progress) return;
+    const all = progress.events();
+    const run = new Set(lessonRun(all, lesson.id).map((e) => e.id));
+    const now = nowLocal();
+    const after = progressOf(all, now);
+    const before = progressOf(all.filter((e) => !run.has(e.id)), now);
+    plainMode = after.settings.plainMode;
+    askGoal = !after.settings.goalChosen && !plainMode;
+    // Nothing pre-selected: clicking an already-checked radio fires no change, so a pre-selected
+    // 20 could never be confirmed. Until a goal is chosen, the default (20) applies.
+    chosenGoal = after.settings.goalChosen ? after.settings.dailyGoal : null;
+    rewards = {
+      xp: after.xp - before.xp,
+      todayXp: after.todayXp,
+      goal: after.goal,
+      goalReachedNow: before.todayXp < after.goal && after.todayXp >= after.goal,
+      streak: after.streak.days,
+    };
+  }
+
+  async function chooseGoal(goal: number) {
+    await record(EVENT.settingsChanged, { dailyGoal: goal });
+    if (!progress || !rewards) return;
+    const p = progressOf(progress.events(), nowLocal());
+    rewards = { ...rewards, todayXp: p.todayXp, goal: p.goal, streak: p.streak.days };
+    goalSaved = t("lesson.complete.goalSaved", { n: goal });
   }
 
   onMount(() => {
     let cancelled = false;
     (async () => {
-      const opened = await openLocalStore();
+      const opened = await openProgress();
       if (cancelled) return;
-      store = opened.store;
-      ctx = {
-        now: monotonic(() => Date.now()),
-        tz: () => -new Date().getTimezoneOffset(),
-        dev: await store.deviceId(),
-        random: () => crypto.getRandomValues(new Uint8Array(10)),
-      };
-      const at = resumePoint(await store.all(), lesson);
-      if (cancelled) return;
+      progress = opened;
+      const at = resumePoint(opened.events(), lesson);
       if (at.start) await record(EVENT.lessonStarted, { lessonId: lesson.id, contentHash: lesson.contentHash });
       fs = startFlow(kinds, at.step);
-      if (fs.phase === "done") await record(EVENT.lessonCompleted, { lessonId: lesson.id, contentHash: lesson.contentHash });
+      if (fs.phase === "done") await finish();
       else await enterStep(false);
     })();
     return () => { cancelled = true; };
@@ -110,17 +136,22 @@
     }
     const before = fs;
     if (!before || before.phase !== "answering") return;
+    if (fb.tone !== "unavailable") {
+      // Saved BEFORE the learner sees the result: leaving right after "Correct!" must not lose the
+      // attempt (an IndexedDB write still pending when the page unloads can be dropped; e2e found it).
+      checking = true;
+      await record(EVENT.attempt, {
+        exerciseId: ex.id, contentHash: ex.contentHash, lessonId: lesson.id, step: before.step, difficulty: ex.difficulty,
+        correct: fb.tone === "correct", attempt: before.attempts + 1, hints: before.hints, revealRatio: revealRatio(before, units(ex)),
+        ...(fb.problem ? { problem: fb.problem } : {}),
+        ...(fb.misconceptionId ? { misconceptionId: fb.misconceptionId } : {}),
+        ...(fb.seed !== undefined ? { seed: fb.seed } : {}),
+        durationMs: Math.round(performance.now() - stepStarted),
+      });
+      checking = false;
+    }
     dispatch({ type: "checked", feedback: fb });
     announce = `${t(TITLES[fb.tone])}. ${plain(fb)}`;
-    if (fb.tone === "unavailable") return;
-    void record(EVENT.attempt, {
-      exerciseId: ex.id, contentHash: ex.contentHash, lessonId: lesson.id, step: before.step,
-      correct: fb.tone === "correct", attempt: before.attempts + 1, hints: before.hints, revealRatio: revealRatio(before, units(ex)),
-      ...(fb.problem ? { problem: fb.problem } : {}),
-      ...(fb.misconceptionId ? { misconceptionId: fb.misconceptionId } : {}),
-      ...(fb.seed !== undefined ? { seed: fb.seed } : {}),
-      durationMs: Math.round(performance.now() - stepStarted),
-    });
   }
 
   async function next() {
@@ -130,7 +161,7 @@
     if (fs === before) return;
     announce = "";
     if (fs.phase === "done") {
-      await record(EVENT.lessonCompleted, { lessonId: lesson.id, contentHash: lesson.contentHash });
+      await finish();
       return;
     }
     await enterStep();
@@ -210,7 +241,16 @@
     <p class="mt-8 text-muted">{t("lesson.loading")}</p>
   {:else if fs.phase === "done"}
     {@const s = summary(fs)}
-    <LessonComplete lessonTitle={lesson.title} exercises={s.exercises} firstTry={s.firstTry} {nextHref} {pathHref} />
+    <LessonComplete lessonTitle={lesson.title} exercises={s.exercises} firstTry={s.firstTry} {nextHref} {pathHref} {rewards} plain={plainMode}>
+      {#if askGoal}
+        <div class="mt-4 grid w-full max-w-xl gap-2 text-left" data-testid="goal-question">
+          <h2 class="text-lg font-semibold">{t("lesson.complete.pickGoal")}</h2>
+          <p class="text-sm text-muted">{t("lesson.complete.pickGoalHelp")}</p>
+          <GoalPicker goals={DAILY_GOALS} bind:selected={chosenGoal} name="daily-goal" legend={t("lesson.complete.pickGoal")} onchange={chooseGoal} />
+          <p class="text-sm" role="status" data-testid="goal-saved">{goalSaved}</p>
+        </div>
+      {/if}
+    </LessonComplete>
   {:else if step}
     <article class="mt-6 grid gap-5" data-testid="lesson-step" data-step={fs.step} data-kind={ex?.type ?? "explain"}>
       <h1 class="text-2xl font-bold tracking-tight" tabindex="-1" bind:this={heading}>

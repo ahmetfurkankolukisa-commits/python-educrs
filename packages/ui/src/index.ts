@@ -12,3 +12,7 @@ export { default as HintLadder } from "./HintLadder.svelte";
 export { default as LessonHeader } from "./LessonHeader.svelte";
 export { default as LessonComplete } from "./LessonComplete.svelte";
 export { default as LearningPath } from "./LearningPath.svelte";
+export { default as GoalRing } from "./GoalRing.svelte";
+export { default as StatsBar } from "./StatsBar.svelte";
+export { default as GoalPicker } from "./GoalPicker.svelte";
+export { default as Toggle } from "./Toggle.svelte";
