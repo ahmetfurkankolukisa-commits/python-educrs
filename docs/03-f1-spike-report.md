@@ -95,9 +95,10 @@ Sandbox CSP'si: `default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; conne
 | Firefox | 3,7 sn | ✅ |
 | WebKit | 3,3 sn | ✅ |
 | iPhone (WebKit emülasyonu) | 3,3 sn | ✅ |
+| **Gerçek Safari (macOS), elle test** | — | ✅ Etkileşimli `input()` çalıştı ("What is your name? aaa" → "Hello, aaa"). Bu, service worker üzerinden senkron girdi yolunun gerçek Safari'de, üçüncü taraf iframe içinde çalıştığını kanıtlıyor. |
 
 - Ölçüm geniş bantlı bir bağlantıda yapıldı. Yavaş mobil ağ ve düşük donanımlı cihaz hâlâ açık.
-- **Gerçek Safari ve iOS hâlâ açık.** Playwright WebKit gerçek Safari ile birebir aynı değil.
+- **Gerçek Safari (macOS) kapandı ✅.** **iOS Safari hâlâ açık:** iOS'ta üçüncü taraf iframe ve service worker politikaları macOS'tan farklı olabilir.
 - **Yeni bulgu:** Cloudflare, HTML'in içine kenar sunucusunda kendi script'lerini ekliyor:
   - **Web Analytics beacon'ı:** Plandaki çerezsiz analitik buydu (§9.1 C), CSP'de açıkça izin verildi.
   - **"JavaScript Detections" (Bot Fight Mode) satır içi script'i:** İçeriği her istekte değiştiği için hash'le izin verilemiyor. `'unsafe-inline'` CSP'yi boşa çıkaracağı için **bilerek engelli bırakıldı**. Siteye bir zararı yok.
