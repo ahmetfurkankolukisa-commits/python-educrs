@@ -126,6 +126,33 @@ test("other sites cannot embed the sandbox", async ({ page }) => {
   expect(await page.evaluate(() => (window as unknown as { gotReady: boolean }).gotReady)).toBe(false);
 });
 
+test.describe("errors are explained in plain English (F3.3)", () => {
+  const cases: [string, string, RegExp, number][] = [
+    ["text without quotes", "print(Hello)", /put it in quotes/, 1],
+    ["capital letter", 'Print("hi")', /capital letters: Print is not the same as print/, 1],
+    ["typo", 'name = "Ada"\nprint(nmae)', /Did you mean name\?/, 2],
+    ["smart quotes", "print(\u201cHi\u201d)", /smart quotes/, 1],
+    ["unterminated text", 'print("Hi)', /never ends/, 1],
+  ];
+  for (const [label, code, expected, line] of cases) {
+    test(label, async ({ page }) => {
+      await ready(page);
+      await run(page, code);
+      const box = page.getByTestId("runner-explanation");
+      await expect(box).toContainText(expected);
+      await expect(box).toContainText(`What went wrong · line ${line}`);
+    });
+  }
+
+  test("the explanation disappears on the next successful run", async ({ page }) => {
+    await ready(page);
+    await run(page, "print(Hello)");
+    await expect(page.getByTestId("runner-explanation")).toBeVisible();
+    await run(page, 'print("Hello")');
+    await expect(page.getByTestId("runner-explanation")).toHaveCount(0);
+  });
+});
+
 test("form fields are at least 16px on small screens (iOS Safari zooms smaller fields on focus)", async ({ page }) => {
   await ready(page);
   const width = page.viewportSize()?.width ?? 1280;

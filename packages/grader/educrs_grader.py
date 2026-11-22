@@ -23,6 +23,8 @@ import io
 import random
 import traceback
 
+import educrs_explain
+
 VERSION = 1
 
 # Friendly, varied test values: names a beginner recognises, with non-ASCII letters on purpose.
@@ -160,7 +162,18 @@ def _parse_reference(source, label, filename):
 
 
 def grade(spec, code, seed, filename="/main.py"):
-    """Grade learner `code` against an exercise `spec` (a bundle entry). Returns a result dict."""
+    """Grade learner `code` against an exercise `spec` (a bundle entry). Returns a result dict.
+
+    When the learner's code raised, `explanation` carries a structured explainer code (F3.3).
+    """
+    result = _grade(spec, code, seed, filename)
+    err = result.get("error")
+    if err and err.get("type") != "InputsMissing":
+        result["explanation"] = educrs_explain.explain(err, code)
+    return result
+
+
+def _grade(spec, code, seed, filename):
     check = spec["check"]
     kind = check["kind"]
     rng = random.Random(seed)

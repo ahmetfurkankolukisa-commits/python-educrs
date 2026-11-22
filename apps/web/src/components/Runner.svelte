@@ -1,7 +1,7 @@
 <script lang="ts">
   // Talks to the sandbox site (different site, plan §3.1). Trusts nothing it receives:
   // checks origin + source, accepts only known message types, renders output as text.
-  import { t } from "@educrs/i18n";
+  import { catalog, t, type MessageKey } from "@educrs/i18n";
 
   // Inlined at build time; the build fails if it is missing (scripts/write-headers.mjs).
   const RUN_ORIGIN = import.meta.env.PUBLIC_RUN_ORIGIN ?? "";
@@ -12,6 +12,7 @@
   let status = $state<Status>("loading");
   let failReason = $state("");
   let asking = $state<{ runId: string; reqId: string } | null>(null);
+  let explanation = $state<{ text: string; lineno: number | null } | null>(null);
   let answer = $state("");
   let frame = $state<HTMLIFrameElement>();
   let answerInput = $state<HTMLInputElement>();
@@ -23,6 +24,24 @@
   const HELLO_MAX_TRIES = 80; // ~20 s: the sandbox page itself may still be loading
 
   const isStr = (v: unknown): v is string => typeof v === "string";
+
+  /** Turn the sandbox's structured explanation into words. Everything from the sandbox is untrusted. */
+  function describe(extra: unknown): { text: string; lineno: number | null } | null {
+    if (!isStr(extra)) return null;
+    let data: unknown;
+    try { data = JSON.parse(extra); } catch { return null; }
+    const e = (data as { explanation?: unknown } | null)?.explanation as { id?: unknown; params?: unknown; lineno?: unknown } | undefined;
+    if (!e || !isStr(e.id)) return null;
+    const key = `explain.${e.id}`;
+    if (!(key in catalog("en"))) return null;
+    const params: Record<string, string | number> = {};
+    if (e.params && typeof e.params === "object") {
+      for (const [k, v] of Object.entries(e.params as Record<string, unknown>)) {
+        if (typeof v === "string" || typeof v === "number") params[k] = v;
+      }
+    }
+    return { text: t(key as MessageKey, params), lineno: typeof e.lineno === "number" ? e.lineno : null };
+  }
 
   function onMessage(e: MessageEvent) {
     if (e.origin !== RUN_ORIGIN || !frame || e.source !== frame.contentWindow) return;
@@ -49,7 +68,10 @@
       asking = { runId: m.runId as string, reqId: m.reqId };
       queueMicrotask(() => answerInput?.focus());
     } else if (m.type === "result") {
-      if (m.status === "error" && isStr(m.error)) output += m.error;
+      if (m.status === "error" && isStr(m.error)) {
+        output += m.error;
+        explanation = describe(m.extra);
+      }
       if (m.status === "interrupted") output += `\n${t("runner.interrupted")}\n`;
       asking = null;
       currentRun = null;
@@ -80,6 +102,7 @@
     if (status !== "ready" || !frame?.contentWindow) return;
     currentRun = `r${++seq}`;
     output = "";
+    explanation = null;
     status = "running";
     frame.contentWindow.postMessage({ type: "run", runId: currentRun, code, mode: "run" }, RUN_ORIGIN);
   }
@@ -154,6 +177,15 @@
       />
       <button type="submit" class="min-h-11 rounded-md bg-accent px-4 font-semibold text-on-accent">{t("runner.send")}</button>
     </form>
+  {/if}
+
+  {#if explanation}
+    <div role="alert" data-testid="runner-explanation" class="mt-4 rounded-md border border-danger p-3">
+      <p class="text-sm font-semibold text-danger">
+        {t("runner.explanationTitle")}{#if explanation.lineno !== null}{" · "}{t("runner.line", { n: explanation.lineno })}{/if}
+      </p>
+      <p class="mt-1 text-text">{explanation.text}</p>
+    </div>
   {/if}
 
   <h3 class="mt-4 text-sm font-semibold text-muted">{t("runner.output")}</h3>

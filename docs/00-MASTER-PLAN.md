@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.16)
+# Python Öğrenme Sistemi — Ana Plan (v0.17)
 
+> v0.17: **F3.3 tamamlandı:** hata açıklayıcısı v1. 18 yapısal kural, öğrenciye i18n üzerinden sade İngilizce açıklama. Hem "Kontrol Et" hem "Çalıştır" hatalarında gösteriliyor. Python testleri artık Pyodide'de de CI'da koşuyor (43 test).
 > v0.16: **F3.2 tamamlandı:** tek grader (`packages/grader/educrs_grader.py`) hem tarayıcıda hem CI'da çalışıyor; içerik hattı alıştırmaları Pyodide'de çalıştırıp paketi ve golden dosyalarını üretiyor, CI'da CPython 3.14 aynı sonucu vermek zorunda; e2e'de tarayıcı notu golden dosyalarla birebir aynı. Hata fırlatan referans çözüm artık içerik hatası. Notlandırma zaman aşımı worker'ın açılışını da kapsıyor (kararsız test kök nedeni). iPhone emülasyonundaki kararsız testlerin kök nedeni gerçek bir iOS sorunu çıktı: 16 px altı form alanları odaklanınca sayfa yakınlaşıyor. Dar ekranlarda alanlar artık 16 px.
 > v0.15: **F3.1 tamamlandı:** sandbox protokolü v1 (el sıkışma + origin izin listesi, mesajlar asla `"*"`'e gitmiyor), notlandırma her zaman taze worker'da (`worker_runs: 1` ile kanıtlı), önizlemeler sandbox'ı kullanabiliyor. e2e 72/72 (18 test × 4 tarayıcı).
 > v0.14: F3 kararları (K15–K17): dış kullanıcı testi yok, proje sahibi kendisi değerlendiriyor; içerik incelemesi örnekleyerek; `shell.expressions` M1'de ön tanıtım. F3 tasarımı onaylandı, F3.1 başladı.
