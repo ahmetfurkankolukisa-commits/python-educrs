@@ -62,6 +62,12 @@ Alan adı bağlandıktan sonra uygulamanın `workers.dev` adresi kapanacak (`app
 3. Bir eski Android telefonda dene. İlk açılış süresini not et.
 4. Tarayıcı geliştirici araçlarında yanıt başlıklarına bak: `Content-Security-Policy` ve `X-Robots-Tag: noindex` görünmeli.
 
+### Cloudflare'in sayfaya eklediği script'ler
+
+Tarayıcı konsolunda CSP uyarıları görebilirsin. Sebebi, Cloudflare'in sayfaya kenar sunucusunda iki şey eklemesi:
+- **Web Analytics** (`static.cloudflareinsights.com`): CSP'de izin verildi, çalışıyor.
+- **JavaScript Detections** (`/cdn-cgi/challenge-platform/...`, Bot Fight Mode'un parçası): CSP tarafından bilerek engelleniyor. Site etkilenmiyor. Konsoldaki uyarıyı kaldırmak istersen **Security → Bots** altından "JavaScript Detections"ı kapatabilirsin. ⚠️ Bu ayar bütün `educrs.com` alanını etkiler.
+
 ## 5. Bilinen sınır: önizlemeler
 
 PR önizlemeleri `*-python-educrs.<hesap>.workers.dev` adresinde açılıyor. Ama sandbox şu an sadece `https://python.educrs.com` tarafından gömülebiliyor, bu yüzden **önizlemelerde Python kutusu çalışmaz.**

@@ -85,6 +85,24 @@ Sandbox CSP'si: `default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; conne
 | Mobil sembol çubuğu prototipi | Arayüz işi, sandbox riskine bağlı değil | F3 (MVP-0) içinde |
 | Uygulama düzeyinde çevrimdışı çalışma | Bu spike sadece sandbox'ı kapsıyordu | F2 (uygulama service worker'ı) |
 
+### 5.3 Canlı ortamda duman testi (22 Kasım 2026, `python.educrs.com`)
+
+Üretim sitesi (Cloudflare Workers, gerçek internet) Playwright ile test edildi. Kod çalıştırma, `input()` ve Python sürümü kontrol edildi:
+
+| Motor | Python hazır olma süresi (ilk açılış, önbellek boş) | Sonuç |
+|---|---|---|
+| Chromium | 3,6 sn | ✅ `Hello, Ada` · 3.14.2 |
+| Firefox | 3,7 sn | ✅ |
+| WebKit | 3,3 sn | ✅ |
+| iPhone (WebKit emülasyonu) | 3,3 sn | ✅ |
+| **Gerçek Safari (macOS), elle test** | — | ✅ Etkileşimli `input()` çalıştı ("What is your name? aaa" → "Hello, aaa"). Bu, service worker üzerinden senkron girdi yolunun gerçek Safari'de, üçüncü taraf iframe içinde çalıştığını kanıtlıyor. |
+
+- Ölçüm geniş bantlı bir bağlantıda yapıldı. Yavaş mobil ağ ve düşük donanımlı cihaz hâlâ açık.
+- **Gerçek Safari (macOS) kapandı ✅.** **iOS Safari hâlâ açık:** iOS'ta üçüncü taraf iframe ve service worker politikaları macOS'tan farklı olabilir.
+- **Yeni bulgu:** Cloudflare, HTML'in içine kenar sunucusunda kendi script'lerini ekliyor:
+  - **Web Analytics beacon'ı:** Plandaki çerezsiz analitik buydu (§9.1 C), CSP'de açıkça izin verildi.
+  - **"JavaScript Detections" (Bot Fight Mode) satır içi script'i:** İçeriği her istekte değiştiği için hash'le izin verilemiyor. `'unsafe-inline'` CSP'yi boşa çıkaracağı için **bilerek engelli bırakıldı**. Siteye bir zararı yok.
+
 ## 6. Prototipten ürüne taşınacaklar
 
 - `run/sw.js`: senkron stdin protokolü (tur tabanlı yeniden deneme, `claim` mesajı) → `packages/runtime`
