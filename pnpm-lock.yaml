@@ -211,9 +211,15 @@ importers:
       '@astrojs/svelte':
         specifier: 9.1.6
         version: 9.1.6(@types/node@22.20.5)(astro@7.4.13(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))(esbuild@0.28.2)(jiti@2.7.0)(svelte@5.59.1)(typescript@6.0.3)(yaml@2.9.1)
+      '@educrs/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@educrs/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
+      '@educrs/store':
+        specifier: workspace:*
+        version: link:../../packages/store
       '@educrs/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -240,6 +246,19 @@ importers:
   packages/core: {}
 
   packages/i18n: {}
+
+  packages/store:
+    dependencies:
+      '@educrs/core':
+        specifier: workspace:*
+        version: link:../core
+      dexie:
+        specifier: 4.4.7
+        version: 4.4.7
+    devDependencies:
+      fake-indexeddb:
+        specifier: 6.2.8
+        version: 6.2.8
 
   packages/ui:
     dependencies:
@@ -2122,6 +2141,9 @@ packages:
   devtools-protocol@0.0.1182435:
     resolution: {integrity: sha512-EmlkWb62wSbQNE1gRZZsi4KZYRaF5Skpp183LhRU7+sadKR06O1dHCjZmFSEG6Kv7P6S/UYLxcY3NlYwqKM99w==}
 
+  dexie@4.4.7:
+    resolution: {integrity: sha512-wemFiCl3DTCnfzyqepUTX1ugbYbkTrw3aEZOG7YjAOUoEQB5g5PrEywPzk5JpbX/SxqQ9IvjUpxCDIEjoOWEfA==}
+
   diff@9.0.0:
     resolution: {integrity: sha512-svtcdpS8CgJyqAjEQIXdb3OjhFVVYjzGAPO8WGCmRbrml64SPw/jJD4GoE98aR7r25A0XcgrK3F02yw9R/vhQw==}
     engines: {node: '>=0.3.1'}
@@ -2234,6 +2256,10 @@ packages:
 
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
+
+  fake-indexeddb@6.2.8:
+    resolution: {integrity: sha512-mpVW/HLUqwKXJ6F/s0hMgdK1eQfM4ncTHDioNGHWL0WKV3VcZCoZq1NKgboBbAge07aRCO7L48yziKssL59XEQ==}
+    engines: {node: '>=18'}
 
   fast-check@4.10.3:
     resolution: {integrity: sha512-SBaU6nhh+sXxb05r2IHAKfxnR/1Pu6MqtHYaewM1BY6V5xzOxOk+4yoWO7WfeeyZG1iArFE6/DO/7iLYMUuOJg==}
@@ -5158,6 +5184,8 @@ snapshots:
 
   devtools-protocol@0.0.1182435: {}
 
+  dexie@4.4.7: {}
+
   diff@9.0.0: {}
 
   dom-accessibility-api@0.5.16: {}
@@ -5275,6 +5303,8 @@ snapshots:
   expect-type@1.4.0: {}
 
   extend@3.0.2: {}
+
+  fake-indexeddb@6.2.8: {}
 
   fast-check@4.10.3:
     dependencies:

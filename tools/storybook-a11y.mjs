@@ -51,6 +51,9 @@ async function open(id, theme) {
     undefined,
     { timeout: 30_000 },
   );
+  // Scan the settled state: mid-animation (e.g. a panel fading in) text is translucent and
+  // would fail contrast for a reason no learner ever sees for more than 200 ms.
+  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
   const state = await page.evaluate(() => ({
     theme: document.documentElement.dataset.theme,
     error: document.body.classList.contains("sb-show-errordisplay"),

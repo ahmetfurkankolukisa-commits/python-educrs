@@ -44,6 +44,14 @@ export const REQUIRED_PAIRS: ReadonlyArray<readonly [string, string, number]> = 
   ["--color-code-function", "--color-code-bg", 4.5],
   ["--color-text", "--color-code-error-line", 4.5],
   ["--color-code-string", "--color-code-error-line", 4.5],
+  // lesson feedback panel (docs/05-f3-mvp0.md §13.3): body text and the tone-coloured title
+  ["--color-warning", "--color-surface", 4.5],
+  ["--color-text", "--color-success-soft", 4.5],
+  ["--color-text", "--color-warning-soft", 4.5],
+  ["--color-text", "--color-danger-soft", 4.5],
+  ["--color-success", "--color-success-soft", 4.5],
+  ["--color-warning", "--color-warning-soft", 4.5],
+  ["--color-danger", "--color-danger-soft", 4.5],
   // non-text UI (borders, focus rings): WCAG 1.4.11 asks for 3:1
   ["--color-border", "--color-bg", 3],
   ["--color-focus", "--color-bg", 3],

@@ -1,0 +1,33 @@
+id = "ex:vars.reassign/give-new-value"
+concept = "vars.reassign"
+type = "code"
+difficulty = "easy"
+title = "Change the pet"
+prompt = """
+The program prints `pet`, then prints it again. Add one line in the middle so that `pet`
+gets the value of `new_pet` before the second `print`.
+
+For example, when `pet = "cat"` and `new_pet = "dog"`, the program prints:
+
+    cat
+    dog
+
+Your program must work for **any** two pets.
+"""
+
+[check]
+kind = "program-with-inputs"
+inputs = ["pet", "new_pet"]
+tests = [{ pet = "cat", new_pet = "dog" }, { pet = "goldfish", new_pet = "hamster" }]
+random = { count = 6, types = { pet = "str", new_pet = "str" } }
+
+[[hints]]
+text = "To give a variable a new value, write its name, then `=`, then the new value."
+
+[[hints]]
+text = "The variable that changes goes on the **left**: `pet = new_pet`."
+
+[[misconceptions]]
+id = "mc.assign-direction"
+program = "wrong/swapped-sides.py"
+message = "`new_pet = pet` changes `new_pet`, not `pet`. The variable on the left of `=` is the one that gets the new value: write `pet = new_pet`."

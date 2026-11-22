@@ -1,0 +1,65 @@
+{
+  "grader": 1,
+  "id": "ex:vars.reassign/give-new-value",
+  "misconceptions": {
+    "mc.assign-direction": {
+      "error": null,
+      "failed": {
+        "actual": "cat\ncat\n",
+        "error": null,
+        "expected": "cat\ndog\n",
+        "inputs": {
+          "new_pet": "dog",
+          "pet": "cat"
+        }
+      },
+      "grader": 1,
+      "kind": "program-with-inputs",
+      "misconception": {
+        "id": "mc.assign-direction",
+        "message": "`new_pet = pet` changes `new_pet`, not `pet`. The variable on the left of `=` is the one that gets the new value: write `pet = new_pet`."
+      },
+      "passed": false,
+      "problem": "wrong-output",
+      "seed": 1,
+      "tests_passed": 0,
+      "tests_total": 8
+    }
+  },
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 8,
+    "tests_total": 8
+  },
+  "starter": {
+    "error": null,
+    "failed": {
+      "actual": "cat\ncat\n",
+      "error": null,
+      "expected": "cat\ndog\n",
+      "inputs": {
+        "new_pet": "dog",
+        "pet": "cat"
+      }
+    },
+    "grader": 1,
+    "kind": "program-with-inputs",
+    "misconception": {
+      "id": "mc.assign-direction",
+      "message": "`new_pet = pet` changes `new_pet`, not `pet`. The variable on the left of `=` is the one that gets the new value: write `pet = new_pet`."
+    },
+    "passed": false,
+    "problem": "wrong-output",
+    "seed": 1,
+    "tests_passed": 0,
+    "tests_total": 8
+  }
+}

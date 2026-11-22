@@ -1,0 +1,20 @@
+---
+import Base from "../../layouts/Base.astro";
+import PathIsland from "../../components/PathIsland.svelte";
+import { t } from "@educrs/i18n";
+import { bundle, lessonById, lessonHref } from "../../lib/content.ts";
+
+const modules = bundle.path.map((m) => ({
+  id: m.module,
+  title: m.title,
+  nodes: m.lessons.map((id) => ({ lessonId: id, title: lessonById(id).title, href: lessonHref(lessonById(id)) })),
+}));
+---
+
+<Base title={`${t("path.title")} · Learn Python`}>
+  <h1 class="text-center text-3xl font-bold tracking-tight">{t("path.title")}</h1>
+  <p class="mt-2 text-center text-muted">{t("path.lead")}</p>
+  <div class="mt-10">
+    <PathIsland client:load modules={modules} path={bundle.path} />
+  </div>
+</Base>

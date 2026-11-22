@@ -11,4 +11,4 @@ separated by a comma.
 """
 
 [option_misconceptions]
-"first last" = "mc.quoted-name"
+"first last" = { id = "mc.quoted-name", message = "`first` and `last` have no quotes, so they are variable names. Python prints the values stored in them, not the names." }

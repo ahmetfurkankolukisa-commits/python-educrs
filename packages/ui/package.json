@@ -2,7 +2,7 @@
   "name": "@educrs/ui",
   "private": true,
   "type": "module",
-  "description": "Design system: tokens, themes, wrapped components (plan \u00a72.4). The only place allowed to import third-party UI libraries.",
+  "description": "Design system: tokens, themes, wrapped components (plan §2.4). The only place allowed to import third-party UI libraries.",
   "exports": {
     ".": "./src/index.ts",
     "./tokens.css": "./src/tokens.css",
@@ -37,5 +37,8 @@
     "svelte-check": "4.7.8",
     "typescript": "6.0.3",
     "vite": "8.3.8"
-  }
+  },
+  "sideEffects": [
+    "*.css"
+  ]
 }

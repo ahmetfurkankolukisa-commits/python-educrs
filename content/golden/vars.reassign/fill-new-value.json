@@ -1,0 +1,28 @@
+{
+  "answer": "\"blue\"",
+  "grader": 1,
+  "id": "ex:vars.reassign/fill-new-value",
+  "outcomes": {
+    "\"blue\"": {
+      "error": null,
+      "stdout": "blue\n"
+    },
+    "\"red\"": {
+      "error": null,
+      "stdout": "red\n"
+    },
+    "blue": {
+      "error": {
+        "lineno": 2,
+        "message": "name 'blue' is not defined",
+        "name": "blue",
+        "offset": null,
+        "text": null,
+        "traceback": "Traceback (most recent call last):\n  File \"/main.py\", line 2, in <module>\nNameError: name 'blue' is not defined\n",
+        "type": "NameError"
+      },
+      "stdout": ""
+    }
+  },
+  "python": "3.14"
+}

@@ -44,6 +44,9 @@ export interface LanguageRuntime {
 
 // ------------------------------------------------------------------ persistence & sync
 export interface LocalStore {
+  /** Stable random id of this device/browser profile, created on first use (event `dev`). */
+  deviceId(): Promise<string>;
+  /** Idempotent: appending an event whose id is already stored changes nothing (G-Set). */
   append(events: readonly StoredEvent[]): Promise<void>;
   all(): Promise<StoredEvent[]>;
   unsynced(): Promise<StoredEvent[]>;
