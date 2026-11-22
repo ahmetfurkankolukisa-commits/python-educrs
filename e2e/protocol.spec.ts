@@ -136,7 +136,8 @@ const strip = (g: Record<string, unknown> | null) => {
 };
 
 test.describe("browser grading matches the CI golden files exactly", () => {
-  for (const ex of bundle.exercises.filter((e) => e.type !== "predict-output")) {
+  // predict-output and fill-gap are graded in the app (no Python); code and verbatim go through the sandbox.
+  for (const ex of bundle.exercises.filter((e) => e.type === "code" || e.type === "verbatim")) {
     test(ex.id, async ({ page }) => {
       await ready(page);
       const g = golden(ex.id);

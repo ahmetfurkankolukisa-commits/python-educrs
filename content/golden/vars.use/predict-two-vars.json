@@ -1,0 +1,10 @@
+{
+  "answer": "Ada Lovelace",
+  "grader": 1,
+  "id": "ex:vars.use/predict-two-vars",
+  "outcome": {
+    "error": null,
+    "stdout": "Ada Lovelace\n"
+  },
+  "python": "3.14"
+}

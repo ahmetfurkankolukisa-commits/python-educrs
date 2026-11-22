@@ -65,6 +65,50 @@
       "type": "predict-output"
     },
     {
+      "concept": "vars.use",
+      "contentHash": "b6d5c4cccc6981e4",
+      "difficulty": "easy",
+      "fill": {
+        "answer": "name",
+        "expected_output": "Hello, Ada\n",
+        "explanation": "Without quotes, Python uses the value stored in the variable `name`.",
+        "template": "name = \"Ada\"\nprint(\"Hello,\", ____)",
+        "tile_feedback": {
+          "\"name\"": {
+            "output": "Hello, name\n"
+          },
+          "Name": {
+            "error": "NameError",
+            "explanation": {
+              "id": "name.case",
+              "lineno": 2,
+              "params": {
+                "name": "Name",
+                "suggestion": "name"
+              }
+            }
+          }
+        },
+        "tile_misconceptions": {
+          "\"name\"": {
+            "id": "mc.quoted-name",
+            "message": "With quotes, Python prints the word name itself. Without them, it uses the value stored in the variable."
+          }
+        },
+        "tiles": [
+          "name",
+          "\"name\"",
+          "Name"
+        ]
+      },
+      "hints": [],
+      "id": "ex:vars.use/fill-print-name",
+      "prompt": "Fill the gap so the program prints `Hello, Ada`.",
+      "source": "original",
+      "title": "Print the name",
+      "type": "fill-gap"
+    },
+    {
       "check": {
         "inputs": [
           "name"
@@ -111,9 +155,62 @@
       "starter": "name = \"Ada\"\n",
       "title": "Greet someone by name",
       "type": "code"
+    },
+    {
+      "concept": "vars.use",
+      "contentHash": "6bff0524e119ad85",
+      "difficulty": "easy",
+      "hints": [],
+      "id": "ex:vars.use/predict-two-vars",
+      "predict": {
+        "answer": "Ada Lovelace",
+        "explanation": "`print` shows the **values** of `first` and `last`, separated by a space, because they are\nseparated by a comma.\n",
+        "option_misconceptions": {
+          "first last": "mc.quoted-name"
+        },
+        "options": [
+          "Ada Lovelace",
+          "first last",
+          "AdaLovelace",
+          "Error"
+        ],
+        "program": "first = \"Ada\"\nlast = \"Lovelace\"\nprint(first, last)\n"
+      },
+      "prompt": "What will this program print?",
+      "source": "original",
+      "title": "Two variables in one print",
+      "type": "predict-output"
     }
   ],
   "grader": 1,
+  "lessons": [
+    {
+      "concept": "vars.use",
+      "contentHash": "cdc07468bd3786db",
+      "id": "lesson:vars.use",
+      "steps": [
+        {
+          "example": "name = \"Ada\"\nprint(name)\nprint(\"name\")",
+          "example_output": "Ada\nname\n",
+          "kind": "explain",
+          "text": "When Python sees a variable's name in your code, it uses the **value** stored in that variable.\nWords inside quotes are just text, so `\"name\"` and `name` mean different things."
+        },
+        {
+          "id": "ex:vars.use/predict-two-vars",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.use/fill-print-name",
+          "kind": "exercise"
+        },
+        {
+          "id": "ex:vars.use/greet-by-name",
+          "kind": "exercise"
+        }
+      ],
+      "title": "Using variables"
+    }
+  ],
   "python": "3.14",
   "schema": 1
 }

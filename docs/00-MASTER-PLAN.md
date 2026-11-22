@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.18)
+# Python Öğrenme Sistemi — Ana Plan (v0.19)
 
+> v0.19: **F3.2b tamamlandı:** `fill-gap` türü (her kutucuk çalıştırılıyor, belirsiz soru CI'da reddediliyor, yanlış kutucuk geri bildirimi otomatik) ve ders manifestoları (adımlar, kurallar, örnek çıktıları önceden hesaplanıyor). İlk ders: `vars.use`.
 > v0.18: **K18:** Ders adım adım akan kartlara dönüştü (Duolingo tarzı etkileşim kalıpları, kendi görsel kimliğimizle). Oyunlaştırmanın temeli (XP, seri, günlük hedef, öğrenme yolu, ders sonu ekranı) F7'den MVP-0'a alındı. Yeni alıştırma türü `fill-gap`. Ayrıntılar `docs/05-f3-mvp0.md` §13. Can/kalp, mağaza ve ligler yine yok (§3.5.1).
 > v0.17: **F3.3 tamamlandı:** hata açıklayıcısı v1. 18 yapısal kural, öğrenciye i18n üzerinden sade İngilizce açıklama. Hem "Kontrol Et" hem "Çalıştır" hatalarında gösteriliyor. Python testleri artık Pyodide'de de CI'da koşuyor (43 test).
 > v0.16: **F3.2 tamamlandı:** tek grader (`packages/grader/educrs_grader.py`) hem tarayıcıda hem CI'da çalışıyor; içerik hattı alıştırmaları Pyodide'de çalıştırıp paketi ve golden dosyalarını üretiyor, CI'da CPython 3.14 aynı sonucu vermek zorunda; e2e'de tarayıcı notu golden dosyalarla birebir aynı. Hata fırlatan referans çözüm artık içerik hatası. Notlandırma zaman aşımı worker'ın açılışını da kapsıyor (kararsız test kök nedeni). iPhone emülasyonundaki kararsız testlerin kök nedeni gerçek bir iOS sorunu çıktı: 16 px altı form alanları odaklanınca sayfa yakınlaşıyor. Dar ekranlarda alanlar artık 16 px.

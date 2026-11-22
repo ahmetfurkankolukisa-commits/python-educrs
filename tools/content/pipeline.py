@@ -29,14 +29,16 @@ import educrs_grader as grader  # noqa: E402
 
 ID_RE = re.compile(r"^ex:([a-z][a-z0-9]*(?:\.[a-z0-9][a-z0-9-]*)+)/([a-z0-9][a-z0-9-]*)$")
 SOURCE_RE = re.compile(r"^(original|futurecoder@[0-9a-f]{7,40})$")
-TYPES = {"code", "verbatim", "predict-output"}
+TYPES = {"code", "verbatim", "predict-output", "fill-gap"}
 DIFFICULTIES = {"easy", "medium", "hard"}
 CHECK_KINDS = {"stdout", "program-with-inputs"}
 RANDOM_TYPES = {"str", "int", "bool"}
 VALIDATION_SEEDS = range(1, 11)  # the solution must pass for every one of these
 GOLDEN_SEED = 1
 ERROR_OPTION = "Error"
-MIN_HINTS = {"code": 2, "verbatim": 1, "predict-output": 0}
+MIN_HINTS = {"code": 2, "verbatim": 1, "predict-output": 0, "fill-gap": 0}
+GAP = "____"
+LESSON_MIN_EXERCISES = 3
 PYTHON = "%d.%d" % sys.version_info[:2]
 
 
@@ -142,7 +144,7 @@ def build_entry(root, path, concepts, misconceptions, report):
         target = read_text(folder, d.get("target", "target.py"), where, report)
         entry["starter"] = read_text(folder, d["starter"], where, report) if "starter" in d else ""
         entry["check"] = {"kind": "verbatim", "target": target}
-    else:  # predict-output
+    elif etype == "predict-output":
         program = read_text(folder, d.get("program", "program.py"), where, report)
         options = d.get("options")
         if not isinstance(options, list) or len(options) < 2 or not all(isinstance(o, str) for o in options):
@@ -165,7 +167,45 @@ def build_entry(root, path, concepts, misconceptions, report):
             "program": program, "options": options, "option_misconceptions": dict(sorted(om.items())),
             "explanation": _str(d, "explanation", where, report),
         }
+    else:  # fill-gap (docs/05-f3-mvp0.md §13.4)
+        entry["fill"] = _fill_gap(d, misconceptions, where, report)
     return entry
+
+
+def _fill_gap(d, catalog, where, report):
+    template = _str(d, "template", where, report)
+    if template is not None and template.count(GAP) != 1:
+        report.error(where, "bad-gap", f"template must contain exactly one {GAP}")
+    tiles = d.get("tiles")
+    if not isinstance(tiles, list) or len(tiles) < 2 or not all(isinstance(t, str) and t.strip() for t in tiles):
+        report.error(where, "bad-tiles", "tiles must list at least 2 non-empty strings")
+        tiles = []
+    if len(set(tiles)) != len(tiles):
+        report.error(where, "duplicate-tiles", "tiles must be distinct")
+    answer = d.get("answer")
+    if answer not in tiles:
+        report.error(where, "answer-not-in-tiles", "answer must be one of the tiles")
+    tm = d.get("tile_misconceptions", {})
+    clean = {}
+    if not isinstance(tm, dict):
+        report.error(where, "bad-tile-misconceptions", "tile_misconceptions must map a tile to { id, message }")
+        tm = {}
+    for tile, v in tm.items():
+        if tile not in tiles:
+            report.error(where, "unknown-tile", f"tile_misconceptions refers to {tile!r}, which is not a tile")
+        if tile == answer:
+            report.error(where, "correct-tile-has-misconception", "the answer tile cannot be tagged with a misconception")
+        if not (isinstance(v, dict) and isinstance(v.get("id"), str) and isinstance(v.get("message"), str) and v["message"].strip()):
+            report.error(where, "bad-tile-misconceptions", f"{tile!r}: expected {{ id = \"mc.…\", message = \"…\" }}")
+            continue
+        if v["id"] not in catalog:
+            report.error(where, "unknown-misconception", f"{v['id']!r} is not in the concepts.toml catalog")
+        clean[tile] = {"id": v["id"], "message": v["message"].strip()}
+    return {
+        "template": template, "tiles": tiles, "answer": answer,
+        "explanation": _str(d, "explanation", where, report),
+        "tile_misconceptions": dict(sorted(clean.items())),
+    }
 
 
 def _check(c, where, report):
@@ -228,6 +268,8 @@ def execute(entry, report):
     try:
         if entry["type"] == "predict-output":
             return _execute_predict(entry, report)
+        if entry["type"] == "fill-gap":
+            return _execute_fill(entry, report)
         golden = {}
         ref = entry["solution"] if entry["type"] == "code" else entry["check"]["target"]
         for seed in VALIDATION_SEEDS:
@@ -259,16 +301,45 @@ def execute(entry, report):
         return None
 
 
+def run_program(source):
+    """Outcome of a whole program, including the case where it does not even compile."""
+    try:
+        code = compile(source, "/main.py", "exec", dont_inherit=True)
+    except SyntaxError as exc:
+        return {"stdout": "", "error": grader.error_info(exc, "/main.py")}
+    return grader.run(code, "/main.py")
+
+
+def _execute_fill(entry, report):
+    """Run the template with EVERY tile. The answer must run cleanly and no other tile may give the
+    same result (otherwise the question is ambiguous). Feedback for wrong tiles is computed here."""
+    eid, f = entry["id"], entry["fill"]
+    outcomes = {t: run_program(f["template"].replace(GAP, t)) for t in f["tiles"]}
+    ans = outcomes[f["answer"]]
+    if ans["error"]:
+        report.error(eid, "answer-raises", f"the program with the answer tile raises {ans['error']['type']}")
+        return None
+    feedback = {}
+    for tile, o in outcomes.items():
+        if tile == f["answer"]:
+            continue
+        if grader.same_outcome(o, ans):
+            report.error(eid, "ambiguous-tiles", f"tile {tile!r} gives the same result as the answer {f['answer']!r}")
+        if o["error"]:
+            program = f["template"].replace(GAP, tile)
+            feedback[tile] = {"error": o["error"]["type"], "explanation": grader.educrs_explain.explain(o["error"], program)}
+        else:
+            feedback[tile] = {"output": o["stdout"]}
+    f["expected_output"] = ans["stdout"]
+    f["tile_feedback"] = dict(sorted(feedback.items()))
+    return {"answer": f["answer"], "outcomes": outcomes}
+
+
 def _execute_predict(entry, report):
     eid, p = entry["id"], entry["predict"]
     if p["program"] is None:
         return None
-    try:
-        code = compile(p["program"], "/main.py", "exec", dont_inherit=True)
-    except SyntaxError as exc:
-        outcome = {"stdout": "", "error": grader.error_info(exc, "/main.py")}
-    else:
-        outcome = grader.run(code, "/main.py")
+    outcome = run_program(p["program"])
     answer = ERROR_OPTION if outcome["error"] else grader.normalise(outcome["stdout"])
     normalised = {grader.normalise(o): o for o in p["options"]}
     if answer not in normalised:
@@ -283,6 +354,82 @@ def _execute_predict(entry, report):
 def content_hash(entry):
     data = {k: v for k, v in entry.items() if k != "contentHash"}
     return hashlib.sha256(json.dumps(data, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:16]
+
+
+# ------------------------------------------------------------------ lessons (§13.2)
+def build_lessons(root, entries, concepts, report):
+    lroot = root / "content" / "en" / "lessons"
+    paths = sorted(lroot.glob("*.toml")) if lroot.is_dir() else []
+    by_id = {e["id"]: e for e in entries}
+    used = {}
+    lessons = []
+    for path in paths:
+        where = str(path.relative_to(root))
+        try:
+            with open(path, "rb") as fh:
+                d = tomllib.load(fh)
+        except tomllib.TOMLDecodeError as exc:
+            report.error(where, "toml", str(exc))
+            continue
+        concept = _str(d, "concept", where, report)
+        title = _str(d, "title", where, report)
+        if concept and concept not in concepts:
+            report.error(where, "unknown-concept", f"concept {concept!r} is not in concepts.toml")
+        if concept and path.stem != concept:
+            report.error(where, "lesson-file-mismatch", f"file must be named {concept}.toml")
+        steps = d.get("steps")
+        if not isinstance(steps, list) or not steps:
+            report.error(where, "no-steps", "a lesson needs [[steps]]")
+            continue
+        out, exercises = [], 0
+        for i, st in enumerate(steps, 1):
+            kind = st.get("kind") if isinstance(st, dict) else None
+            if kind == "explain":
+                text = st.get("text")
+                if not isinstance(text, str) or not text.strip():
+                    report.error(where, "bad-step", f"step {i}: explain needs a non-empty `text`")
+                    continue
+                step = {"kind": "explain", "text": text.strip()}
+                example = st.get("example")
+                if example is not None:
+                    if not isinstance(example, str) or not example.strip():
+                        report.error(where, "bad-step", f"step {i}: `example` must be a non-empty string")
+                    else:
+                        o = run_program(example)
+                        if o["error"]:
+                            report.error(where, "example-raises", f"step {i}: example raises {o['error']['type']}")
+                        step.update(example=example, example_output=o["stdout"])
+                out.append(step)
+            elif kind == "exercise":
+                eid = st.get("id")
+                e = by_id.get(eid)
+                if e is None:
+                    report.error(where, "unknown-exercise", f"step {i}: no exercise {eid!r}")
+                elif e["concept"] != concept:
+                    report.error(where, "exercise-wrong-concept", f"step {i}: {eid} belongs to {e['concept']}")
+                if eid in used:
+                    report.error(where, "exercise-reused", f"step {i}: {eid} is already used in {used[eid]}")
+                else:
+                    used[eid] = where
+                exercises += 1
+                out.append({"kind": "exercise", "id": eid})
+            else:
+                report.error(where, "bad-step-kind", f"step {i}: kind must be 'explain' or 'exercise'")
+        first = steps[0].get("kind") if isinstance(steps[0], dict) else None
+        last = steps[-1].get("kind") if isinstance(steps[-1], dict) else None
+        if first != "explain":
+            report.error(where, "first-step-not-explain", "a lesson starts with an explain step")
+        if last != "exercise":
+            report.error(where, "last-step-not-exercise", "a lesson ends with an exercise step")
+        if exercises < LESSON_MIN_EXERCISES:
+            report.error(where, "too-few-exercises", f"{exercises} exercise step(s); a lesson needs at least {LESSON_MIN_EXERCISES}")
+        lesson = {"id": f"lesson:{concept}", "concept": concept, "title": title, "steps": out}
+        lesson["contentHash"] = content_hash(lesson)
+        lessons.append(lesson)
+    with_lesson = {l["concept"] for l in lessons}
+    for c in sorted({e["concept"] for e in entries} - with_lesson):
+        report.warn(c, "no-lesson", "has exercises but no lesson manifest yet (F3.7)")
+    return sorted(lessons, key=lambda l: l["id"])
 
 
 # ------------------------------------------------------------------ build
@@ -313,9 +460,11 @@ def build(root):
     for c, n in sorted(per_concept.items()):
         if n < 5:
             report.warn(c, "coverage", f"{n} item(s); target is >= 5 per concept (F3.7)")
+    lessons = build_lessons(root, entries, concepts, report)
     bundle = {
         "schema": 1, "grader": grader.VERSION, "python": PYTHON,
         "exercises": sorted(entries, key=lambda e: e["id"]),
+        "lessons": lessons,
     }
     return bundle, goldens, report
 
