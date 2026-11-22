@@ -1,0 +1,24 @@
+concept = "vars.use"
+title = "Using variables"
+
+[[steps]]
+kind = "explain"
+text = """
+When Python sees a variable's name in your code, it uses the **value** stored in that variable.
+Words inside quotes are just text, so `"name"` and `name` mean different things.
+"""
+example = """name = "Ada"
+print(name)
+print("name")"""
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.use/predict-two-vars"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.use/fill-print-name"
+
+[[steps]]
+kind = "exercise"
+id = "ex:vars.use/greet-by-name"

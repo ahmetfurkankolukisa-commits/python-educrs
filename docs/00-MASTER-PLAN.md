@@ -1,5 +1,8 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.17)
+# Python Öğrenme Sistemi — Ana Plan (v0.20)
 
+> v0.20: **F3.4 tamamlandı:** CodeMirror editörü + mobil sembol çubuğu + Storybook. Bulgu: sıkı CSP CodeMirror'ın `<style>` elemanlarını engelliyordu ve editör stilsiz görünürken testler geçiyordu. Editör artık gölge kökte çalışıyor (CSP'de `'unsafe-inline'` stil yok, sadece `style-src-attr`). JS bütçesi üç kategoriye ayrıldı (ilk boyama 50 KB, adacıklar 60 KB, tembel 160 KB) ve hiçbir parçanın sayılmadan kalamayacağı kuralı eklendi. Her Storybook hikâyesi 3 temada axe ile taranıyor ve tarama her koşuda kendini test ediyor (`docs/05-f3-mvp0.md` §5, §8).
+> v0.19: **F3.2b tamamlandı:** `fill-gap` türü (her kutucuk çalıştırılıyor, belirsiz soru CI'da reddediliyor, yanlış kutucuk geri bildirimi otomatik) ve ders manifestoları (adımlar, kurallar, örnek çıktıları önceden hesaplanıyor). İlk ders: `vars.use`.
+> v0.18: **K18:** Ders adım adım akan kartlara dönüştü (Duolingo tarzı etkileşim kalıpları, kendi görsel kimliğimizle). Oyunlaştırmanın temeli (XP, seri, günlük hedef, öğrenme yolu, ders sonu ekranı) F7'den MVP-0'a alındı. Yeni alıştırma türü `fill-gap`. Ayrıntılar `docs/05-f3-mvp0.md` §13. Can/kalp, mağaza ve ligler yine yok (§3.5.1).
 > v0.17: **F3.3 tamamlandı:** hata açıklayıcısı v1. 18 yapısal kural, öğrenciye i18n üzerinden sade İngilizce açıklama. Hem "Kontrol Et" hem "Çalıştır" hatalarında gösteriliyor. Python testleri artık Pyodide'de de CI'da koşuyor (43 test).
 > v0.16: **F3.2 tamamlandı:** tek grader (`packages/grader/educrs_grader.py`) hem tarayıcıda hem CI'da çalışıyor; içerik hattı alıştırmaları Pyodide'de çalıştırıp paketi ve golden dosyalarını üretiyor, CI'da CPython 3.14 aynı sonucu vermek zorunda; e2e'de tarayıcı notu golden dosyalarla birebir aynı. Hata fırlatan referans çözüm artık içerik hatası. Notlandırma zaman aşımı worker'ın açılışını da kapsıyor (kararsız test kök nedeni). iPhone emülasyonundaki kararsız testlerin kök nedeni gerçek bir iOS sorunu çıktı: 16 px altı form alanları odaklanınca sayfa yakınlaşıyor. Dar ekranlarda alanlar artık 16 px.
 > v0.15: **F3.1 tamamlandı:** sandbox protokolü v1 (el sıkışma + origin izin listesi, mesajlar asla `"*"`'e gitmiyor), notlandırma her zaman taze worker'da (`worker_runs: 1` ile kanıtlı), önizlemeler sandbox'ı kullanabiliyor. e2e 72/72 (18 test × 4 tarayıcı).
@@ -44,6 +47,7 @@
 | K15 | F3 değerlendirmesi | **Dış kullanıcı testi yok.** Proje sahibi (İngilizcesi C1) MVP-0'ı kendisi dener. Bilinçli olarak kaybedilen: yeni başlayan sinyali (`docs/05-f3-mvp0.md` §9) |
 | K16 | İçerik incelemesi | Taslakları Claude yazar, proje sahibi örnekleyerek inceler. Doğruluk CI'da otomatik |
 | K17 | `shell.expressions` | M1'de ön tanıtım (`print(2 + 3)`), sayılar M3'te |
+| K18 | Oyunlaştırılmış akış | Ders **adım adım kartlar** (tek seferde tek adım, alttan geri bildirim paneli). XP, seri, günlük hedef, öğrenme yolu ve ders sonu ekranı **MVP-0'da**. Seviye, rozet, görev ve taç F7'de. Duolingo'dan sadece etkileşim kalıpları alınıyor, marka ve görsel değil. Can/kalp sistemi yok (`docs/05-f3-mvp0.md` §13) |
 
 ## 1. Temel İlkeler
 
@@ -321,7 +325,7 @@ Sürümler 22 Kasım 2026'da npm'den kontrol edildi.
 | Erişilebilirlik | Her hikâye `@axe-core/playwright` ile taranır. İhlal varsa build kırılır. |
 | **Kontrast matematiksel olarak garanti** | Birim test bütün metin ve arka plan token çiftlerinin WCAG kontrast oranını hesaplar (normal metin ≥ 4.5, büyük metin ≥ 3). Bir renk değişikliği kontrastı bozarsa test kırılır. |
 | Görsel regresyon | Playwright, hikâyelerin ekran görüntüsünü açık tema, koyu tema ve mobil boyutta karşılaştırır |
-| Performans bütçesi | **İlk boyamaya kadar** yüklenen JS ≤ 50 KB (gzip). Bu bütçeye **dahil olmayanlar** ilk boyamadan sonra tembel (lazy) yüklenir ve her birinin kendi bütçesi vardır: CodeMirror, Firebase SDK, Pyodide, görselleştirici, grafikler. Bu bütçeler F2'de ölçülüp sabitlenir. LCP < 2 sn (orta seviye mobil); CLS < 0.05 |
+| Performans bütçesi | **İlk boyamaya kadar** yüklenen JS ≤ 50 KB (gzip). Bu bütçeye **dahil olmayanlar** ilk boyamadan sonra tembel (lazy) yüklenir ve her birinin kendi bütçesi vardır: CodeMirror, Firebase SDK, Pyodide, görselleştirici, grafikler. Bu bütçeler F2'de ölçülüp sabitlenir. **F3.4:** sayfa başına üç kategori: ilk boyama ≤ 50 KB, adacıklar ≤ 60 KB, tembel ≤ 160 KB; `_astro/` altında hiçbir sayfadan erişilemeyen JS dosyası olursa bütçe kırmızıya döner (`docs/05-f3-mvp0.md` §5). LCP < 2 sn (orta seviye mobil); CLS < 0.05 |
 | Hareket hassasiyeti | `prefers-reduced-motion` açıkken bütün animasyonlar kapanır veya yumuşar (test edilir) |
 | Dokunma hedefleri | Etkileşimli öğeler ≥ 44×44 px |
 | Klavye | Bütün akışlar fareye dokunmadan tamamlanabilir (Playwright e2e) |
@@ -605,6 +609,8 @@ flowchart LR
 ```
 
 #### 3.5.3 Öğeler
+
+> **K18 (v0.18):** XP, seri (dondurma dahil), günlük hedef, öğrenme yolu ve ders sonu ekranı MVP-0'da (F3) uygulanıyor. Diğer öğeler F7'de.
 
 | Öğe | Açıklama |
 |---|---|
@@ -908,7 +914,7 @@ Herhangi bir adım kırmızıysa deploy olmaz. "Algoritma haritalarını tekrar 
 | **F4** | **Veriden öğren:** MVP bulgularıyla plan v0.6 | Planda değişen her karar bir bulguya dayanıyor |
 | **F5** | Tracer + görselleştirici (metin anlatımı dahil) + **ikinci alıştırma türü (`parsons`)** | M2 ve M7 görselleştiriciyle çalışıyor; `parsons` var olan koda dokunmadan eklendi |
 | **F6** | Öğrenci modeli (BKT/KT-IDEM + FSRS + seçici) + seviye belirleme testi | Simüle öğrencilerle seçici testleri; BKT simülasyon tablosu CI'da |
-| **F7** | Oyunlaştırma (§3.5) + sürümlü ödül kuralları + projeler | XP, seviye, seri, görev ve rozet motorları property testlerinden geçiyor; kural yükseltme testi (ödül hiçbir zaman azalmıyor); sade mod çalışıyor; ilk proje oynanabilir |
+| **F7** | Oyunlaştırmanın geri kalanı (§3.5): seviye, rozet kural motoru, günlük görevler, kavram taçları (BKT'ye bağlı), sürüm 2 ödül kuralları + projeler. **Temel öğeler K18 ile F3'e taşındı.** | XP, seviye, seri, görev ve rozet motorları property testlerinden geçiyor; kural yükseltme testi (ödül hiçbir zaman azalmıyor); sade mod çalışıyor; ilk proje oynanabilir |
 | **F8** | Firebase Auth + senkron + **yasal konular** (gizlilik politikası, hesap silme, yaş politikası) | Saat kaymalı çok cihazlı yakınsama testi; Security Rules emulator testleri (hız sınırı dahil); hesap silme e2e testi |
 | **F9** | **Sınıf modu** (K13): sınıf oluşturma, katılım kodu, öğrencinin açık izniyle öğretmenin özet durumu görmesi | Security Rules emulator testleri: öğretmen ham olayları göremiyor, izin geri alınınca erişim anında kapanıyor |
 | **F10** | **YZ öğretmen** (K11): `TutorProvider` portu ile cihaz-üstü YZ ve Firebase AI Logic. Sokratik sistem talimatı, cevabı vermeme kuralı, kota dolunca kibarca kapanma, gizlilik bildirimi | Değerlendirme seti: 50 gerçek takılma senaryosunda öğretmen hiçbir zaman tam çözümü vermiyor; 13 yaş altı ve hesapsız kullanıcıda veri cihazdan çıkmıyor (testle kanıtlanacak); kota dolunca uygulama etkilenmiyor |
@@ -926,7 +932,7 @@ Herhangi bir adım kırmızıysa deploy olmaz. "Algoritma haritalarını tekrar 
 | JS bütçeleri ölçülüp sabitlendi | ✅ | İlk boyama **2,0 KB** / 50 KB, sayfanın tamamı **21,2 KB** / 120 KB (`tools/js-budget.mjs`) |
 | Kod ve içerik lisansları, katkı rehberi | ✅ | `LICENSE` (MIT), `content/LICENSE` (CC BY-SA 4.0, resmi metin), `CONTRIBUTING.md` |
 | Renovate | ✅ yapılandırma | `renovate.json`: haftalık, sürümler sabit, TS < 7 kuralı, Pyodide güncellemeleri ayrı grupta. GitHub uygulamasının kurulumu senin adımın. |
-| Storybook | ⏭ F3'e ertelendi | Henüz belgelenecek bileşen yok. İlk bileşenlerle birlikte kurulacak. |
+| Storybook | ⏭ F3'e ertelendi → ✅ F3.4 | F3.4'te ilk bileşenlerle kuruldu; her hikâye 3 temada axe ile taranıyor (`pnpm a11y:stories`). |
 | F1'den devreden: CPython–Pyodide eşliği | ✅ | `tools/tests/python_parity.mjs`: 22 örnek, CI'da Python 3.14 ile zorunlu |
 | F1'den devreden: iPhone emülasyonu | ✅ | e2e'de `mobile-webkit` projesi. Gerçek Safari/iOS hâlâ deploy sonrasında test edilecek. |
 

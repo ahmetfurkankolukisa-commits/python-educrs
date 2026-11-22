@@ -8,12 +8,14 @@
 - `pnpm run check` — everything CI runs. Needs `pnpm exec playwright install chromium firefox webkit` once.
 - `pnpm test` (vitest), `pnpm typecheck`, `pnpm lint:deps`, `pnpm test:boundaries`, `pnpm test:concepts`, `pnpm test:parity`, `pnpm budget`.
 - `pnpm build:e2e && pnpm e2e` — e2e against built sites with the real `_headers`.
+- `pnpm a11y:stories` — builds Storybook (`packages/ui`) and axe-scans every story in all 3 themes; it plants violations (light DOM + editor shadow root) each run and fails if axe misses them. New UI components ship with stories.
 - `pnpm docs:concepts` regenerates `docs/01-concept-graph.md` from `content/concepts.toml`. Never hand-edit the generated doc.
 - `pnpm content` regenerates `content/build/exercises.json` and `content/golden/**` by running every exercise in Pyodide (the browser's Python). Never hand-edit them; `pnpm test:content` fails if they are stale. Never run `tools/content/pipeline.py` WITHOUT `--check` under a CPython whose minor version differs from Pyodide's — it would write mismatching files.
 - One grader + explainer for browser and CI: `packages/grader/educrs_grader.py`, `educrs_explain.py`. Explainer rules look at structure (type, lineno, source, assigned names), never at exception messages; every rule needs a triggering program in `tools/tests/test_explain.py` and an `explain.<id>` message in `packages/i18n/locales/en.json` (tests enforce both). Expected output is never hand-written (it comes from running the solution); reference programs run before learner code.
 
 ## Non-negotiables
 - **Sandbox** (`apps/run`) must stay a different *site* from the app (`python-educrs-run.<account>.workers.dev`; workers.dev is on the PSL), CSP without `'unsafe-eval'`, `connect-src 'self'`, `frame-ancestors` = app origin only. Grading always runs in a fresh worker.
+- **Editor under CSP**: CodeMirror lives in a shadow root (`EditorView({root})`) so its styles go through `adoptedStyleSheets`; the CSP allows only `style-src-attr 'unsafe-inline'`, never inline `<style>`/`style-src 'unsafe-inline'`. A green test run does not prove the editor is styled — e2e asserts computed styles.
 - **Boundaries** (`.dependency-cruiser.cjs` + `tools/check-astro-imports.mjs`): `packages/core|i18n` import no frameworks; apps import UI libs only via `packages/ui`. Add a negative case to `tools/tests/test_boundaries.mjs` for every new rule.
 - **Event sourcing**: stored events are never rewritten; upcast on read; unknown types preserved; reward rules are versioned and append-only (plan §3.5.6).
 - **Versions are pinned.** TypeScript stays < 7 (Astro/Svelte checkers support 5–6). A Pyodide bump changes the Python version: re-run parity + content validation, and update CI's `python-version`.

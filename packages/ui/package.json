@@ -2,7 +2,40 @@
   "name": "@educrs/ui",
   "private": true,
   "type": "module",
-  "description": "Design system: tokens, themes, wrapped components (plan §2.4). The only place allowed to import third-party UI libraries.",
-  "exports": { ".": "./src/index.ts", "./tokens.css": "./src/tokens.css" },
-  "scripts": { "typecheck": "tsc -p tsconfig.json" }
+  "description": "Design system: tokens, themes, wrapped components (plan \u00a72.4). The only place allowed to import third-party UI libraries.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./CodeEditor.svelte": "./src/CodeEditor.svelte",
+    "./SymbolBar.svelte": "./src/SymbolBar.svelte"
+  },
+  "scripts": {
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook-static --quiet"
+  },
+  "svelte": "./src/index.ts",
+  "dependencies": {
+    "@codemirror/autocomplete": "6.20.4",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-python": "6.2.1",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.15",
+    "@educrs/i18n": "workspace:*",
+    "@lezer/highlight": "1.2.5"
+  },
+  "peerDependencies": {
+    "svelte": "^5.59.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.6.8",
+    "@storybook/svelte-vite": "10.6.8",
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "storybook": "10.6.8",
+    "svelte": "5.59.1",
+    "svelte-check": "4.7.8",
+    "typescript": "6.0.3",
+    "vite": "8.3.8"
+  }
 }

@@ -1,0 +1,14 @@
+id = "ex:vars.use/predict-two-vars"
+concept = "vars.use"
+type = "predict-output"
+difficulty = "easy"
+title = "Two variables in one print"
+prompt = "What will this program print?"
+options = ["Ada Lovelace", "first last", "AdaLovelace"]
+explanation = """
+`print` shows the **values** of `first` and `last`, separated by a space, because they are
+separated by a comma.
+"""
+
+[option_misconceptions]
+"first last" = "mc.quoted-name"

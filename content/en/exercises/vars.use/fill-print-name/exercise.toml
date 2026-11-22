@@ -1,0 +1,14 @@
+id = "ex:vars.use/fill-print-name"
+concept = "vars.use"
+type = "fill-gap"
+difficulty = "easy"
+title = "Print the name"
+prompt = "Fill the gap so the program prints `Hello, Ada`."
+template = """name = "Ada"
+print("Hello,", ____)"""
+tiles = ["name", '"name"', "Name"]
+answer = "name"
+explanation = "Without quotes, Python uses the value stored in the variable `name`."
+
+[tile_misconceptions]
+'"name"' = { id = "mc.quoted-name", message = "With quotes, Python prints the word name itself. Without them, it uses the value stored in the variable." }

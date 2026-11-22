@@ -67,6 +67,8 @@ jobs:
       - name: Build both sites with local origins
         run: pnpm build:e2e
       - run: pnpm e2e
+      - name: Design-system stories × 3 themes (axe, with planted-violation self-test)
+        run: pnpm a11y:stories
       - uses: actions/upload-artifact@v7
         if: failure()
         with:

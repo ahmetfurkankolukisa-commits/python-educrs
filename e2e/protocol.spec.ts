@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
+import { setCode } from "./helpers.ts";
 
 // Sandbox protocol v1 (docs/05-f3-mvp0.md §6) and grading in a fresh worker (§3.1).
 const RUN = "http://127.0.0.1:4322";
@@ -12,7 +13,7 @@ async function ready(page: Page, url = "/") {
 }
 
 async function run(page: Page, code: string) {
-  await page.locator("#code").fill(code);
+  await setCode(page, code);
   await page.getByRole("button", { name: "Run" }).click();
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready");
   return (await page.getByTestId("runner-output").textContent()) ?? "";
@@ -136,7 +137,8 @@ const strip = (g: Record<string, unknown> | null) => {
 };
 
 test.describe("browser grading matches the CI golden files exactly", () => {
-  for (const ex of bundle.exercises.filter((e) => e.type !== "predict-output")) {
+  // predict-output and fill-gap are graded in the app (no Python); code and verbatim go through the sandbox.
+  for (const ex of bundle.exercises.filter((e) => e.type === "code" || e.type === "verbatim")) {
     test(ex.id, async ({ page }) => {
       await ready(page);
       const g = golden(ex.id);
