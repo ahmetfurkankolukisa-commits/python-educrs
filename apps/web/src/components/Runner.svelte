@@ -106,6 +106,7 @@
 </script>
 
 <div class="rounded-lg border border-border bg-surface p-4">
+  <!-- Form fields stay at 16px on small screens: iOS Safari zooms the page into smaller fields on focus. -->
   <label for="code" class="sr-only">Python code</label>
   <textarea
     id="code"
@@ -115,7 +116,7 @@
     spellcheck="false"
     autocapitalize="off"
     autocomplete="off"
-    class="w-full resize-y rounded-md border border-border bg-code p-3 font-mono text-sm text-text"
+    class="w-full resize-y rounded-md border border-border bg-code p-3 font-mono text-base text-text sm:text-sm"
   ></textarea>
 
   <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -149,7 +150,7 @@
         bind:value={answer}
         autocomplete="off"
         placeholder={t("runner.inputLabel")}
-        class="min-h-11 flex-1 rounded-md border border-border bg-code px-3 font-mono text-sm text-text"
+        class="min-h-11 flex-1 rounded-md border border-border bg-code px-3 font-mono text-base text-text sm:text-sm"
       />
       <button type="submit" class="min-h-11 rounded-md bg-accent px-4 font-semibold text-on-accent">{t("runner.send")}</button>
     </form>

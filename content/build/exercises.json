@@ -1,0 +1,119 @@
+{
+  "exercises": [
+    {
+      "check": {
+        "kind": "verbatim",
+        "target": "print(\"I am learning Python!\")\n"
+      },
+      "concept": "intro.run-code",
+      "contentHash": "fb433c64ea593eff",
+      "difficulty": "easy",
+      "hints": [
+        "Copy each character: the word `print`, the round brackets, and the double quotes around the text."
+      ],
+      "id": "ex:intro.run-code/type-and-run",
+      "prompt": "Type this line into the editor **exactly as it is**, then press **Run**:\n\n```python\nprint(\"I am learning Python!\")\n```\n",
+      "source": "original",
+      "starter": "",
+      "title": "Your very first program",
+      "type": "verbatim"
+    },
+    {
+      "check": {
+        "kind": "stdout"
+      },
+      "concept": "print.basic",
+      "contentHash": "aab8fd8477ee9240",
+      "difficulty": "easy",
+      "hints": [
+        "Use the `print` function. The message goes inside the parentheses.",
+        "Text needs quotes around it: `print(\"...\")`. Check the comma and the exclamation mark too."
+      ],
+      "id": "ex:print.basic/hello-world",
+      "misconceptions": [],
+      "prompt": "Write a program that prints exactly this message:\n\n    Hello, world!\n",
+      "solution": "print(\"Hello, world!\")\n",
+      "source": "original",
+      "starter": "# Write your program below this line\n",
+      "title": "Say hello to the world",
+      "type": "code"
+    },
+    {
+      "concept": "vars.reassign",
+      "contentHash": "2cf91f0848d79d6c",
+      "difficulty": "medium",
+      "hints": [],
+      "id": "ex:vars.reassign/predict-copy",
+      "predict": {
+        "answer": "cat",
+        "explanation": "`b = a` makes `b` refer to the value `\"cat\"` at that moment. Giving `a` a new value later\ndoes not change `b` — so the program prints `cat`.\n",
+        "option_misconceptions": {
+          "dog": "mc.vars-auto-update"
+        },
+        "options": [
+          "cat",
+          "dog",
+          "a",
+          "b",
+          "Error"
+        ],
+        "program": "a = \"cat\"\nb = a\na = \"dog\"\nprint(b)\n"
+      },
+      "prompt": "What will this program print? Decide **before** you run it.",
+      "source": "original",
+      "title": "Does b change too?",
+      "type": "predict-output"
+    },
+    {
+      "check": {
+        "inputs": [
+          "name"
+        ],
+        "kind": "program-with-inputs",
+        "random": {
+          "count": 6,
+          "types": {
+            "name": "str"
+          }
+        },
+        "tests": [
+          {
+            "name": "Ada"
+          },
+          {
+            "name": "Grace Hopper"
+          }
+        ]
+      },
+      "concept": "vars.use",
+      "contentHash": "8774c4e1f9156266",
+      "difficulty": "easy",
+      "hints": [
+        "The name is already stored in the variable `name`. How do you print the value of a variable?",
+        "`print` can show several values separated by commas: `print(\"Hello,\", name)`."
+      ],
+      "id": "ex:vars.use/greet-by-name",
+      "misconceptions": [
+        {
+          "id": "mc.quoted-name",
+          "message": "Your program printed the word `name` itself. Remove the quotes around `name` to print what the variable holds.",
+          "program": "name = \"Ada\"\nprint(\"Hello,\", \"name\")\n"
+        },
+        {
+          "id": "mc.comma-vs-plus",
+          "message": "`+` glues text together without a space. Use a comma, `print(\"Hello,\", name)`, and Python adds the space for you.",
+          "program": "name = \"Ada\"\nprint(\"Hello,\" + name)\n"
+        }
+      ],
+      "prompt": "The program starts with a variable called `name`. Make it print `Hello,` followed by the name.\n\nFor example, when `name = \"Ada\"` the program prints:\n\n    Hello, Ada\n\nYour program must work for **any** name, not just Ada.\n",
+      "solution": "name = \"Ada\"\nprint(\"Hello,\", name)\n",
+      "source": "original",
+      "starter": "name = \"Ada\"\n",
+      "title": "Greet someone by name",
+      "type": "code"
+    }
+  ],
+  "grader": 1,
+  "python": "3.14",
+  "schema": 1
+}

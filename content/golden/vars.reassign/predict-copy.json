@@ -1,0 +1,10 @@
+{
+  "answer": "cat",
+  "grader": 1,
+  "id": "ex:vars.reassign/predict-copy",
+  "outcome": {
+    "error": null,
+    "stdout": "cat\n"
+  },
+  "python": "3.14"
+}

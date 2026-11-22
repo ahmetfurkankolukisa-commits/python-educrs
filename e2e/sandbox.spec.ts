@@ -126,6 +126,14 @@ test("other sites cannot embed the sandbox", async ({ page }) => {
   expect(await page.evaluate(() => (window as unknown as { gotReady: boolean }).gotReady)).toBe(false);
 });
 
+test("form fields are at least 16px on small screens (iOS Safari zooms smaller fields on focus)", async ({ page }) => {
+  await ready(page);
+  const width = page.viewportSize()?.width ?? 1280;
+  test.skip(width >= 640, "desktop layout may use smaller text");
+  const size = await page.locator("#code").evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  expect(size).toBeGreaterThanOrEqual(16);
+});
+
 for (const colorScheme of ["light", "dark"] as const) {
   test(`has no serious accessibility violations (${colorScheme})`, async ({ page }) => {
     await page.emulateMedia({ colorScheme });

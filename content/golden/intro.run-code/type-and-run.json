@@ -1,0 +1,18 @@
+{
+  "grader": 1,
+  "id": "ex:intro.run-code/type-and-run",
+  "misconceptions": {},
+  "python": "3.14",
+  "solution": {
+    "error": null,
+    "failed": null,
+    "grader": 1,
+    "kind": "verbatim",
+    "misconception": null,
+    "passed": true,
+    "problem": null,
+    "seed": 1,
+    "tests_passed": 1,
+    "tests_total": 1
+  }
+}

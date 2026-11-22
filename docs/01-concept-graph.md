@@ -25,7 +25,7 @@
 | Önkoşul bağlantısı | 251 |
 | En uzun önkoşul zinciri (derinlik) | 18 adım |
 | En geniş katman | 20 kavram (aynı anda açık olabilecek seçenek sayısının üst sınırı) |
-| Yanılgı | 32 (bunlarla bağlantılı 31 kavram) |
+| Yanılgı | 38 (bunlarla bağlantılı 36 kavram) |
 | Proje | 17 |
 | Tahmini alıştırma sayısı | ~865 (kavram başına 5) |
 
@@ -102,11 +102,11 @@ flowchart TD
 
 | Kimlik | Başlık | Önkoşullar | Katman | Yanılgılar |
 |---|---|---|---|---|
-| `print.basic` | print() | `intro.run-code` | 2 |  |
+| `print.basic` | print() | `intro.run-code` | 2 | `mc.case-insensitive` |
 | `comments.basic` | Comments | `intro.sequence` | 3 |  |
 | `shell.expressions` | Expressions have values | `print.basic` | 3 |  |
-| `strings.literal` | String literals | `print.basic` | 3 |  |
-| `print.multiple-args` | print() with several values | `strings.literal` | 4 |  |
+| `strings.literal` | String literals | `print.basic` | 3 | `mc.missing-quotes`, `mc.smart-quotes` |
+| `print.multiple-args` | print() with several values | `strings.literal` | 4 | `mc.comma-vs-plus` |
 | `strings.quotes-mixed` | Quotes inside strings | `strings.literal` | 4 |  |
 | `print.end-sep` | sep= and end= | `print.multiple-args` | 5 |  |
 | `strings.escape` | Escape sequences | `strings.quotes-mixed` | 5 |  |
@@ -115,8 +115,8 @@ flowchart TD
 
 | Kimlik | Başlık | Önkoşullar | Katman | Yanılgılar |
 |---|---|---|---|---|
-| `vars.assign` | Assignment | `strings.literal`, `intro.sequence` | 4 |  |
-| `vars.naming` | Naming rules | `vars.assign` | 5 |  |
+| `vars.assign` | Assignment | `strings.literal`, `intro.sequence` | 4 | `mc.assign-direction` |
+| `vars.naming` | Naming rules | `vars.assign` | 5 | `mc.shadow-builtin` |
 | `vars.use` | Using variables | `vars.assign` | 5 | `mc.quoted-name` |
 | `vars.name-error` | NameError | `vars.use`, `intro.errors-are-normal` | 6 |  |
 | `vars.reassign` | Reassignment | `vars.use` | 6 | `mc.vars-auto-update`, `mc.var-remembers-history` |
@@ -403,6 +403,12 @@ flowchart TD
 | `mc.is-vs-equals` | is and == mean the same thing. | `oop.state` | predict |
 | `mc.recursion-no-base` | A recursive function stops on its own. | `rec.basic` | exception |
 | `mc.generator-reusable` | A generator can be looped over again and again. | `gen.basic` | predict |
+| `mc.missing-quotes` | Text can be written without quotes: print(Hello). | `strings.literal` | exception |
+| `mc.smart-quotes` | Curly quotes copied from a document or phone keyboard work like plain quotes. | `strings.literal` | exception |
+| `mc.case-insensitive` | Python ignores capital letters, so Print works like print. | `print.basic` | exception |
+| `mc.shadow-builtin` | Any word can be a variable name, even print. | `vars.naming` | exception |
+| `mc.assign-direction` | Assignment works both ways, so "Ada" = name is the same as name = "Ada". | `vars.assign` | exception |
+| `mc.comma-vs-plus` | print("Hi" + name) and print("Hi", name) print exactly the same thing. | `print.multiple-args` | behavioral |
 
 ## 7. Projeler
 

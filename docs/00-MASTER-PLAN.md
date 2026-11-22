@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.15)
+# Python Öğrenme Sistemi — Ana Plan (v0.16)
 
+> v0.16: **F3.2 tamamlandı:** tek grader (`packages/grader/educrs_grader.py`) hem tarayıcıda hem CI'da çalışıyor; içerik hattı alıştırmaları Pyodide'de çalıştırıp paketi ve golden dosyalarını üretiyor, CI'da CPython 3.14 aynı sonucu vermek zorunda; e2e'de tarayıcı notu golden dosyalarla birebir aynı. Hata fırlatan referans çözüm artık içerik hatası. Notlandırma zaman aşımı worker'ın açılışını da kapsıyor (kararsız test kök nedeni). iPhone emülasyonundaki kararsız testlerin kök nedeni gerçek bir iOS sorunu çıktı: 16 px altı form alanları odaklanınca sayfa yakınlaşıyor. Dar ekranlarda alanlar artık 16 px.
 > v0.15: **F3.1 tamamlandı:** sandbox protokolü v1 (el sıkışma + origin izin listesi, mesajlar asla `"*"`'e gitmiyor), notlandırma her zaman taze worker'da (`worker_runs: 1` ile kanıtlı), önizlemeler sandbox'ı kullanabiliyor. e2e 72/72 (18 test × 4 tarayıcı).
 > v0.14: F3 kararları (K15–K17): dış kullanıcı testi yok, proje sahibi kendisi değerlendiriyor; içerik incelemesi örnekleyerek; `shell.expressions` M1'de ön tanıtım. F3 tasarımı onaylandı, F3.1 başladı.
 > v0.13: F3 (MVP-0) tasarımı yazıldı: `docs/05-f3-mvp0.md`. İçerik formatı, notlandırma her zaman taze worker'da, hata açıklayıcısı v1 (15 yapısal durum), editör + mobil sembol çubuğu, önizleme origin listesi + el sıkışma, yerel olay deposu, kullanıcı testi protokolü, 8 alt faz. 3 karar bekliyor (§12).

@@ -1,0 +1,19 @@
+id = "ex:print.basic/hello-world"
+concept = "print.basic"
+type = "code"
+difficulty = "easy"
+title = "Say hello to the world"
+prompt = """
+Write a program that prints exactly this message:
+
+    Hello, world!
+"""
+
+[check]
+kind = "stdout"
+
+[[hints]]
+text = "Use the `print` function. The message goes inside the parentheses."
+
+[[hints]]
+text = "Text needs quotes around it: `print(\"...\")`. Check the comma and the exclamation mark too."
