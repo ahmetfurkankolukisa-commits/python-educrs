@@ -1,0 +1,15 @@
+// Cloudflare Worker (static assets only — no script, so requests are free and unlimited).
+// Serves python.educrs.com. `dist/_headers` (CSP, noindex, caching) is applied by Cloudflare.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "python-educrs",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  // Production traffic must come only from python.educrs.com: the sandbox's frame-ancestors
+  // allows nothing else, and a second copy on workers.dev would be duplicate content.
+  "workers_dev": false,
+  "preview_urls": true
+}

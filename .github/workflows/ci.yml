@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+
+jobs:
+  checks:
+    name: Types, unit tests, content, architecture, budget
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - name: Enable pnpm (version from package.json)
+        run: corepack enable
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14" # must match Pyodide's Python (apps/run build-info.json)
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Concept graph (validator + negative tests)
+        run: pnpm test:concepts
+      - name: CPython vs Pyodide parity (enforced on equal minor versions)
+        run: pnpm test:parity
+        env:
+          PARITY_PYTHON: python
+      - name: Architecture boundaries
+        run: pnpm lint:deps
+      - name: Boundary rules actually fire (negative tests)
+        run: pnpm test:boundaries
+      - name: Production build
+        run: pnpm build
+      - name: JS budget
+        run: pnpm budget
+      - name: Cloudflare Worker configs (dry-run deploy)
+        run: pnpm deploy:check
+
+  e2e:
+    name: E2E (Chromium, Firefox, WebKit, iPhone)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - name: Build both sites with local origins
+        run: pnpm build:e2e
+      - run: pnpm e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

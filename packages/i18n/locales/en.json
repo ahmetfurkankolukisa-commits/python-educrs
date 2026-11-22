@@ -1,0 +1,20 @@
+{
+  "site.title": "Learn Python from zero",
+  "site.description": "A free, interactive Python course for complete beginners. Runs in your browser, works offline.",
+  "banner.earlyAccess": "Early access — we are building this in the open. Things will change.",
+  "home.heading": "Learn Python from zero",
+  "home.lead": "Write real Python in your browser from the very first minute. No installation, no account, no cost.",
+  "home.tryIt": "Try it now",
+  "home.tryIt.help": "Press Run. If the program asks a question, type your answer and press Enter.",
+  "runner.run": "Run",
+  "runner.stop": "Stop",
+  "runner.loading": "Loading Python…",
+  "runner.ready": "Python is ready",
+  "runner.inputLabel": "Your program is waiting for input",
+  "runner.send": "Send",
+  "runner.output": "Output",
+  "runner.interrupted": "Stopped.",
+  "runner.failed": "Python could not start in this browser: {reason}",
+  "footer.license": "Code: MIT · Content: CC BY-SA 4.0",
+  "footer.source": "Source code"
+}

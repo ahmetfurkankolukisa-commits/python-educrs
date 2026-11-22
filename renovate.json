@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Istanbul",
+  "schedule": ["before 6am on monday"],
+  "rangeStrategy": "pin",
+  "prConcurrentLimit": 5,
+  "dependencyDashboard": true,
+  "packageRules": [
+    { "matchPackageNames": ["pyodide"], "groupName": "pyodide", "description": "Pyodide upgrades change the Python version: all content must be re-validated (plan §9.2 N)." },
+    { "matchPackageNames": ["typescript"], "allowedVersions": "<7", "description": "Astro/Svelte checkers support TypeScript 5-6 only (checked 2026-11-22)." },
+    { "matchUpdateTypes": ["major"], "dependencyDashboardApproval": true }
+  ]
+}

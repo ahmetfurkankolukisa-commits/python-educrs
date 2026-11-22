@@ -1,0 +1,34 @@
+---
+import "../styles/global.css";
+import { t } from "@educrs/i18n";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = t("site.title"), description = t("site.description") } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Early access: keep out of search engines until MVP-0 passes user tests (plan F2). -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="min-h-dvh bg-bg text-text">
+    <div role="note" class="border-b border-border bg-surface px-4 py-2 text-center text-sm text-muted">
+      {t("banner.earlyAccess")}
+    </div>
+    <main class="mx-auto w-full max-w-3xl px-4 py-10">
+      <slot />
+    </main>
+    <footer class="mx-auto w-full max-w-3xl px-4 pb-10 text-sm text-muted">
+      {t("footer.license")}
+    </footer>
+  </body>
+</html>
