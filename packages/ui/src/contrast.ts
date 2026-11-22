@@ -36,6 +36,14 @@ export const REQUIRED_PAIRS: ReadonlyArray<readonly [string, string, number]> = 
   ["--color-danger", "--color-surface", 4.5],
   ["--color-xp", "--color-surface", 4.5],
   ["--color-streak", "--color-surface", 4.5],
+  // syntax highlighting must stay readable on the editor background
+  ["--color-code-keyword", "--color-code-bg", 4.5],
+  ["--color-code-string", "--color-code-bg", 4.5],
+  ["--color-code-comment", "--color-code-bg", 4.5],
+  ["--color-code-number", "--color-code-bg", 4.5],
+  ["--color-code-function", "--color-code-bg", 4.5],
+  ["--color-text", "--color-code-error-line", 4.5],
+  ["--color-code-string", "--color-code-error-line", 4.5],
   // non-text UI (borders, focus rings): WCAG 1.4.11 asks for 3:1
   ["--color-border", "--color-bg", 3],
   ["--color-focus", "--color-bg", 3],

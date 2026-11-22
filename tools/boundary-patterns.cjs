@@ -4,5 +4,5 @@
 const pkgs = (names) => `(^|node_modules/)(${names.join("|")})(/|$)`;
 module.exports = {
   INFRA: pkgs(["firebase", "@firebase", "pyodide", "svelte", "astro", "@astrojs", "dexie", "@codemirror", "codemirror", "bits-ui", "tailwindcss"]),
-  THIRD_PARTY_UI: pkgs(["bits-ui", "@lucide", "lucide-svelte", "svelte-sonner", "paneforge", "layerchart", "canvas-confetti", "@rive-app"]),
+  THIRD_PARTY_UI: pkgs(["bits-ui", "@lucide", "lucide-svelte", "svelte-sonner", "paneforge", "layerchart", "canvas-confetti", "@rive-app", "@codemirror", "codemirror", "@lezer"]),
 };

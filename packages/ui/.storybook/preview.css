@@ -1,0 +1,10 @@
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+#storybook-root {
+  padding: var(--space-4);
+  max-width: 40rem;
+}

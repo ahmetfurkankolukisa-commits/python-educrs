@@ -36,5 +36,18 @@
   "explain.name.undefined": "Python doesn't know {name}. Give it a value first, for example: {name} = ...",
   "explain.type.shadowed-builtin": "On line {line} you gave {name} a new value, so it stopped working as the built-in {name}. Use a different name for your variable.",
   "explain.runtime.generic": "Your program stopped with a {type}. Read the last line of the error message and look at the marked line.",
-  "runner.line": "line {n}"
+  "runner.line": "line {n}",
+  "editor.symbols": "Code symbols",
+  "editor.insertIndent": "Tab: insert indent (4 spaces)",
+  "editor.insertColon": "Insert colon",
+  "editor.insertBrackets": "Insert round brackets",
+  "editor.insertQuotes": "Insert double quotes",
+  "editor.insertSingleQuotes": "Insert single quotes",
+  "editor.insertEquals": "Insert equals sign",
+  "editor.insertComma": "Insert comma",
+  "editor.insertHash": "Insert comment sign",
+  "editor.insertSquare": "Insert square brackets",
+  "editor.cursorLeft": "Move cursor left",
+  "editor.cursorRight": "Move cursor right",
+  "editor.loading": "Loading the editor…"
 }

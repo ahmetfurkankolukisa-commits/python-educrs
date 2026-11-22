@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { editorReady, editorText, setCode } from "./helpers.ts";
 
 const RUN = "http://127.0.0.1:4322";
 const EVIL = "http://127.0.0.1:4323";
@@ -11,7 +12,7 @@ async function ready(page: Page) {
 
 /** Type code into the real editor, press Run, answer input() prompts, return the output text. */
 async function run(page: Page, code: string, inputs: string[] = []) {
-  await page.locator("#code").fill(code);
+  await setCode(page, code);
   await page.getByRole("button", { name: "Run" }).click();
   for (const value of inputs) {
     await page.locator("#stdin").fill(value);
@@ -45,7 +46,7 @@ test("runs print and input()", async ({ page }) => {
 
 test("stops an infinite loop and keeps working", async ({ page }) => {
   await ready(page);
-  await page.locator("#code").fill("while True:\n    pass");
+  await setCode(page, "while True:\n    pass");
   await page.getByRole("button", { name: "Run" }).click();
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "running");
   await page.getByRole("button", { name: "Stop" }).click();
@@ -153,12 +154,65 @@ test.describe("errors are explained in plain English (F3.3)", () => {
   });
 });
 
-test("form fields are at least 16px on small screens (iOS Safari zooms smaller fields on focus)", async ({ page }) => {
+test("the editor's text is at least 16px (iOS Safari zooms smaller fields on focus)", async ({ page }) => {
   await ready(page);
-  const width = page.viewportSize()?.width ?? 1280;
-  test.skip(width >= 640, "desktop layout may use smaller text");
-  const size = await page.locator("#code").evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  await editorReady(page);
+  const size = await page.locator(".cm-content").evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(size).toBeGreaterThanOrEqual(16);
+});
+
+test.describe("code editor (F3.4)", () => {
+  test("is actually styled by its theme (strict CSP must not strip CodeMirror's styles)", async ({ page }) => {
+    await ready(page);
+    await editorReady(page);
+    const style = await page.locator(".cm-editor").evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { radius: cs.borderTopLeftRadius, font: getComputedStyle(el.querySelector(".cm-scroller")!).fontFamily, position: cs.position };
+    });
+    expect(style.radius).toBe("8px"); // --radius-md from our theme
+    expect(style.font).toMatch(/mono|Menlo|monospace/i);
+    expect(style.position).toBe("relative"); // CodeMirror's own base theme
+  });
+
+  test("highlights the line an error points at, and clears it on edit", async ({ page }) => {
+    await ready(page);
+    await run(page, 'name = "Ada"\nprint(nmae)');
+    await expect(page.locator(".cm-line.cm-error-line")).toHaveText("print(nmae)");
+    const bg = await page.locator(".cm-line.cm-error-line").evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).not.toBe("rgba(0, 0, 0, 0)"); // the highlight is visible, not just a class name
+    await page.locator(".cm-content").click();
+    await page.keyboard.insertText(" ");
+    await expect(page.locator(".cm-error-line")).toHaveCount(0);
+  });
+
+  test("Ctrl/Cmd+Enter runs the program", async ({ page }) => {
+    await ready(page);
+    await setCode(page, 'print("shortcut")');
+    await page.keyboard.press("ControlOrMeta+Enter");
+    await expect(page.getByTestId("runner-output")).toHaveText("shortcut\n");
+  });
+
+  test("symbol bar inserts paired characters and keeps the cursor inside (touch devices)", async ({ page }, info) => {
+    test.skip(!info.project.use.hasTouch, "the symbol bar only appears on touch devices");
+    await ready(page);
+    await setCode(page, "");
+    await page.keyboard.insertText("print");
+    await page.getByRole("button", { name: "Insert round brackets" }).tap();
+    await page.getByRole("button", { name: "Insert double quotes" }).tap();
+    await page.keyboard.insertText("hi");
+    await expect.poll(() => editorText(page)).toBe('print("hi")');
+    // focus stays in the editor (it lives in a shadow root, so look inside it)
+    expect(await page.evaluate(() => !!document.activeElement?.shadowRoot?.activeElement?.closest(".cm-editor"))).toBe(true);
+    await page.getByRole("button", { name: "Run" }).tap();
+    await expect(page.getByTestId("runner-output")).toHaveText("hi\n");
+  });
+
+  test("no symbol bar on devices with a mouse", async ({ page }, info) => {
+    test.skip(!!info.project.use.hasTouch, "touch devices show the bar");
+    await ready(page);
+    await editorReady(page);
+    await expect(page.getByTestId("symbol-bar")).toHaveCount(0);
+  });
 });
 
 for (const colorScheme of ["light", "dark"] as const) {

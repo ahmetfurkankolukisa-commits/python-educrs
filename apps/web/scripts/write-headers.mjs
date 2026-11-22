@@ -37,6 +37,10 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' ${CF_ANALYTICS_SCRIPT} ${[...hashes].join(" ")}`.trim(),
   `style-src 'self' ${[...styleHashes].join(" ")}`.trim(),
+  // CodeMirror sets style ATTRIBUTES at runtime (line heights, cursor positions) whose values change
+  // constantly, so they can't be hashed. Allow attributes only: <style> elements and every script stay
+  // strict, and attribute styles can't use selectors (images are still limited by img-src).
+  "style-src-attr 'unsafe-inline'",
   "img-src 'self' data:",
   `frame-src ${RUN_ORIGIN}`,
   `connect-src 'self' ${CF_ANALYTICS_BEACON}`,

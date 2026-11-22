@@ -14,7 +14,7 @@ const uiRe = new RegExp(THIRD_PARTY_UI);
 const files = [];
 const walk = (dir) => {
   for (const d of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (["node_modules", "dist", ".astro"].includes(d.name)) continue;
+    if (["node_modules", "dist", "storybook-static", ".astro"].includes(d.name)) continue;
     const p = path.join(dir, d.name);
     if (d.isDirectory()) walk(p);
     else if (d.name.endsWith(".astro")) files.push(p);

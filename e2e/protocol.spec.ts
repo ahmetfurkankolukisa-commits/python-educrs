@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
+import { setCode } from "./helpers.ts";
 
 // Sandbox protocol v1 (docs/05-f3-mvp0.md §6) and grading in a fresh worker (§3.1).
 const RUN = "http://127.0.0.1:4322";
@@ -12,7 +13,7 @@ async function ready(page: Page, url = "/") {
 }
 
 async function run(page: Page, code: string) {
-  await page.locator("#code").fill(code);
+  await setCode(page, code);
   await page.getByRole("button", { name: "Run" }).click();
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready");
   return (await page.getByTestId("runner-output").textContent()) ?? "";

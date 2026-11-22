@@ -1,5 +1,6 @@
-# Python Öğrenme Sistemi — Ana Plan (v0.19)
+# Python Öğrenme Sistemi — Ana Plan (v0.20)
 
+> v0.20: **F3.4 tamamlandı:** CodeMirror editörü + mobil sembol çubuğu + Storybook. Bulgu: sıkı CSP CodeMirror'ın `<style>` elemanlarını engelliyordu ve editör stilsiz görünürken testler geçiyordu. Editör artık gölge kökte çalışıyor (CSP'de `'unsafe-inline'` stil yok, sadece `style-src-attr`). JS bütçesi üç kategoriye ayrıldı (ilk boyama 50 KB, adacıklar 60 KB, tembel 160 KB) ve hiçbir parçanın sayılmadan kalamayacağı kuralı eklendi. Her Storybook hikâyesi 3 temada axe ile taranıyor ve tarama her koşuda kendini test ediyor (`docs/05-f3-mvp0.md` §5, §8).
 > v0.19: **F3.2b tamamlandı:** `fill-gap` türü (her kutucuk çalıştırılıyor, belirsiz soru CI'da reddediliyor, yanlış kutucuk geri bildirimi otomatik) ve ders manifestoları (adımlar, kurallar, örnek çıktıları önceden hesaplanıyor). İlk ders: `vars.use`.
 > v0.18: **K18:** Ders adım adım akan kartlara dönüştü (Duolingo tarzı etkileşim kalıpları, kendi görsel kimliğimizle). Oyunlaştırmanın temeli (XP, seri, günlük hedef, öğrenme yolu, ders sonu ekranı) F7'den MVP-0'a alındı. Yeni alıştırma türü `fill-gap`. Ayrıntılar `docs/05-f3-mvp0.md` §13. Can/kalp, mağaza ve ligler yine yok (§3.5.1).
 > v0.17: **F3.3 tamamlandı:** hata açıklayıcısı v1. 18 yapısal kural, öğrenciye i18n üzerinden sade İngilizce açıklama. Hem "Kontrol Et" hem "Çalıştır" hatalarında gösteriliyor. Python testleri artık Pyodide'de de CI'da koşuyor (43 test).
@@ -324,7 +325,7 @@ Sürümler 22 Kasım 2026'da npm'den kontrol edildi.
 | Erişilebilirlik | Her hikâye `@axe-core/playwright` ile taranır. İhlal varsa build kırılır. |
 | **Kontrast matematiksel olarak garanti** | Birim test bütün metin ve arka plan token çiftlerinin WCAG kontrast oranını hesaplar (normal metin ≥ 4.5, büyük metin ≥ 3). Bir renk değişikliği kontrastı bozarsa test kırılır. |
 | Görsel regresyon | Playwright, hikâyelerin ekran görüntüsünü açık tema, koyu tema ve mobil boyutta karşılaştırır |
-| Performans bütçesi | **İlk boyamaya kadar** yüklenen JS ≤ 50 KB (gzip). Bu bütçeye **dahil olmayanlar** ilk boyamadan sonra tembel (lazy) yüklenir ve her birinin kendi bütçesi vardır: CodeMirror, Firebase SDK, Pyodide, görselleştirici, grafikler. Bu bütçeler F2'de ölçülüp sabitlenir. LCP < 2 sn (orta seviye mobil); CLS < 0.05 |
+| Performans bütçesi | **İlk boyamaya kadar** yüklenen JS ≤ 50 KB (gzip). Bu bütçeye **dahil olmayanlar** ilk boyamadan sonra tembel (lazy) yüklenir ve her birinin kendi bütçesi vardır: CodeMirror, Firebase SDK, Pyodide, görselleştirici, grafikler. Bu bütçeler F2'de ölçülüp sabitlenir. **F3.4:** sayfa başına üç kategori: ilk boyama ≤ 50 KB, adacıklar ≤ 60 KB, tembel ≤ 160 KB; `_astro/` altında hiçbir sayfadan erişilemeyen JS dosyası olursa bütçe kırmızıya döner (`docs/05-f3-mvp0.md` §5). LCP < 2 sn (orta seviye mobil); CLS < 0.05 |
 | Hareket hassasiyeti | `prefers-reduced-motion` açıkken bütün animasyonlar kapanır veya yumuşar (test edilir) |
 | Dokunma hedefleri | Etkileşimli öğeler ≥ 44×44 px |
 | Klavye | Bütün akışlar fareye dokunmadan tamamlanabilir (Playwright e2e) |
@@ -931,7 +932,7 @@ Herhangi bir adım kırmızıysa deploy olmaz. "Algoritma haritalarını tekrar 
 | JS bütçeleri ölçülüp sabitlendi | ✅ | İlk boyama **2,0 KB** / 50 KB, sayfanın tamamı **21,2 KB** / 120 KB (`tools/js-budget.mjs`) |
 | Kod ve içerik lisansları, katkı rehberi | ✅ | `LICENSE` (MIT), `content/LICENSE` (CC BY-SA 4.0, resmi metin), `CONTRIBUTING.md` |
 | Renovate | ✅ yapılandırma | `renovate.json`: haftalık, sürümler sabit, TS < 7 kuralı, Pyodide güncellemeleri ayrı grupta. GitHub uygulamasının kurulumu senin adımın. |
-| Storybook | ⏭ F3'e ertelendi | Henüz belgelenecek bileşen yok. İlk bileşenlerle birlikte kurulacak. |
+| Storybook | ⏭ F3'e ertelendi → ✅ F3.4 | F3.4'te ilk bileşenlerle kuruldu; her hikâye 3 temada axe ile taranıyor (`pnpm a11y:stories`). |
 | F1'den devreden: CPython–Pyodide eşliği | ✅ | `tools/tests/python_parity.mjs`: 22 örnek, CI'da Python 3.14 ile zorunlu |
 | F1'den devreden: iPhone emülasyonu | ✅ | e2e'de `mobile-webkit` projesi. Gerçek Safari/iOS hâlâ deploy sonrasında test edilecek. |
 

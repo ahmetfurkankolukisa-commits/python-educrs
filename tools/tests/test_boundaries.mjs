@@ -22,6 +22,7 @@ const CASES = [
   { name: "app .ts uses UI lib directly", file: "apps/web/src/__violation.ts", body: 'import "bits-ui";\nexport {};\n', rule: "ui-libs-only-via-packages-ui" },
   { name: "app .svelte uses UI lib directly", file: "apps/web/src/components/__Violation.svelte", body: '<script lang="ts">\n  import "bits-ui";\n</script>\n', rule: "ui-libs-only-via-packages-ui" },
   { name: "app .astro uses UI lib directly", file: "apps/web/src/components/__Violation.astro", body: '---\nimport "bits-ui";\n---\n<p>x</p>\n', rule: "ui-libs-only-via-packages-ui" },
+  { name: "app uses CodeMirror directly", file: "apps/web/src/__violation.ts", body: 'import "@codemirror/view";\nexport {};\n', rule: "ui-libs-only-via-packages-ui" },
   { name: "circular import", file: "packages/ui/src/__a.ts", body: 'import "./__b.ts";\nexport const a = 1;\n', extra: { "packages/ui/src/__b.ts": 'import "./__a.ts";\nexport const b = 1;\n' }, rule: "no-circular" },
 ];
 

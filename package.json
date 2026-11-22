@@ -18,10 +18,11 @@
     "lint:deps": "depcruise apps packages --config .dependency-cruiser.cjs && node tools/check-astro-imports.mjs",
     "test:boundaries": "node tools/tests/test_boundaries.mjs",
     "budget": "node tools/js-budget.mjs",
+    "a11y:stories": "pnpm --filter @educrs/ui build-storybook && node tools/storybook-a11y.mjs",
     "e2e": "playwright test",
     "build:e2e": "APP_ORIGIN=http://localhost:4321 PREVIEW_ORIGIN_REGEX='^http://localhost:4325$' FRAME_ANCESTORS_EXTRA='http://localhost:4325 http://localhost:4326' pnpm --filter run build && PUBLIC_RUN_ORIGIN=http://127.0.0.1:4322 pnpm --filter web build",
     "test:parity": "node tools/tests/python_parity.mjs",
-    "check": "pnpm typecheck && pnpm test && pnpm test:concepts && pnpm test:content && pnpm test:parity && pnpm lint:deps && pnpm test:boundaries && pnpm build && pnpm budget && pnpm deploy:check && pnpm build:e2e && pnpm e2e",
+    "check": "pnpm typecheck && pnpm test && pnpm test:concepts && pnpm test:content && pnpm test:parity && pnpm lint:deps && pnpm test:boundaries && pnpm build && pnpm budget && pnpm deploy:check && pnpm build:e2e && pnpm e2e && pnpm a11y:stories",
     "deploy:check": "WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config apps/run/wrangler.jsonc && WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config apps/web/wrangler.jsonc",
     "content": "node tools/content/run-pipeline.mjs",
     "test:content": "node tools/content/run-pipeline.mjs --check && python3 tools/content/pipeline.py --check && python3 -m unittest discover -s tools/tests -p 'test_grader.py' && python3 -m unittest discover -s tools/tests -p 'test_explain.py' && python3 -m unittest discover -s tools/tests -p 'test_content_pipeline.py' && node tools/tests/run-unittests-pyodide.mjs test_grader.py test_explain.py test_content_pipeline.py"

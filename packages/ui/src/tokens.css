@@ -21,6 +21,12 @@
   --color-streak: #c2410c;
   --color-code-bg: #f5f5f4;
   --color-focus: #1d4ed8;
+  --color-code-keyword: #6d28d9;
+  --color-code-string: #166534;
+  --color-code-comment: #57534e;
+  --color-code-number: #92400e;
+  --color-code-function: #1d4ed8;
+  --color-code-error-line: #fee2e2;
   color-scheme: light;
 }
 
@@ -39,6 +45,12 @@
     --color-streak: #fdba74;
     --color-code-bg: #0c0a09;
     --color-focus: #93c5fd;
+  --color-code-keyword: #c4b5fd;
+  --color-code-string: #86efac;
+  --color-code-comment: #a8a29e;
+  --color-code-number: #fdba74;
+  --color-code-function: #93c5fd;
+  --color-code-error-line: #450a0a;
     color-scheme: dark;
   }
 }
@@ -57,6 +69,12 @@
   --color-streak: #fdba74;
   --color-code-bg: #0c0a09;
   --color-focus: #93c5fd;
+  --color-code-keyword: #c4b5fd;
+  --color-code-string: #86efac;
+  --color-code-comment: #a8a29e;
+  --color-code-number: #fdba74;
+  --color-code-function: #93c5fd;
+  --color-code-error-line: #450a0a;
   color-scheme: dark;
 }
 
@@ -74,6 +92,12 @@
   --color-streak: #fdba74;
   --color-code-bg: #000000;
   --color-focus: #ffff00;
+  --color-code-keyword: #f0abfc;
+  --color-code-string: #4ade80;
+  --color-code-comment: #e7e5e4;
+  --color-code-number: #fdba74;
+  --color-code-function: #ffff00;
+  --color-code-error-line: #4c0519;
   color-scheme: dark;
 }
 

@@ -52,7 +52,7 @@ module.exports = {
     doNotFollow: { path: "node_modules" },
     // node_modules is NOT excluded: excluded modules vanish as dependency targets too,
     // which would silently disable the third-party rules. doNotFollow stops traversal instead.
-    exclude: { path: "(^|/)(dist|\\.astro)/|\\.test\\.ts$|^apps/run/(src|scripts)/" },
+    exclude: { path: "(^|/)(dist|storybook-static|\\.astro)/|\\.test\\.ts$|^apps/run/(src|scripts)/" },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: "tsconfig.base.json" },
     enhancedResolveOptions: {

@@ -2,6 +2,7 @@
   // Talks to the sandbox site (different site, plan §3.1). Trusts nothing it receives:
   // checks origin + source, accepts only known message types, renders output as text.
   import { catalog, t, type MessageKey } from "@educrs/i18n";
+  import { CodeEditor } from "@educrs/ui";
 
   // Inlined at build time; the build fails if it is missing (scripts/write-headers.mjs).
   const RUN_ORIGIN = import.meta.env.PUBLIC_RUN_ORIGIN ?? "";
@@ -119,28 +120,10 @@
     asking = null;
     answer = "";
   }
-
-  function onKeydown(ev: KeyboardEvent) {
-    if ((ev.metaKey || ev.ctrlKey) && ev.key === "Enter") {
-      ev.preventDefault();
-      run();
-    }
-  }
 </script>
 
 <div class="rounded-lg border border-border bg-surface p-4">
-  <!-- Form fields stay at 16px on small screens: iOS Safari zooms the page into smaller fields on focus. -->
-  <label for="code" class="sr-only">Python code</label>
-  <textarea
-    id="code"
-    bind:value={code}
-    onkeydown={onKeydown}
-    rows="6"
-    spellcheck="false"
-    autocapitalize="off"
-    autocomplete="off"
-    class="w-full resize-y rounded-md border border-border bg-code p-3 font-mono text-base text-text sm:text-sm"
-  ></textarea>
+  <CodeEditor bind:value={code} id="code" label="Python code" errorLine={explanation?.lineno ?? null} onRun={run} />
 
   <div class="mt-3 flex flex-wrap items-center gap-3">
     <button
