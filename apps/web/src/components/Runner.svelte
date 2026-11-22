@@ -17,6 +17,10 @@
   let answerInput = $state<HTMLInputElement>();
   let seq = 0;
   let currentRun: string | null = null;
+  let acked = false; // sandbox accepted our hello (protocol v1, docs/05-f3-mvp0.md §6)
+  const PROTOCOL = 1;
+  const HELLO_INTERVAL_MS = 250;
+  const HELLO_MAX_TRIES = 80; // ~20 s: the sandbox page itself may still be loading
 
   const isStr = (v: unknown): v is string => typeof v === "string";
 
@@ -24,6 +28,10 @@
     if (e.origin !== RUN_ORIGIN || !frame || e.source !== frame.contentWindow) return;
     const m = e.data as Record<string, unknown> | null;
     if (!m || typeof m !== "object" || !isStr(m.type)) return;
+    if (m.type === "hello-ack") {
+      acked = m.protocol === PROTOCOL;
+      return;
+    }
     if (m.type === "ready") {
       const caps = (m.caps ?? {}) as Record<string, unknown>;
       if (isStr(caps.fatal)) {
@@ -51,7 +59,21 @@
 
   $effect(() => {
     window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
+    // The sandbox only talks to an origin it has verified, so we introduce ourselves until it answers.
+    let tries = 0;
+    const timer = setInterval(() => {
+      if (acked) { clearInterval(timer); return; }
+      if (tries++ >= HELLO_MAX_TRIES) {
+        clearInterval(timer);
+        if (status === "loading") { status = "failed"; failReason = "the Python sandbox did not answer"; }
+        return;
+      }
+      frame?.contentWindow?.postMessage({ type: "hello", protocol: PROTOCOL }, RUN_ORIGIN);
+    }, HELLO_INTERVAL_MS);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("message", onMessage);
+    };
   });
 
   function run() {

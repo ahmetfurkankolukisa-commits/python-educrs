@@ -26,6 +26,7 @@ Cloudflare → **Workers & Pages → Create → Import a repository** → `pytho
 | Non-production branch deploy command | boş bırak (sandbox için önizleme gerekmiyor) |
 | Path / root directory | `/` |
 | Build variables | `NODE_VERSION` = `22.23.4` · `APP_ORIGIN` = `https://python.educrs.com` · `WRANGLER_SEND_METRICS` = `false` |
+| Önizleme izinleri (F3.1) | `PREVIEW_ORIGIN_REGEX` = `^https://[a-z0-9-]+-python-educrs\.ahmetfurkankolukisa\.workers\.dev$` · `FRAME_ANCESTORS_EXTRA` = `https://*.ahmetfurkankolukisa.workers.dev` |
 
 İlk deploy bitince Worker sayfasında görünen adresi kopyala, örneğin `https://python-educrs-run.<hesap>.workers.dev`. Bir sonraki adımda lazım olacak.
 
@@ -68,11 +69,13 @@ Tarayıcı konsolunda CSP uyarıları görebilirsin. Sebebi, Cloudflare'in sayfa
 - **Web Analytics** (`static.cloudflareinsights.com`): CSP'de izin verildi, çalışıyor.
 - **JavaScript Detections** (`/cdn-cgi/challenge-platform/...`, Bot Fight Mode'un parçası): CSP tarafından bilerek engelleniyor. Site etkilenmiyor. Konsoldaki uyarıyı kaldırmak istersen **Security → Bots** altından "JavaScript Detections"ı kapatabilirsin. ⚠️ Bu ayar bütün `educrs.com` alanını etkiler.
 
-## 5. Bilinen sınır: önizlemeler
+## 5. Önizlemeler (F3.1 ile çözüldü)
 
-PR önizlemeleri `*-python-educrs.<hesap>.workers.dev` adresinde açılıyor. Ama sandbox şu an sadece `https://python.educrs.com` tarafından gömülebiliyor, bu yüzden **önizlemelerde Python kutusu çalışmaz.**
-
-Çözüm F3'te: sandbox'a izin verilen origin listesi + el sıkışma protokolü. Bunu yaparken bir noktaya dikkat edilecek: önizleme adresiyle sandbox aynı `<hesap>.workers.dev` altında olduğu için **birbirleriyle aynı site** sayılırlar. Önizlemeler gerçek kullanıcı verisi taşımamalı.
+Uygulamanın PR önizlemeleri (`<sürüm>-python-educrs.ahmetfurkankolukisa.workers.dev`) artık sandbox'ı kullanabiliyor:
+- **El sıkışma:** Sandbox, kendisini gömen sayfanın origin'ini izin listesiyle karşılaştırıp bir kez kilitliyor. Mesajları asla `"*"` hedefine göndermiyor (`docs/05-f3-mvp0.md` §6).
+- **Gerekli ayar:** Bunun çalışması için sandbox Worker'ına yukarıdaki iki değişken (`PREVIEW_ORIGIN_REGEX`, `FRAME_ANCESTORS_EXTRA`) eklenmeli. Eklenmezse sadece `python.educrs.com` çalışır, önizlemelerde Python kutusu "Loading" durumunda kalır.
+- ⚠️ `FRAME_ANCESTORS_EXTRA`'daki joker karakter, hesabındaki bütün `workers.dev` adreslerinin sandbox'ı **gömebilmesine** izin veriyor. Ama sandbox'la **konuşabilmek** için `PREVIEW_ORIGIN_REGEX` desenine uymak gerekiyor.
+- ⚠️ Önizleme uygulaması ve sandbox aynı `<hesap>.workers.dev` altında olduğu için birbirleriyle **aynı site** sayılıyor. Önizlemeler gerçek kullanıcı verisi taşımamalı.
 
 ## 6. Firebase (henüz gerekmiyor)
 

@@ -19,7 +19,7 @@
     "test:boundaries": "node tools/tests/test_boundaries.mjs",
     "budget": "node tools/js-budget.mjs",
     "e2e": "playwright test",
-    "build:e2e": "APP_ORIGIN=http://localhost:4321 pnpm --filter run build && PUBLIC_RUN_ORIGIN=http://127.0.0.1:4322 pnpm --filter web build",
+    "build:e2e": "APP_ORIGIN=http://localhost:4321 PREVIEW_ORIGIN_REGEX='^http://localhost:4325$' FRAME_ANCESTORS_EXTRA='http://localhost:4325 http://localhost:4326' pnpm --filter run build && PUBLIC_RUN_ORIGIN=http://127.0.0.1:4322 pnpm --filter web build",
     "test:parity": "node tools/tests/python_parity.mjs",
     "check": "pnpm typecheck && pnpm test && pnpm test:concepts && pnpm test:parity && pnpm lint:deps && pnpm test:boundaries && pnpm build && pnpm budget && pnpm deploy:check && pnpm build:e2e && pnpm e2e",
     "deploy:check": "WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config apps/run/wrangler.jsonc && WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config apps/web/wrangler.jsonc"

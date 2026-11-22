@@ -48,7 +48,7 @@ self.onmessage = async (e) => {
       await py.loadPackage(["executing-2.3.0", "asttokens-3.0.2", "pure_eval-0.2.4", "stack_data-0.6.3"].map((w) => `${base}${w}-py3-none-any.whl`));
       wheelsLoaded = true;
     }
-    const res = await ns.get("run_user")(m.code, m.mode);
+    const res = await ns.get("run_user")(m.code, m.mode, typeof m.spec === "string" ? m.spec : null, Number.isSafeInteger(m.seed) ? m.seed : 0);
     const [status, error, extra] = res.toJs();
     res.destroy();
     postMessage({ type: "result", runId, status, error, extra });
