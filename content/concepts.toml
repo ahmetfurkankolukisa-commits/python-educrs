@@ -1,0 +1,1617 @@
+# Concept graph — single source of truth.
+# Validated by tools/concept_graph.py; docs/01-concept-graph.md is GENERATED from this file.
+#
+# Rules (enforced by the validator):
+#   - ids are permanent: never reuse or rename (renames go through [[alias]]).
+#   - prereqs list only DIRECT, NECESSARY prerequisites (transitive duplicates are rejected).
+#   - a prereq's module must not come after the concept's module.
+#   - core concepts must not depend on optional tracks.
+#   - the graph must be a DAG with a single root: intro.program.
+
+schema = 1
+
+# ---------------------------------------------------------------- modules
+[[module]]
+id = "M0"
+title = "What is programming?"
+[[module]]
+id = "M1"
+title = "print, strings, comments"
+[[module]]
+id = "M2"
+title = "Variables"
+[[module]]
+id = "M3"
+title = "Numbers and operators"
+[[module]]
+id = "M4"
+title = "Input, conversion, calling functions"
+[[module]]
+id = "M5"
+title = "Booleans and conditions"
+[[module]]
+id = "M6"
+title = "Loops"
+[[module]]
+id = "M7"
+title = "Lists"
+[[module]]
+id = "M8"
+title = "Strings in depth"
+[[module]]
+id = "M9"
+title = "Tuples, dictionaries, sets"
+[[module]]
+id = "M10"
+title = "Functions"
+[[module]]
+id = "M11"
+title = "Scope and the call stack"
+[[module]]
+id = "M12"
+title = "Errors and debugging"
+[[module]]
+id = "M13"
+title = "Files"
+[[module]]
+id = "M14"
+title = "Modules and the standard library"
+[[module]]
+id = "M15"
+title = "Object-oriented programming"
+[[module]]
+id = "M16"
+title = "Comprehensions, iterators, generators"
+[[module]]
+id = "M17"
+title = "Recursion"
+[[module]]
+id = "M18"
+title = "Algorithmic thinking"
+[[module]]
+id = "M19"
+title = "Testing your code"
+[[module]]
+id = "M20"
+title = "Capstone projects"
+[[module]]
+id = "M21"
+title = "Graduation: Python on your own computer"
+
+# ---------------------------------------------------------------- M0
+[[concept]]
+id = "intro.program"
+module = "M0"
+title = "What a program is"
+summary = "A program is a list of exact instructions the computer follows."
+prereqs = []
+
+[[concept]]
+id = "intro.run-code"
+module = "M0"
+title = "Running code"
+summary = "Write code in the editor, press Run, read the output."
+prereqs = ["intro.program"]
+
+[[concept]]
+id = "intro.sequence"
+module = "M0"
+title = "Top-to-bottom execution"
+summary = "Statements run one after another, from top to bottom."
+prereqs = ["intro.run-code"]
+
+[[concept]]
+id = "intro.errors-are-normal"
+module = "M0"
+title = "Errors are feedback"
+summary = "Error messages are normal and tell you what to fix."
+prereqs = ["intro.run-code"]
+
+# ---------------------------------------------------------------- M1
+[[concept]]
+id = "print.basic"
+module = "M1"
+title = "print()"
+summary = "print() shows a value in the output."
+prereqs = ["intro.run-code"]
+
+[[concept]]
+id = "strings.literal"
+module = "M1"
+title = "String literals"
+summary = "Text in quotes is a string."
+prereqs = ["print.basic"]
+
+[[concept]]
+id = "strings.quotes-mixed"
+module = "M1"
+title = "Quotes inside strings"
+summary = "Single vs double quotes; putting quotes inside strings."
+prereqs = ["strings.literal"]
+
+[[concept]]
+id = "strings.escape"
+module = "M1"
+title = "Escape sequences"
+summary = "\\n, \\t and escaping quotes."
+prereqs = ["strings.quotes-mixed"]
+
+[[concept]]
+id = "print.multiple-args"
+module = "M1"
+title = "print() with several values"
+summary = "print(a, b) separates values with spaces."
+prereqs = ["strings.literal"]
+
+[[concept]]
+id = "print.end-sep"
+module = "M1"
+title = "sep= and end="
+summary = "Control separators and line endings in print()."
+prereqs = ["print.multiple-args"]
+
+[[concept]]
+id = "comments.basic"
+module = "M1"
+title = "Comments"
+summary = "# starts a comment that Python ignores."
+prereqs = ["intro.sequence"]
+
+[[concept]]
+id = "shell.expressions"
+module = "M1"
+title = "Expressions have values"
+summary = "An expression is evaluated to a value."
+prereqs = ["print.basic"]
+
+# ---------------------------------------------------------------- M2
+[[concept]]
+id = "vars.assign"
+module = "M2"
+title = "Assignment"
+summary = "name = value makes a name refer to a value."
+prereqs = ["strings.literal", "intro.sequence"]
+
+[[concept]]
+id = "vars.use"
+module = "M2"
+title = "Using variables"
+summary = "A variable name in an expression is replaced by its value."
+prereqs = ["vars.assign"]
+
+[[concept]]
+id = "vars.reassign"
+module = "M2"
+title = "Reassignment"
+summary = "Assigning again makes the name refer to a new value."
+prereqs = ["vars.use"]
+
+[[concept]]
+id = "vars.naming"
+module = "M2"
+title = "Naming rules"
+summary = "Valid names, snake_case, keywords you cannot use."
+prereqs = ["vars.assign"]
+
+[[concept]]
+id = "vars.name-error"
+module = "M2"
+title = "NameError"
+summary = "Using a name before assigning it, or with a typo."
+prereqs = ["vars.use", "intro.errors-are-normal"]
+
+[[concept]]
+id = "vars.trace"
+module = "M2"
+title = "Tracing program state"
+summary = "Follow the value of each variable step by step (visualizer)."
+prereqs = ["vars.reassign"]
+
+[[concept]]
+id = "vars.swap"
+module = "M2"
+title = "Order of updates"
+summary = "Swapping two variables; why the order of assignments matters."
+prereqs = ["vars.trace"]
+
+# ---------------------------------------------------------------- M3
+[[concept]]
+id = "numbers.int"
+module = "M3"
+title = "Integers and arithmetic"
+summary = "Whole numbers with + - *."
+prereqs = ["shell.expressions"]
+
+[[concept]]
+id = "numbers.float"
+module = "M3"
+title = "Floats and division"
+summary = "Decimal numbers; / always gives a float."
+prereqs = ["numbers.int"]
+
+[[concept]]
+id = "numbers.floor-mod"
+module = "M3"
+title = "// and %"
+summary = "Floor division and remainder."
+prereqs = ["numbers.int"]
+
+[[concept]]
+id = "numbers.power"
+module = "M3"
+title = "Exponents"
+summary = "** raises to a power."
+prereqs = ["numbers.int"]
+
+[[concept]]
+id = "numbers.precedence"
+module = "M3"
+title = "Operator precedence"
+summary = "Which operator goes first; parentheses."
+prereqs = ["numbers.power", "numbers.floor-mod"]
+
+[[concept]]
+id = "numbers.float-precision"
+module = "M3"
+title = "Float precision"
+summary = "Why 0.1 + 0.2 is not exactly 0.3; round()."
+prereqs = ["numbers.float"]
+
+[[concept]]
+id = "numbers.builtins"
+module = "M3"
+title = "abs, min, max, round"
+summary = "Built-in numeric helpers."
+prereqs = ["numbers.float"]
+
+[[concept]]
+id = "vars.augmented"
+module = "M3"
+title = "Augmented assignment"
+summary = "x += 1 and friends."
+prereqs = ["vars.reassign", "numbers.int"]
+
+[[concept]]
+id = "strings.concat"
+module = "M3"
+title = "String + and *"
+summary = "Joining and repeating strings."
+prereqs = ["strings.literal", "numbers.int"]
+
+[[concept]]
+id = "types.type-fn"
+module = "M3"
+title = "Types and type()"
+summary = "Every value has a type: int, float, str."
+prereqs = ["numbers.float"]
+
+[[concept]]
+id = "types.type-error"
+module = "M3"
+title = "TypeError"
+summary = "Mixing incompatible types, e.g. 'a' + 1."
+prereqs = ["types.type-fn", "strings.concat"]
+
+# ---------------------------------------------------------------- M4
+[[concept]]
+id = "io.input"
+module = "M4"
+title = "input()"
+summary = "input() asks the user and always returns a string."
+prereqs = ["vars.assign"]
+
+[[concept]]
+id = "types.convert"
+module = "M4"
+title = "Type conversion"
+summary = "int(), float(), str()."
+prereqs = ["types.type-fn"]
+
+[[concept]]
+id = "io.input-number"
+module = "M4"
+title = "Numbers from input"
+summary = "Convert input() results before doing maths."
+prereqs = ["io.input", "types.convert"]
+
+[[concept]]
+id = "types.value-error"
+module = "M4"
+title = "ValueError"
+summary = "int('abc') fails: the value cannot be converted."
+prereqs = ["types.convert"]
+
+[[concept]]
+id = "strings.fstring-basic"
+module = "M4"
+title = "f-strings"
+summary = "f'Hello {name}' puts values inside text."
+prereqs = ["vars.use"]
+
+[[concept]]
+id = "funcs.call"
+module = "M4"
+title = "Calling functions"
+summary = "Arguments go in, a return value comes out (print, input, len, int)."
+prereqs = ["io.input", "types.convert"]
+
+# ---------------------------------------------------------------- M5
+[[concept]]
+id = "bool.values"
+module = "M5"
+title = "True and False"
+summary = "The bool type."
+prereqs = ["types.type-fn"]
+
+[[concept]]
+id = "bool.compare"
+module = "M5"
+title = "Comparisons"
+summary = "==, !=, <, >, <=, >= produce booleans."
+prereqs = ["bool.values"]
+
+[[concept]]
+id = "bool.compare-strings"
+module = "M5"
+title = "Comparing strings"
+summary = "Case sensitivity and alphabetical order."
+prereqs = ["bool.compare"]
+
+[[concept]]
+id = "cond.if"
+module = "M5"
+title = "if"
+summary = "Run a block only when a condition is true."
+prereqs = ["bool.compare"]
+
+[[concept]]
+id = "blocks.indentation"
+module = "M5"
+title = "Indentation and blocks"
+summary = "Indentation decides which statements belong to a block."
+prereqs = ["cond.if"]
+
+[[concept]]
+id = "cond.else"
+module = "M5"
+title = "else"
+summary = "Run another block when the condition is false."
+prereqs = ["cond.if"]
+
+[[concept]]
+id = "cond.elif"
+module = "M5"
+title = "elif chains"
+summary = "Several conditions; only the first true branch runs."
+prereqs = ["cond.else"]
+
+[[concept]]
+id = "bool.and-or-not"
+module = "M5"
+title = "and, or, not"
+summary = "Combine conditions."
+prereqs = ["bool.compare"]
+
+[[concept]]
+id = "bool.chained-compare"
+module = "M5"
+title = "Chained comparisons"
+summary = "1 < x < 5."
+prereqs = ["bool.and-or-not"]
+
+[[concept]]
+id = "bool.truthiness"
+module = "M5"
+title = "Truthiness"
+summary = "Empty and zero values count as false."
+prereqs = ["bool.and-or-not", "cond.if"]
+
+[[concept]]
+id = "cond.nested"
+module = "M5"
+title = "Nested conditions"
+summary = "if inside if."
+prereqs = ["cond.elif", "blocks.indentation"]
+
+# ---------------------------------------------------------------- M6
+[[concept]]
+id = "loops.while"
+module = "M6"
+title = "while loops"
+summary = "Repeat while a condition stays true."
+prereqs = ["blocks.indentation", "vars.augmented"]
+
+[[concept]]
+id = "loops.infinite"
+module = "M6"
+title = "Infinite loops"
+summary = "Why a loop never stops, and how to stop it."
+prereqs = ["loops.while"]
+
+[[concept]]
+id = "loops.for-string"
+module = "M6"
+title = "for over a string"
+summary = "Visit each character in turn."
+prereqs = ["blocks.indentation"]
+
+[[concept]]
+id = "loops.range"
+module = "M6"
+title = "range()"
+summary = "range(stop), range(start, stop, step)."
+prereqs = ["loops.for-string"]
+
+[[concept]]
+id = "loops.accumulator"
+module = "M6"
+title = "Accumulator pattern"
+summary = "Build a total, a count or a string inside a loop."
+prereqs = ["loops.range", "vars.augmented"]
+
+[[concept]]
+id = "loops.break-continue"
+module = "M6"
+title = "break and continue"
+summary = "Leave a loop early or skip to the next round."
+prereqs = ["loops.while"]
+
+[[concept]]
+id = "loops.loop-condition"
+module = "M6"
+title = "Loops with conditions"
+summary = "Filter and count with if inside a loop."
+prereqs = ["loops.accumulator"]
+
+[[concept]]
+id = "loops.nested"
+module = "M6"
+title = "Nested loops"
+summary = "A loop inside a loop."
+prereqs = ["loops.range"]
+
+[[concept]]
+id = "loops.while-vs-for"
+module = "M6"
+title = "Choosing while or for"
+summary = "Unknown vs known number of repetitions."
+prereqs = ["loops.while", "loops.range"]
+
+[[concept]]
+id = "loops.sentinel"
+module = "M6"
+title = "Input loops"
+summary = "Keep asking until the user types a stop value."
+prereqs = ["loops.while", "io.input"]
+
+[[concept]]
+id = "modules.random-intro"
+module = "M6"
+title = "Random numbers (first look)"
+summary = "import random; random.randint(a, b)."
+prereqs = ["funcs.call"]
+
+# ---------------------------------------------------------------- M7
+[[concept]]
+id = "lists.literal"
+module = "M7"
+title = "Lists"
+summary = "An ordered collection: [1, 2, 3]."
+prereqs = ["vars.assign"]
+
+[[concept]]
+id = "lists.index"
+module = "M7"
+title = "Indexing"
+summary = "Positions start at 0."
+prereqs = ["lists.literal", "numbers.int"]
+
+[[concept]]
+id = "lists.negative-index"
+module = "M7"
+title = "Negative indices"
+summary = "items[-1] is the last item."
+prereqs = ["lists.index"]
+
+[[concept]]
+id = "lists.index-error"
+module = "M7"
+title = "IndexError"
+summary = "Asking for a position that does not exist."
+prereqs = ["lists.index"]
+
+[[concept]]
+id = "lists.len"
+module = "M7"
+title = "len()"
+summary = "How many items a list has."
+prereqs = ["lists.literal", "funcs.call"]
+
+[[concept]]
+id = "lists.iterate"
+module = "M7"
+title = "Looping over a list"
+summary = "for item in items."
+prereqs = ["lists.literal", "loops.for-string"]
+
+[[concept]]
+id = "lists.mutate"
+module = "M7"
+title = "Changing items"
+summary = "items[0] = 'new'."
+prereqs = ["lists.index"]
+
+[[concept]]
+id = "lists.append"
+module = "M7"
+title = "append()"
+summary = "Grow a list, often inside a loop."
+prereqs = ["lists.iterate", "loops.accumulator"]
+
+[[concept]]
+id = "lists.methods"
+module = "M7"
+title = "List methods"
+summary = "insert, pop, remove, sort, reverse, index, count."
+prereqs = ["lists.append"]
+
+[[concept]]
+id = "lists.slicing"
+module = "M7"
+title = "Slicing"
+summary = "items[1:3], items[::-1]."
+prereqs = ["lists.negative-index"]
+
+[[concept]]
+id = "lists.in"
+module = "M7"
+title = "Membership"
+summary = "x in items."
+prereqs = ["lists.literal", "bool.values"]
+
+[[concept]]
+id = "lists.aliasing"
+module = "M7"
+title = "Aliasing"
+summary = "Two names can refer to the same list."
+prereqs = ["lists.mutate", "vars.reassign"]
+
+[[concept]]
+id = "lists.copy"
+module = "M7"
+title = "Copying lists"
+summary = "items[:], list(items), items.copy()."
+prereqs = ["lists.aliasing", "lists.slicing"]
+
+[[concept]]
+id = "lists.sorted-vs-sort"
+module = "M7"
+title = "sorted() vs .sort()"
+summary = ".sort() changes the list and returns None."
+prereqs = ["lists.methods"]
+
+[[concept]]
+id = "lists.index-loop"
+module = "M7"
+title = "Looping with positions"
+summary = "range(len(items)) and enumerate()."
+prereqs = ["lists.iterate", "lists.len", "lists.index"]
+
+[[concept]]
+id = "lists.nested"
+module = "M7"
+title = "Lists of lists"
+summary = "Grids and tables: grid[row][col]."
+prereqs = ["lists.index", "loops.nested"]
+
+[[concept]]
+id = "lists.builtins"
+module = "M7"
+title = "sum, min, max on lists"
+summary = "Built-ins that work on whole lists."
+prereqs = ["lists.literal", "numbers.builtins"]
+
+# ---------------------------------------------------------------- M8
+[[concept]]
+id = "strings.index-slice"
+module = "M8"
+title = "Indexing and slicing strings"
+summary = "Strings behave like sequences of characters."
+prereqs = ["lists.slicing"]
+
+[[concept]]
+id = "strings.immutable"
+module = "M8"
+title = "Strings cannot change"
+summary = "String methods return a new string."
+prereqs = ["strings.index-slice", "lists.mutate"]
+
+[[concept]]
+id = "strings.methods"
+module = "M8"
+title = "String methods"
+summary = "upper, lower, strip, replace, find, startswith."
+prereqs = ["strings.immutable"]
+
+[[concept]]
+id = "strings.split-join"
+module = "M8"
+title = "split() and join()"
+summary = "Turn text into a list and back."
+prereqs = ["strings.methods"]
+
+[[concept]]
+id = "strings.fstring-format"
+module = "M8"
+title = "Formatting numbers"
+summary = "f'{price:.2f}', alignment, padding."
+prereqs = ["strings.fstring-basic", "numbers.float"]
+
+[[concept]]
+id = "strings.in"
+module = "M8"
+title = "Substrings"
+summary = "'cat' in 'concatenate'."
+prereqs = ["strings.index-slice", "lists.in"]
+
+[[concept]]
+id = "strings.char-codes"
+module = "M8"
+title = "ord() and chr()"
+summary = "Characters are numbers underneath."
+prereqs = ["strings.index-slice"]
+
+[[concept]]
+id = "strings.build-loop"
+module = "M8"
+title = "Building strings in loops"
+summary = "Transform text character by character."
+prereqs = ["strings.methods", "loops.accumulator"]
+
+# ---------------------------------------------------------------- M9
+[[concept]]
+id = "tuples.basic"
+module = "M9"
+title = "Tuples"
+summary = "Fixed, unchangeable sequences."
+prereqs = ["lists.index"]
+
+[[concept]]
+id = "tuples.unpacking"
+module = "M9"
+title = "Unpacking"
+summary = "a, b = pair; a, b = b, a."
+prereqs = ["tuples.basic", "vars.swap"]
+
+[[concept]]
+id = "dicts.basic"
+module = "M9"
+title = "Dictionaries"
+summary = "Look up values by key."
+prereqs = ["lists.index"]
+
+[[concept]]
+id = "dicts.key-error"
+module = "M9"
+title = "KeyError and get()"
+summary = "Missing keys and safe lookup."
+prereqs = ["dicts.basic"]
+
+[[concept]]
+id = "dicts.update"
+module = "M9"
+title = "Adding and changing keys"
+summary = "d[key] = value."
+prereqs = ["dicts.basic"]
+
+[[concept]]
+id = "dicts.iterate"
+module = "M9"
+title = "Looping over dictionaries"
+summary = "keys(), values(), items()."
+prereqs = ["dicts.update", "tuples.unpacking", "lists.iterate"]
+
+[[concept]]
+id = "dicts.counting"
+module = "M9"
+title = "Counting with a dictionary"
+summary = "The frequency-count pattern."
+prereqs = ["dicts.iterate", "dicts.key-error", "loops.accumulator"]
+
+[[concept]]
+id = "dicts.nested"
+module = "M9"
+title = "Nested data"
+summary = "Lists of dictionaries, dictionaries of lists."
+prereqs = ["dicts.iterate", "lists.nested"]
+
+[[concept]]
+id = "sets.basic"
+module = "M9"
+title = "Sets"
+summary = "Unique items, fast membership."
+prereqs = ["lists.in"]
+
+[[concept]]
+id = "sets.ops"
+module = "M9"
+title = "Set operations"
+summary = "Union, intersection, difference."
+prereqs = ["sets.basic"]
+
+[[concept]]
+id = "collections.choose"
+module = "M9"
+title = "Choosing a collection"
+summary = "When to use a list, tuple, dict or set."
+prereqs = ["dicts.basic", "sets.basic", "tuples.basic"]
+
+# ---------------------------------------------------------------- M10
+[[concept]]
+id = "funcs.def"
+module = "M10"
+title = "Defining functions"
+summary = "def name(): and calling it."
+prereqs = ["funcs.call", "blocks.indentation"]
+
+[[concept]]
+id = "funcs.params"
+module = "M10"
+title = "Parameters"
+summary = "Values passed into a function."
+prereqs = ["funcs.def"]
+
+[[concept]]
+id = "funcs.return"
+module = "M10"
+title = "return"
+summary = "Send a value back to the caller."
+prereqs = ["funcs.params"]
+
+[[concept]]
+id = "funcs.print-vs-return"
+module = "M10"
+title = "print vs return"
+summary = "Showing a value is not the same as returning it."
+prereqs = ["funcs.return"]
+
+[[concept]]
+id = "funcs.none"
+module = "M10"
+title = "None"
+summary = "What a function returns when it has no return."
+prereqs = ["funcs.return"]
+
+[[concept]]
+id = "funcs.default-args"
+module = "M10"
+title = "Default parameters"
+summary = "def greet(name='friend')."
+prereqs = ["funcs.params"]
+
+[[concept]]
+id = "funcs.keyword-args"
+module = "M10"
+title = "Keyword arguments"
+summary = "greet(name='Ada')."
+prereqs = ["funcs.default-args"]
+
+[[concept]]
+id = "funcs.decompose"
+module = "M10"
+title = "Breaking problems into functions"
+summary = "Small functions that each do one job."
+prereqs = ["funcs.return"]
+
+[[concept]]
+id = "funcs.docstring"
+module = "M10"
+title = "Docstrings"
+summary = "Describe what a function does."
+prereqs = ["funcs.def", "comments.basic"]
+
+[[concept]]
+id = "funcs.early-return"
+module = "M10"
+title = "Returning early"
+summary = "return inside loops and conditions."
+prereqs = ["funcs.return", "loops.break-continue"]
+
+# ---------------------------------------------------------------- M11
+[[concept]]
+id = "scope.local"
+module = "M11"
+title = "Local variables"
+summary = "Names inside a function stay inside it."
+prereqs = ["funcs.params"]
+
+[[concept]]
+id = "scope.global"
+module = "M11"
+title = "Global variables"
+summary = "Reading vs assigning globals; why to avoid global."
+prereqs = ["scope.local"]
+
+[[concept]]
+id = "scope.call-stack"
+module = "M11"
+title = "The call stack"
+summary = "Each call gets its own frame (visualizer)."
+prereqs = ["scope.local", "funcs.return"]
+
+[[concept]]
+id = "scope.mutable-args"
+module = "M11"
+title = "Passing lists to functions"
+summary = "A function can change a list it receives."
+prereqs = ["scope.local", "lists.aliasing"]
+
+[[concept]]
+id = "funcs.mutable-default"
+module = "M11"
+title = "Mutable default trap"
+summary = "def f(items=[]) shares one list between calls."
+prereqs = ["funcs.default-args", "scope.mutable-args"]
+
+# ---------------------------------------------------------------- M12
+[[concept]]
+id = "errors.read-traceback"
+module = "M12"
+title = "Reading tracebacks"
+summary = "Find the line, the error type and the message."
+prereqs = ["scope.call-stack"]
+
+[[concept]]
+id = "errors.try-except"
+module = "M12"
+title = "try / except"
+summary = "Handle an error instead of crashing."
+prereqs = ["errors.read-traceback"]
+
+[[concept]]
+id = "errors.specific"
+module = "M12"
+title = "Catching specific errors"
+summary = "except ValueError, not a bare except."
+prereqs = ["errors.try-except", "types.value-error"]
+
+[[concept]]
+id = "errors.else-finally"
+module = "M12"
+title = "else and finally"
+summary = "Code that runs on success or always."
+prereqs = ["errors.try-except"]
+
+[[concept]]
+id = "errors.raise"
+module = "M12"
+title = "raise"
+summary = "Signal an error from your own function."
+prereqs = ["errors.specific"]
+
+[[concept]]
+id = "errors.validate-input"
+module = "M12"
+title = "Validating input"
+summary = "Ask again until the input is valid."
+prereqs = ["errors.specific", "loops.sentinel"]
+
+[[concept]]
+id = "debug.strategies"
+module = "M12"
+title = "Debugging strategies"
+summary = "Print debugging, minimal examples, explaining aloud."
+prereqs = ["errors.read-traceback"]
+
+[[concept]]
+id = "debug.assert"
+module = "M12"
+title = "assert"
+summary = "Check that something you believe is actually true."
+prereqs = ["funcs.return"]
+
+# ---------------------------------------------------------------- M13
+[[concept]]
+id = "files.read"
+module = "M13"
+title = "Reading files"
+summary = "open() and read() on the virtual file system."
+prereqs = ["strings.split-join", "funcs.call"]
+
+[[concept]]
+id = "files.with"
+module = "M13"
+title = "with"
+summary = "Files are closed automatically."
+prereqs = ["files.read"]
+
+[[concept]]
+id = "files.write"
+module = "M13"
+title = "Writing files"
+summary = "Modes 'w' and 'a'."
+prereqs = ["files.with"]
+
+[[concept]]
+id = "files.lines"
+module = "M13"
+title = "Line by line"
+summary = "Loop over lines and strip newlines."
+prereqs = ["files.with"]
+
+[[concept]]
+id = "files.not-found"
+module = "M13"
+title = "FileNotFoundError"
+summary = "Handling a missing file."
+prereqs = ["files.read", "errors.specific"]
+
+# ---------------------------------------------------------------- M14
+[[concept]]
+id = "modules.import"
+module = "M14"
+title = "import"
+summary = "import x, from x import y, aliases."
+prereqs = ["modules.random-intro"]
+
+[[concept]]
+id = "modules.math"
+module = "M14"
+title = "math"
+summary = "sqrt, pi, floor, ceil."
+prereqs = ["modules.import"]
+
+[[concept]]
+id = "modules.datetime"
+module = "M14"
+title = "datetime"
+summary = "Dates, times and differences."
+prereqs = ["modules.import"]
+
+[[concept]]
+id = "modules.csv"
+module = "M14"
+title = "csv"
+summary = "Read and write tables."
+prereqs = ["modules.import", "files.lines"]
+
+[[concept]]
+id = "modules.own"
+module = "M14"
+title = "Your own modules"
+summary = "Split code into files and import them."
+prereqs = ["modules.import", "funcs.def"]
+
+[[concept]]
+id = "modules.main-guard"
+module = "M14"
+title = "if __name__ == '__main__'"
+summary = "Code that runs only when the file is executed directly."
+prereqs = ["modules.own"]
+
+[[concept]]
+id = "modules.docs"
+module = "M14"
+title = "Reading documentation"
+summary = "help() and the official docs."
+prereqs = ["modules.import"]
+
+# ---------------------------------------------------------------- M15
+[[concept]]
+id = "oop.objects"
+module = "M15"
+title = "Objects and methods"
+summary = "Values are objects; methods belong to them."
+prereqs = ["strings.methods", "funcs.call"]
+
+[[concept]]
+id = "oop.class"
+module = "M15"
+title = "Classes and instances"
+summary = "class Dog: and Dog()."
+prereqs = ["oop.objects", "funcs.def"]
+
+[[concept]]
+id = "oop.init-self"
+module = "M15"
+title = "__init__ and self"
+summary = "Give each object its own attributes."
+prereqs = ["oop.class", "funcs.params"]
+
+[[concept]]
+id = "oop.methods"
+module = "M15"
+title = "Methods"
+summary = "Functions defined inside a class."
+prereqs = ["oop.init-self", "funcs.return"]
+
+[[concept]]
+id = "oop.state"
+module = "M15"
+title = "State and identity"
+summary = "Objects change over time; is vs ==."
+prereqs = ["oop.methods", "lists.aliasing"]
+
+[[concept]]
+id = "oop.str-repr"
+module = "M15"
+title = "__str__ and __repr__"
+summary = "How objects are shown."
+prereqs = ["oop.methods"]
+
+[[concept]]
+id = "oop.inheritance"
+module = "M15"
+title = "Inheritance"
+summary = "A class can extend another class."
+prereqs = ["oop.methods"]
+
+[[concept]]
+id = "oop.super"
+module = "M15"
+title = "Overriding and super()"
+summary = "Change or extend parent behaviour."
+prereqs = ["oop.inheritance"]
+
+[[concept]]
+id = "oop.composition"
+module = "M15"
+title = "Composition"
+summary = "Objects that contain other objects."
+prereqs = ["oop.inheritance"]
+
+[[concept]]
+id = "oop.dunder"
+module = "M15"
+title = "Special methods"
+summary = "__eq__, __lt__, __len__."
+prereqs = ["oop.str-repr"]
+
+[[concept]]
+id = "oop.dataclass"
+module = "M15"
+title = "Dataclasses"
+summary = "@dataclass removes boilerplate."
+prereqs = ["oop.init-self", "modules.import"]
+
+# ---------------------------------------------------------------- M16
+[[concept]]
+id = "comp.list"
+module = "M16"
+title = "List comprehensions"
+summary = "[x * 2 for x in items]."
+prereqs = ["lists.append", "loops.loop-condition"]
+
+[[concept]]
+id = "comp.filter"
+module = "M16"
+title = "Filtering comprehensions"
+summary = "[x for x in items if x > 0]."
+prereqs = ["comp.list"]
+
+[[concept]]
+id = "comp.dict-set"
+module = "M16"
+title = "Dict and set comprehensions"
+summary = "{k: v for ...} and {x for ...}."
+prereqs = ["comp.list", "dicts.iterate", "sets.basic"]
+
+[[concept]]
+id = "iter.zip-enumerate"
+module = "M16"
+title = "zip and enumerate"
+summary = "Loop over several sequences together."
+prereqs = ["lists.index-loop", "tuples.unpacking"]
+
+[[concept]]
+id = "iter.protocol"
+module = "M16"
+title = "Iterables and iterators"
+summary = "iter() and next(); what for really does."
+prereqs = ["iter.zip-enumerate", "oop.objects"]
+
+[[concept]]
+id = "gen.basic"
+module = "M16"
+title = "Generators"
+summary = "yield produces values lazily."
+prereqs = ["iter.protocol", "funcs.return"]
+
+[[concept]]
+id = "gen.expr"
+module = "M16"
+title = "Generator expressions"
+summary = "sum(x * x for x in items)."
+prereqs = ["gen.basic", "comp.list"]
+
+[[concept]]
+id = "funcs.lambda"
+module = "M16"
+title = "lambda and key functions"
+summary = "sorted(items, key=lambda x: x[1])."
+prereqs = ["funcs.return", "lists.sorted-vs-sort"]
+
+[[concept]]
+id = "funcs.first-class"
+module = "M16"
+title = "Functions as values"
+summary = "Pass functions to other functions."
+prereqs = ["funcs.lambda"]
+
+# ---------------------------------------------------------------- M17
+[[concept]]
+id = "rec.basic"
+module = "M17"
+title = "Recursion"
+summary = "Base case and recursive case."
+prereqs = ["scope.call-stack", "funcs.early-return"]
+
+[[concept]]
+id = "rec.trace"
+module = "M17"
+title = "Tracing recursion"
+summary = "Watch frames pile up and unwind (visualizer)."
+prereqs = ["rec.basic"]
+
+[[concept]]
+id = "rec.recursion-error"
+module = "M17"
+title = "RecursionError"
+summary = "Missing or unreachable base case."
+prereqs = ["rec.basic"]
+
+[[concept]]
+id = "rec.structures"
+module = "M17"
+title = "Recursion on nested data"
+summary = "Walk nested lists and trees."
+prereqs = ["rec.trace", "lists.nested"]
+
+[[concept]]
+id = "rec.vs-iteration"
+module = "M17"
+title = "Recursion vs loops"
+summary = "When each one is clearer."
+prereqs = ["rec.basic", "loops.while-vs-for"]
+
+# ---------------------------------------------------------------- M18
+[[concept]]
+id = "algo.problem-solving"
+module = "M18"
+title = "Problem solving"
+summary = "Understand, plan with pseudocode, then code."
+prereqs = ["funcs.decompose"]
+
+[[concept]]
+id = "algo.linear-search"
+module = "M18"
+title = "Linear search"
+summary = "Check items one by one."
+prereqs = ["lists.iterate", "funcs.early-return"]
+
+[[concept]]
+id = "algo.binary-search"
+module = "M18"
+title = "Binary search"
+summary = "Halve a sorted list each step."
+prereqs = ["algo.linear-search", "numbers.floor-mod", "lists.sorted-vs-sort"]
+
+[[concept]]
+id = "algo.sorting"
+module = "M18"
+title = "Simple sorting"
+summary = "Selection and insertion sort."
+prereqs = ["lists.index-loop", "loops.nested", "vars.swap"]
+
+[[concept]]
+id = "algo.complexity"
+module = "M18"
+title = "How fast is it?"
+summary = "Big-O intuition by counting steps."
+prereqs = ["algo.binary-search", "algo.sorting"]
+
+[[concept]]
+id = "algo.patterns"
+module = "M18"
+title = "Common patterns"
+summary = "Frequency counting, two pointers, running best."
+prereqs = ["dicts.counting", "algo.linear-search"]
+
+# ---------------------------------------------------------------- M19
+[[concept]]
+id = "test.why"
+module = "M19"
+title = "Why test?"
+summary = "Manual checks vs automated tests."
+prereqs = ["debug.assert"]
+
+[[concept]]
+id = "test.assert-tests"
+module = "M19"
+title = "Writing tests"
+summary = "Test functions full of asserts."
+prereqs = ["test.why", "funcs.decompose"]
+
+[[concept]]
+id = "test.edge-cases"
+module = "M19"
+title = "Edge cases"
+summary = "Empty, zero, negative, huge."
+prereqs = ["test.assert-tests"]
+
+[[concept]]
+id = "test.framework"
+module = "M19"
+title = "A test framework"
+summary = "unittest basics."
+prereqs = ["test.edge-cases", "oop.class", "modules.import"]
+
+[[concept]]
+id = "test.tdd"
+module = "M19"
+title = "Test first"
+summary = "Write the test, then the code."
+prereqs = ["test.edge-cases"]
+
+# ---------------------------------------------------------------- M21
+[[concept]]
+id = "grad.install"
+module = "M21"
+title = "Installing Python"
+summary = "Get Python running on your own computer."
+prereqs = ["modules.import"]
+
+[[concept]]
+id = "grad.terminal"
+module = "M21"
+title = "The terminal"
+summary = "Navigate folders and run python file.py."
+prereqs = ["grad.install"]
+
+[[concept]]
+id = "grad.editor"
+module = "M21"
+title = "A real editor"
+summary = "Set up VS Code for Python."
+prereqs = ["grad.terminal"]
+
+[[concept]]
+id = "grad.pip-venv"
+module = "M21"
+title = "pip and virtual environments"
+summary = "Install packages safely per project."
+prereqs = ["grad.terminal"]
+
+[[concept]]
+id = "grad.next-steps"
+module = "M21"
+title = "Where to go next"
+summary = "Web, data, automation, games."
+prereqs = ["grad.pip-venv", "grad.editor"]
+
+# ---------------------------------------------------------------- optional track: creative coding
+[[concept]]
+id = "gfx.turtle-basic"
+module = "M4"
+track = "creative"
+title = "Drawing with turtle"
+summary = "forward, left, right, pen colour."
+prereqs = ["funcs.call"]
+
+[[concept]]
+id = "gfx.turtle-loops"
+module = "M6"
+track = "creative"
+title = "Patterns with loops"
+summary = "Polygons, spirals, stars."
+prereqs = ["gfx.turtle-basic", "loops.range"]
+
+[[concept]]
+id = "gfx.turtle-functions"
+module = "M10"
+track = "creative"
+title = "Drawing functions"
+summary = "def square(size): reusable shapes."
+prereqs = ["gfx.turtle-loops", "funcs.params"]
+
+# ================================================================ misconceptions
+# detect: behavioral = matches a known-wrong program on all tests
+#         ast        = code pattern
+#         exception  = specific error + context
+#         predict    = taught/diagnosed with predict-output exercises
+
+[[misconception]]
+id = "mc.assign-vs-equals"
+concepts = ["cond.if"]
+belief = "= compares values (if x = 5:)."
+detect = "exception"
+
+[[misconception]]
+id = "mc.vars-auto-update"
+concepts = ["vars.reassign"]
+belief = "After b = a + 1, changing a later also changes b."
+detect = "predict"
+
+[[misconception]]
+id = "mc.var-remembers-history"
+concepts = ["vars.reassign"]
+belief = "A variable keeps all the values it was ever given."
+detect = "predict"
+
+[[misconception]]
+id = "mc.quoted-name"
+concepts = ["vars.use"]
+belief = "print('name') prints the value of the variable name."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.input-is-number"
+concepts = ["io.input-number"]
+belief = "input() returns a number when the user types digits."
+detect = "exception"
+
+[[misconception]]
+id = "mc.int-division"
+concepts = ["numbers.float"]
+belief = "/ between two ints gives an int."
+detect = "predict"
+
+[[misconception]]
+id = "mc.float-exact"
+concepts = ["numbers.float-precision"]
+belief = "Floats are always exact, so 0.1 + 0.2 == 0.3."
+detect = "predict"
+
+[[misconception]]
+id = "mc.or-english"
+concepts = ["bool.and-or-not"]
+belief = "if x == 1 or 2: checks whether x is 1 or 2."
+detect = "ast"
+
+[[misconception]]
+id = "mc.elif-all-run"
+concepts = ["cond.elif"]
+belief = "Every true branch of an if/elif chain runs."
+detect = "predict"
+
+[[misconception]]
+id = "mc.indentation-cosmetic"
+concepts = ["blocks.indentation"]
+belief = "Indentation is only for looks; a line's block doesn't change behaviour."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.loop-update-missing"
+concepts = ["loops.while", "loops.infinite"]
+belief = "A while loop stops by itself eventually."
+detect = "ast"
+
+[[misconception]]
+id = "mc.range-inclusive"
+concepts = ["loops.range"]
+belief = "range(1, 5) includes 5."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.accumulator-reset"
+concepts = ["loops.accumulator"]
+belief = "The total can be set to 0 inside the loop."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.loop-var-control"
+concepts = ["loops.range"]
+belief = "Changing the loop variable inside a for loop changes which items are visited."
+detect = "predict"
+
+[[misconception]]
+id = "mc.index-starts-at-1"
+concepts = ["lists.index"]
+belief = "The first item is items[1]."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.aliasing-copies"
+concepts = ["lists.aliasing"]
+belief = "b = a makes a separate copy of the list."
+detect = "predict"
+
+[[misconception]]
+id = "mc.sort-returns-list"
+concepts = ["lists.sorted-vs-sort"]
+belief = "items = items.sort() gives back the sorted list."
+detect = "ast"
+
+[[misconception]]
+id = "mc.string-mutable"
+concepts = ["strings.immutable"]
+belief = "s.upper() changes s, or s[0] = 'H' works."
+detect = "ast"
+
+[[misconception]]
+id = "mc.dict-positional"
+concepts = ["dicts.basic"]
+belief = "d[0] gives the first entry of a dictionary."
+detect = "exception"
+
+[[misconception]]
+id = "mc.def-runs-function"
+concepts = ["funcs.def"]
+belief = "Defining a function runs its body."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.params-via-input"
+concepts = ["funcs.params"]
+belief = "A function should get its values with input() instead of parameters."
+detect = "ast"
+
+[[misconception]]
+id = "mc.print-vs-return"
+concepts = ["funcs.print-vs-return"]
+belief = "Printing a value inside a function is the same as returning it."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.return-in-loop"
+concepts = ["funcs.early-return"]
+belief = "return False in an else inside the loop is fine for 'none of the items'."
+detect = "behavioral"
+
+[[misconception]]
+id = "mc.local-visible-outside"
+concepts = ["scope.local"]
+belief = "Variables created in a function exist after it returns."
+detect = "exception"
+
+[[misconception]]
+id = "mc.assign-global"
+concepts = ["scope.global"]
+belief = "Assigning to a name inside a function changes the global one."
+detect = "exception"
+
+[[misconception]]
+id = "mc.mutable-default"
+concepts = ["funcs.mutable-default"]
+belief = "A default list starts fresh on every call."
+detect = "predict"
+
+[[misconception]]
+id = "mc.bare-except"
+concepts = ["errors.specific"]
+belief = "A bare except is a safe way to handle errors."
+detect = "ast"
+
+[[misconception]]
+id = "mc.file-read-twice"
+concepts = ["files.read"]
+belief = "Calling read() twice returns the content twice."
+detect = "predict"
+
+[[misconception]]
+id = "mc.self-missing"
+concepts = ["oop.methods"]
+belief = "Methods don't need self as their first parameter."
+detect = "exception"
+
+[[misconception]]
+id = "mc.is-vs-equals"
+concepts = ["oop.state"]
+belief = "is and == mean the same thing."
+detect = "predict"
+
+[[misconception]]
+id = "mc.recursion-no-base"
+concepts = ["rec.basic"]
+belief = "A recursive function stops on its own."
+detect = "exception"
+
+[[misconception]]
+id = "mc.generator-reusable"
+concepts = ["gen.basic"]
+belief = "A generator can be looped over again and again."
+detect = "predict"
+
+# ================================================================ projects
+[[project]]
+id = "proj.business-card"
+module = "M1"
+title = "Business card"
+requires = ["print.end-sep", "strings.escape"]
+
+[[project]]
+id = "proj.tip-calculator"
+module = "M4"
+title = "Tip calculator"
+requires = ["io.input-number", "numbers.float-precision", "strings.fstring-basic"]
+
+[[project]]
+id = "proj.grade-calculator"
+module = "M5"
+title = "Grade calculator"
+requires = ["cond.elif", "io.input-number"]
+
+[[project]]
+id = "proj.guess-number"
+module = "M6"
+title = "Number guessing game"
+requires = ["loops.while", "loops.break-continue", "modules.random-intro", "cond.elif"]
+
+[[project]]
+id = "proj.shopping-list"
+module = "M7"
+title = "Shopping list"
+requires = ["lists.methods", "loops.sentinel", "lists.in"]
+
+[[project]]
+id = "proj.caesar"
+module = "M8"
+title = "Caesar cipher"
+requires = ["strings.char-codes", "strings.build-loop", "numbers.floor-mod"]
+
+[[project]]
+id = "proj.word-counter"
+module = "M9"
+title = "Word counter"
+requires = ["dicts.counting", "strings.split-join", "lists.sorted-vs-sort"]
+
+[[project]]
+id = "proj.tic-tac-toe"
+module = "M10"
+title = "Tic-tac-toe"
+requires = ["lists.nested", "funcs.decompose", "loops.sentinel"]
+
+[[project]]
+id = "proj.robust-calculator"
+module = "M12"
+title = "Robust calculator"
+requires = ["errors.validate-input", "funcs.decompose"]
+
+[[project]]
+id = "proj.notebook"
+module = "M13"
+title = "Notebook"
+requires = ["files.write", "files.lines", "files.not-found"]
+
+[[project]]
+id = "proj.dice-sim"
+module = "M14"
+title = "Dice simulator"
+requires = ["modules.import", "dicts.counting", "strings.fstring-format"]
+
+[[project]]
+id = "proj.bank-account"
+module = "M15"
+title = "Bank account"
+requires = ["oop.methods", "errors.raise", "oop.str-repr"]
+
+[[project]]
+id = "proj.hanoi"
+module = "M17"
+title = "Towers of Hanoi"
+requires = ["rec.trace", "lists.methods"]
+
+[[project]]
+id = "proj.sorting-viz"
+module = "M18"
+title = "Sorting visualizer"
+requires = ["algo.sorting", "algo.complexity"]
+
+[[project]]
+id = "proj.text-adventure"
+module = "M20"
+title = "Text adventure"
+requires = ["dicts.nested", "oop.composition", "loops.sentinel", "funcs.decompose"]
+
+[[project]]
+id = "proj.todo-cli"
+module = "M20"
+title = "To-do manager"
+requires = ["files.write", "errors.validate-input", "modules.own", "test.assert-tests"]
+
+[[project]]
+id = "proj.turtle-art"
+module = "M10"
+track = "creative"
+title = "Turtle art gallery"
+requires = ["gfx.turtle-functions"]

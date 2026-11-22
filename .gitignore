@@ -1,0 +1,20 @@
+# dependencies & builds
+node_modules/
+dist/
+.astro/
+coverage/
+storybook-static/
+playwright-report/
+test-results/
+*.tsbuildinfo
+# python
+__pycache__/
+.venv/
+# os / editors
+.DS_Store
+.vscode/
+.idea/
+# secrets — never commit
+.env
+.env.*
+!.env.example

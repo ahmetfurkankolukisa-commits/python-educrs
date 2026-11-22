@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F1 app</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<h1>F1 spike — app (localhost:4100)</h1>
+<p class="note">Python runs in a sandbox on a different site (127.0.0.1:4200). Output is always rendered as plain text.</p>
+<textarea id="code" rows="8" spellcheck="false">name = input("Name? ")
+print("Hello", name)</textarea>
+<div class="row">
+  <button id="run">Run</button>
+  <button id="stop">Stop</button>
+  <span id="status">loading Python…</span>
+</div>
+<form id="ask" hidden>
+  <label for="answer">Program is waiting for input:</label>
+  <input id="answer" autocomplete="off">
+  <button>Send</button>
+</form>
+<pre id="out"></pre>
+<iframe id="sandbox" title="Python sandbox" src="http://127.0.0.1:4200/index.html" sandbox="allow-scripts allow-same-origin" hidden></iframe>
+<script type="module" src="app.js"></script>
+</body>
+</html>

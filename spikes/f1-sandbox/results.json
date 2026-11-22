@@ -1,0 +1,807 @@
+[
+  {
+    "engine": "chromium",
+    "version": "159.0.8154.6",
+    "checks": [
+      {
+        "id": "boot",
+        "pass": true,
+        "detail": {
+          "sw": true,
+          "stdin": "sync-sw",
+          "swError": null,
+          "thirdParty": true
+        }
+      },
+      {
+        "id": "run.print",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 4,
+          "readyAfterMs": null,
+          "output": "hello\n"
+        }
+      },
+      {
+        "id": "stdin.single",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 6.299999997019768,
+          "readyAfterMs": null,
+          "output": "Name? Hi Ada\n"
+        }
+      },
+      {
+        "id": "stdin.multiple",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3.4000000059604645,
+          "readyAfterMs": null,
+          "output": "5\n"
+        }
+      },
+      {
+        "id": "stdin.slow-typist (3 SW rounds)",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3508.89999999851,
+          "readyAfterMs": null,
+          "output": "Name? Hi Slow\n"
+        }
+      },
+      {
+        "id": "stop.infinite-loop",
+        "pass": true,
+        "detail": {
+          "status": "interrupted",
+          "error": null,
+          "extra": null,
+          "durationMs": 401.69999999552965,
+          "readyAfterMs": 0.09999999403953552,
+          "output": ""
+        }
+      },
+      {
+        "id": "stop.next-run-works",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "hello\n"
+        }
+      },
+      {
+        "id": "hygiene.builtins-patched",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1.2999999970197678,
+          "readyAfterMs": null,
+          "output": "still 2\n"
+        }
+      },
+      {
+        "id": "hygiene.builtins-cleared",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1.6999999955296516,
+          "readyAfterMs": null,
+          "output": "ok 2\n"
+        }
+      },
+      {
+        "id": "hygiene.globals",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1.1000000014901161,
+          "readyAfterMs": null,
+          "output": "False\n"
+        }
+      },
+      {
+        "id": "hygiene.sys-stdout",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 0.9000000059604645,
+          "readyAfterMs": null,
+          "output": "visible\n"
+        }
+      },
+      {
+        "id": "hygiene.module-patch",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 0.8999999985098839,
+          "readyAfterMs": null,
+          "output": "[1]\n"
+        }
+      },
+      {
+        "id": "hygiene.sabotage-recovers",
+        "pass": true,
+        "detail": {
+          "sabotage": "sabotaged\n",
+          "next": "worker-corrupted: ns.get(...) is not a function",
+          "after": "hello\n"
+        }
+      },
+      {
+        "id": "error.traceback-user-frames-only",
+        "pass": true,
+        "detail": "Traceback (most recent call last):\n  File \"/main.py\", line 3, in <module>\n    print(items[i])\n          ~~~~~^^^\nIndexError: list index out of range\n"
+      },
+      {
+        "id": "error.stack_data-variables",
+        "pass": true,
+        "detail": {
+          "error": "IndexError: list index out of range",
+          "frames": [
+            {
+              "line": 3,
+              "executing": "items[i]",
+              "vars": {
+                "items": "[1, 2, 3]",
+                "i": "3"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "trace.1000-steps<500ms",
+        "pass": true,
+        "detail": {
+          "steps": 1000,
+          "truncated": true,
+          "trace_ms": 15.4,
+          "json_ms": 7.5,
+          "json_kb": 724.1
+        }
+      },
+      {
+        "id": "attack.storage-isolated",
+        "pass": true,
+        "detail": "ORIGIN http://127.0.0.1:4200\nHAS_LOCALSTORAGE False\nHAS_DOCUMENT False\nDBS []\nAPPDB NEW-EMPTY\n"
+      },
+      {
+        "id": "attack.network-blocked",
+        "pass": true,
+        "detail": {
+          "output": "FETCH evil BLOCKED\nFETCH app BLOCKED\nFETCH self OK 200\nXHR BLOCKED\nWS CREATED\nIMPORTSCRIPTS BLOCKED\nEVAL BLOCKED\nSSE CREATED\n",
+          "evilHits": []
+        }
+      },
+      {
+        "id": "attack.self-fetch-allowed",
+        "pass": true,
+        "detail": "FETCH evil BLOCKED\nFETCH app BLOCKED\nFETCH self OK 200\nXHR BLOCKED\nWS CREATED\nIMPORTSCRIPTS BLOCKED\nEVAL BLOCKED\nSSE CREATED\n"
+      },
+      {
+        "id": "attack.spoofed-messages-harmless",
+        "pass": true,
+        "detail": {
+          "children": 0,
+          "dialogs": [],
+          "dropped": []
+        }
+      },
+      {
+        "id": "attack.frame-ancestors",
+        "pass": true,
+        "detail": {
+          "embedded": false
+        }
+      },
+      {
+        "id": "warm.reload-works",
+        "pass": true,
+        "detail": {
+          "warm": {
+            "sw": true,
+            "stdin": "sync-sw",
+            "swError": null,
+            "thirdParty": true
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "coldLoadMs": 737,
+      "stopToResultMs": 1,
+      "readyAfterStopMs": 0,
+      "probe": {
+        "python": "3.14.2",
+        "restore_ms": 0.5,
+        "modules_restored": 0,
+        "modules_tracked": 165
+      },
+      "trace": {
+        "steps": 1000,
+        "truncated": true,
+        "trace_ms": 15.4,
+        "json_ms": 7.5,
+        "json_kb": 724.1
+      },
+      "warmLoadMs": 603,
+      "offlineNote": "sandbox HTML not cached by SW in this spike (expected; app-level SW is F2 scope)"
+    },
+    "caps": {
+      "sw": true,
+      "stdin": "sync-sw",
+      "swError": null,
+      "thirdParty": true
+    },
+    "consoleErrors": []
+  },
+  {
+    "engine": "firefox",
+    "version": "159.0",
+    "checks": [
+      {
+        "id": "boot",
+        "pass": true,
+        "detail": {
+          "sw": true,
+          "stdin": "sync-sw",
+          "swError": null,
+          "thirdParty": true,
+          "claimedExplicitly": true
+        }
+      },
+      {
+        "id": "run.print",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 2,
+          "readyAfterMs": null,
+          "output": "hello\n"
+        }
+      },
+      {
+        "id": "stdin.single",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "Name? Hi Ada\n"
+        }
+      },
+      {
+        "id": "stdin.multiple",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 8,
+          "readyAfterMs": null,
+          "output": "5\n"
+        }
+      },
+      {
+        "id": "stdin.slow-typist (3 SW rounds)",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3510,
+          "readyAfterMs": null,
+          "output": "Name? Hi Slow\n"
+        }
+      },
+      {
+        "id": "stop.infinite-loop",
+        "pass": true,
+        "detail": {
+          "status": "interrupted",
+          "error": null,
+          "extra": null,
+          "durationMs": 402,
+          "readyAfterMs": 0,
+          "output": ""
+        }
+      },
+      {
+        "id": "stop.next-run-works",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 4,
+          "readyAfterMs": null,
+          "output": "hello\n"
+        }
+      },
+      {
+        "id": "hygiene.builtins-patched",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "still 2\n"
+        }
+      },
+      {
+        "id": "hygiene.builtins-cleared",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 2,
+          "readyAfterMs": null,
+          "output": "ok 2\n"
+        }
+      },
+      {
+        "id": "hygiene.globals",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 2,
+          "readyAfterMs": null,
+          "output": "False\n"
+        }
+      },
+      {
+        "id": "hygiene.sys-stdout",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1,
+          "readyAfterMs": null,
+          "output": "visible\n"
+        }
+      },
+      {
+        "id": "hygiene.module-patch",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1,
+          "readyAfterMs": null,
+          "output": "[1]\n"
+        }
+      },
+      {
+        "id": "hygiene.sabotage-recovers",
+        "pass": true,
+        "detail": {
+          "sabotage": "sabotaged\n",
+          "next": "worker-corrupted: ns.get(...) is not a function",
+          "after": "hello\n"
+        }
+      },
+      {
+        "id": "error.traceback-user-frames-only",
+        "pass": true,
+        "detail": "Traceback (most recent call last):\n  File \"/main.py\", line 3, in <module>\n    print(items[i])\n          ~~~~~^^^\nIndexError: list index out of range\n"
+      },
+      {
+        "id": "error.stack_data-variables",
+        "pass": true,
+        "detail": {
+          "error": "IndexError: list index out of range",
+          "frames": [
+            {
+              "line": 3,
+              "executing": "items[i]",
+              "vars": {
+                "items": "[1, 2, 3]",
+                "i": "3"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "trace.1000-steps<500ms",
+        "pass": true,
+        "detail": {
+          "steps": 1000,
+          "truncated": true,
+          "trace_ms": 38,
+          "json_ms": 11,
+          "json_kb": 724.1
+        }
+      },
+      {
+        "id": "attack.storage-isolated",
+        "pass": true,
+        "detail": "ORIGIN http://127.0.0.1:4200\nHAS_LOCALSTORAGE False\nHAS_DOCUMENT False\nDBS []\nAPPDB NEW-EMPTY\n"
+      },
+      {
+        "id": "attack.network-blocked",
+        "pass": true,
+        "detail": {
+          "output": "FETCH evil BLOCKED\nFETCH app BLOCKED\nFETCH self OK 200\nXHR BLOCKED\nWS BLOCKED\nIMPORTSCRIPTS BLOCKED\nEVAL BLOCKED\nSSE CREATED\n",
+          "evilHits": []
+        }
+      },
+      {
+        "id": "attack.self-fetch-allowed",
+        "pass": true,
+        "detail": "FETCH evil BLOCKED\nFETCH app BLOCKED\nFETCH self OK 200\nXHR BLOCKED\nWS BLOCKED\nIMPORTSCRIPTS BLOCKED\nEVAL BLOCKED\nSSE CREATED\n"
+      },
+      {
+        "id": "attack.spoofed-messages-harmless",
+        "pass": true,
+        "detail": {
+          "children": 0,
+          "dialogs": [],
+          "dropped": []
+        }
+      },
+      {
+        "id": "attack.frame-ancestors",
+        "pass": true,
+        "detail": {
+          "embedded": false
+        }
+      },
+      {
+        "id": "warm.reload-works",
+        "pass": true,
+        "detail": {
+          "warm": {
+            "sw": true,
+            "stdin": "sync-sw",
+            "swError": null,
+            "thirdParty": true,
+            "claimedExplicitly": true
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "coldLoadMs": 775,
+      "stopToResultMs": 2,
+      "readyAfterStopMs": 0,
+      "probe": {
+        "python": "3.14.2",
+        "restore_ms": 1,
+        "modules_restored": 0,
+        "modules_tracked": 165
+      },
+      "trace": {
+        "steps": 1000,
+        "truncated": true,
+        "trace_ms": 38,
+        "json_ms": 11,
+        "json_kb": 724.1
+      },
+      "warmLoadMs": 757,
+      "offlineNote": "sandbox HTML not cached by SW in this spike (expected; app-level SW is F2 scope)"
+    },
+    "caps": {
+      "sw": true,
+      "stdin": "sync-sw",
+      "swError": null,
+      "thirdParty": true,
+      "claimedExplicitly": true
+    },
+    "consoleErrors": [
+      "[JavaScript Error: \"uncaught exception: undefined\" {file: \"http://127.0.0.1:4200/pyodide/pyodide.asm.mjs\" line: 1}]",
+      "[JavaScript Error: \"Firefox can’t establish a connection to the server at http://127.0.0.1:4300/sse.\" {file: \"http://127.0.0.1:4200/pyodide/pyodide.asm.mjs\" line: 1}]"
+    ]
+  },
+  {
+    "engine": "webkit",
+    "version": "27.2",
+    "checks": [
+      {
+        "id": "boot",
+        "pass": true,
+        "detail": {
+          "sw": true,
+          "stdin": "sync-sw",
+          "swError": null,
+          "thirdParty": true,
+          "claimedExplicitly": true
+        }
+      },
+      {
+        "id": "run.print",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "hello\n"
+        }
+      },
+      {
+        "id": "stdin.single",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 6,
+          "readyAfterMs": null,
+          "output": "Name? Hi Ada\n"
+        }
+      },
+      {
+        "id": "stdin.multiple",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "5\n"
+        }
+      },
+      {
+        "id": "stdin.slow-typist (3 SW rounds)",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3509,
+          "readyAfterMs": null,
+          "output": "Name? Hi Slow\n"
+        }
+      },
+      {
+        "id": "stop.infinite-loop",
+        "pass": true,
+        "detail": {
+          "status": "interrupted",
+          "error": null,
+          "extra": null,
+          "durationMs": 401,
+          "readyAfterMs": 0,
+          "output": ""
+        }
+      },
+      {
+        "id": "stop.next-run-works",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 4,
+          "readyAfterMs": null,
+          "output": "hello\n"
+        }
+      },
+      {
+        "id": "hygiene.builtins-patched",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "still 2\n"
+        }
+      },
+      {
+        "id": "hygiene.builtins-cleared",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 3,
+          "readyAfterMs": null,
+          "output": "ok 2\n"
+        }
+      },
+      {
+        "id": "hygiene.globals",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1,
+          "readyAfterMs": null,
+          "output": "False\n"
+        }
+      },
+      {
+        "id": "hygiene.sys-stdout",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 2,
+          "readyAfterMs": null,
+          "output": "visible\n"
+        }
+      },
+      {
+        "id": "hygiene.module-patch",
+        "pass": true,
+        "detail": {
+          "status": "ok",
+          "error": null,
+          "extra": null,
+          "durationMs": 1,
+          "readyAfterMs": null,
+          "output": "[1]\n"
+        }
+      },
+      {
+        "id": "hygiene.sabotage-recovers",
+        "pass": true,
+        "detail": {
+          "sabotage": "sabotaged\n",
+          "next": "worker-corrupted: ns.get(\"run_user\") is not a function. (In 'ns.get(\"run_user\")(",
+          "after": "hello\n"
+        }
+      },
+      {
+        "id": "error.traceback-user-frames-only",
+        "pass": true,
+        "detail": "Traceback (most recent call last):\n  File \"/main.py\", line 3, in <module>\n    print(items[i])\n          ~~~~~^^^\nIndexError: list index out of range\n"
+      },
+      {
+        "id": "error.stack_data-variables",
+        "pass": true,
+        "detail": {
+          "error": "IndexError: list index out of range",
+          "frames": [
+            {
+              "line": 3,
+              "executing": "items[i]",
+              "vars": {
+                "items": "[1, 2, 3]",
+                "i": "3"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "trace.1000-steps<500ms",
+        "pass": true,
+        "detail": {
+          "steps": 1000,
+          "truncated": true,
+          "trace_ms": 14,
+          "json_ms": 8,
+          "json_kb": 724.1
+        }
+      },
+      {
+        "id": "attack.storage-isolated",
+        "pass": true,
+        "detail": "ORIGIN http://127.0.0.1:4200\nHAS_LOCALSTORAGE False\nHAS_DOCUMENT False\nDBS []\nAPPDB NEW-EMPTY\n"
+      },
+      {
+        "id": "attack.network-blocked",
+        "pass": true,
+        "detail": {
+          "output": "FETCH evil BLOCKED (never settled)\nFETCH app BLOCKED (never settled)\nFETCH self OK 200\nXHR BLOCKED\nWS BLOCKED\nIMPORTSCRIPTS BLOCKED\nEVAL BLOCKED\nSSE BLOCKED\n",
+          "evilHits": []
+        }
+      },
+      {
+        "id": "attack.self-fetch-allowed",
+        "pass": true,
+        "detail": "FETCH evil BLOCKED (never settled)\nFETCH app BLOCKED (never settled)\nFETCH self OK 200\nXHR BLOCKED\nWS BLOCKED\nIMPORTSCRIPTS BLOCKED\nEVAL BLOCKED\nSSE BLOCKED\n"
+      },
+      {
+        "id": "attack.spoofed-messages-harmless",
+        "pass": true,
+        "detail": {
+          "children": 0,
+          "dialogs": [],
+          "dropped": []
+        }
+      },
+      {
+        "id": "attack.frame-ancestors",
+        "pass": true,
+        "detail": {
+          "embedded": false
+        }
+      },
+      {
+        "id": "warm.reload-works",
+        "pass": true,
+        "detail": {
+          "warm": {
+            "sw": true,
+            "stdin": "sync-sw",
+            "swError": null,
+            "thirdParty": true
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "coldLoadMs": 753,
+      "stopToResultMs": 1,
+      "readyAfterStopMs": 0,
+      "probe": {
+        "python": "3.14.2",
+        "restore_ms": 0,
+        "modules_restored": 0,
+        "modules_tracked": 165
+      },
+      "trace": {
+        "steps": 1000,
+        "truncated": true,
+        "trace_ms": 14,
+        "json_ms": 8,
+        "json_kb": 724.1
+      },
+      "warmLoadMs": 769,
+      "offlineNote": "sandbox HTML not cached by SW in this spike (expected; app-level SW is F2 scope)"
+    },
+    "caps": {
+      "sw": true,
+      "stdin": "sync-sw",
+      "swError": null,
+      "thirdParty": true,
+      "claimedExplicitly": true
+    },
+    "consoleErrors": [
+      "Refused to connect to http://127.0.0.1:4300/fetch because it does not appear in the connect-src directive of the Content Security Policy.",
+      "Unhandled Promise Rejection: PythonError: Traceback (most recent call last):\n  File \"/lib/python314.zip/_pyodide/_future_helper.py\", line 10, in set_exception\n    fut.set_exception(val)\n    ~~~~~~~~~~",
+      "Refused to connect to http://localhost:4100/index.html because it does not appear in the connect-src directive of the Content Security Policy.",
+      "Unhandled Promise Rejection: PythonError: Traceback (most recent call last):\n  File \"/lib/python314.zip/_pyodide/_future_helper.py\", line 10, in set_exception\n    fut.set_exception(val)\n    ~~~~~~~~~~",
+      "Refused to connect to http://127.0.0.1:4300/xhr because it does not appear in the connect-src directive of the Content Security Policy.",
+      "Refused to connect to ws://127.0.0.1:4300/ws because it does not appear in the connect-src directive of the Content Security Policy.",
+      "Refused to connect to http://127.0.0.1:4300/sse because it does not appear in the connect-src directive of the Content Security Policy."
+    ]
+  }
+]
