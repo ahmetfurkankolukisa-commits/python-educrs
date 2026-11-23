@@ -14,6 +14,7 @@
   "runner.send": "Send",
   "runner.output": "Output",
   "runner.interrupted": "Stopped.",
+  "runner.outputTruncated": "… (the rest is not shown: the output is too long)",
   "runner.failed": "Python could not start in this browser: {reason}",
   "footer.license": "Code: MIT · Content: CC BY-SA 4.0",
   "footer.source": "Source code",

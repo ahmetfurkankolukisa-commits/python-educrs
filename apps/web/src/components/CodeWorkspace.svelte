@@ -18,13 +18,34 @@
   }
   let { client, status, failReason = "", code = $bindable(), id = "code", label = "Python code", errorLine = null, check = null }: Props = $props();
 
+  // A runaway loop can print without end and freeze the tab: what a PROGRAM prints is capped.
+  const MAX_OUTPUT_CHARS = 100_000;
+  const MAX_STATUS_CHARS = 10_000;
   let output = $state("");
+  let outputTruncated = false;
   let running = $state(false);
   let asking = $state<{ runId: string; reqId: string } | null>(null);
   let runExplanation = $state<{ text: string; lineno: number | null } | null>(null);
   let answer = $state("");
   let answerInput = $state<HTMLInputElement>();
   let runId: string | null = null;
+
+  function appendOutput(text: string) {
+    if (outputTruncated) return;
+    if (output.length + text.length > MAX_OUTPUT_CHARS) {
+      output += `${text.slice(0, Math.max(0, MAX_OUTPUT_CHARS - output.length))}\n${t("runner.outputTruncated")}\n`;
+      outputTruncated = true;
+      return;
+    }
+    output += text;
+  }
+  /**
+   * What the learner must always see — the error message, "Stopped." — is never dropped by the cap
+   * above (stopping a runaway print loop is exactly when "Stopped." matters). Bounded on its own.
+   */
+  function appendStatus(text: string) {
+    output += text.slice(0, MAX_STATUS_CHARS);
+  }
 
   const shownStatus = $derived(status === "ready" && running ? "running" : status);
   const highlight = $derived(runExplanation?.lineno ?? errorLine);
@@ -40,11 +61,12 @@
   export function run() {
     if (status !== "ready" || running) return;
     output = "";
+    outputTruncated = false;
     runExplanation = null;
     running = true;
     runId = client.run(code, {
-      stdout: (text) => { output += text; },
-      stderr: (text) => { output += text; },
+      stdout: appendOutput,
+      stderr: appendOutput,
       stdin: (reqId) => {
         if (!runId) return;
         asking = { runId, reqId };
@@ -52,10 +74,10 @@
       },
       result: (r) => {
         if (r.status === "error" && r.error) {
-          output += r.error;
+          appendStatus(r.error);
           runExplanation = words(r.extra);
         }
-        if (r.status === "interrupted") output += `\n${t("runner.interrupted")}\n`;
+        if (r.status === "interrupted") appendStatus(`\n${t("runner.interrupted")}\n`);
         asking = null;
         running = false;
         runId = null;
@@ -66,7 +88,7 @@
   function send(ev: SubmitEvent) {
     ev.preventDefault();
     if (!asking) return;
-    output += answer + "\n";
+    appendOutput(answer + "\n");
     client.stdin(asking.runId, asking.reqId, answer);
     asking = null;
     answer = "";

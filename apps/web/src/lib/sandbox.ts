@@ -32,7 +32,6 @@ export class SandboxClient {
   #frame: HTMLIFrameElement | null = null;
   #acked = false;
   #ready = false;
-  #seq = 0;
   #runs = new Map<string, RunHandlers>();
   #checks = new Map<string, (extra: unknown) => void>();
   #onStatus: (s: SandboxStatus, reason?: string) => void = () => {};
@@ -68,7 +67,7 @@ export class SandboxClient {
   }
 
   run(code: string, handlers: RunHandlers): string {
-    const runId = `r${++this.#seq}`;
+    const runId = `r-${crypto.randomUUID()}`;
     this.#runs.set(runId, handlers);
     this.#post({ type: "run", runId, code, mode: "run" });
     return runId;
@@ -87,7 +86,7 @@ export class SandboxClient {
    * Resolves to the raw grade payload, or null if the sandbox never answered.
    */
   check(code: string, spec: object, seed: number): Promise<unknown> {
-    const runId = `c${++this.#seq}`;
+    const runId = `c-${crypto.randomUUID()}`;
     return new Promise((resolve) => {
       const timer = setTimeout(() => { this.#checks.delete(runId); resolve(null); }, CHECK_TIMEOUT_MS);
       this.#checks.set(runId, (extra) => { clearTimeout(timer); resolve(extra); });

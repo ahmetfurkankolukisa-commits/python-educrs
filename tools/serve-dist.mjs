@@ -49,8 +49,15 @@ export function serve(dir, host, port) {
   const rules = fs.existsSync(rulesFile) ? parseHeaders(fs.readFileSync(rulesFile, "utf8")) : [];
   const server = http.createServer((req, res) => {
     const { pathname } = new URL(req.url, `http://${host}`);
-    let file = path.normalize(path.join(root, decodeURIComponent(pathname)));
-    if (!file.startsWith(root)) { res.writeHead(400).end(); return; }
+    let decoded;
+    try {
+      decoded = decodeURIComponent(pathname);
+    } catch {
+      res.writeHead(400).end();
+      return;
+    }
+    let file = path.normalize(path.join(root, decoded));
+    if (file !== root && !file.startsWith(root + path.sep)) { res.writeHead(400).end(); return; }
     if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
     if (!fs.existsSync(file) && fs.existsSync(file + ".html")) file += ".html";
     const headers = headersFor(rules, pathname);

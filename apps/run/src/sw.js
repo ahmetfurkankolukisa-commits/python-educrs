@@ -6,6 +6,7 @@
 //  2. /pyodide/* — cache-first, so Python loads offline and warm loads skip the network.
 const PENDING = new Map(); // reqId -> resolve(value)
 const VALUES = new Map();  // reqId -> value that arrived before the request
+const MAX_CACHED_VALUES = 100;
 let timeoutMs = 15000;
 const CACHE = "__PYODIDE_DIR__";
 
@@ -15,12 +16,18 @@ self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 self.addEventListener("message", (e) => {
   const m = e.data;
   if (!m || typeof m !== "object") return;
-  if (m.type === "config" && typeof m.stdinTimeoutMs === "number") { timeoutMs = m.stdinTimeoutMs; return; }
+  if (m.type === "config" && typeof m.stdinTimeoutMs === "number" && Number.isFinite(m.stdinTimeoutMs)) {
+    timeoutMs = Math.min(60_000, Math.max(1_000, Math.trunc(m.stdinTimeoutMs)));
+    return;
+  }
   if (m.type === "claim") { e.waitUntil(self.clients.claim()); return; }
   if (m.type === "stdin" && typeof m.reqId === "string" && typeof m.value === "string") {
     const resolve = PENDING.get(m.reqId);
     if (resolve) { PENDING.delete(m.reqId); resolve(m.value); }
-    else VALUES.set(m.reqId, m.value);
+    else {
+      if (VALUES.size >= MAX_CACHED_VALUES) VALUES.delete(VALUES.keys().next().value);
+      VALUES.set(m.reqId, m.value);
+    }
   }
 });
 

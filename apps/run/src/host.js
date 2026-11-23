@@ -175,7 +175,10 @@ window.addEventListener("message", async (e) => {
     return;
   }
   if (m.type === "config") {
-    if (typeof m.stdinTimeoutMs === "number") navigator.serviceWorker?.controller?.postMessage({ type: "config", stdinTimeoutMs: m.stdinTimeoutMs });
+    if (typeof m.stdinTimeoutMs === "number" && Number.isFinite(m.stdinTimeoutMs)) {
+      const clamped = Math.min(60_000, Math.max(1_000, Math.trunc(m.stdinTimeoutMs)));
+      navigator.serviceWorker?.controller?.postMessage({ type: "config", stdinTimeoutMs: clamped });
+    }
     return;
   }
   if (m.type === "run" && str(m.runId) && str(m.code)) {
