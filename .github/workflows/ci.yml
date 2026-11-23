@@ -45,6 +45,8 @@ jobs:
         run: pnpm lint:deps
       - name: Boundary rules actually fire (negative tests)
         run: pnpm test:boundaries
+      - name: Every Playwright project has its e2e job below
+        run: pnpm lint:ci
       - name: Production build
         run: pnpm build
       - name: JS budget
@@ -53,9 +55,17 @@ jobs:
         run: pnpm deploy:check
 
   e2e:
-    name: E2E (Chromium, Firefox, WebKit, iPhone)
+    # One job per Playwright project. As one job the four took 28 of its 30 minutes, and the
+    # Storybook scan behind them was cancelled by the limit although every test had passed
+    # (docs/05-f3-mvp0.md §17.13). `pnpm lint:ci` keeps this list equal to the projects in
+    # playwright.config.ts: a project missing here would never run, and nothing would look wrong.
+    name: E2E (${{ matrix.project }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false # one engine failing says nothing about the others: let them finish
+      matrix:
+        project: [chromium, firefox, webkit, mobile-webkit]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -63,15 +73,29 @@ jobs:
           node-version-file: .nvmrc
       - run: corepack enable
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - name: Install the one browser this project runs on
+        run: pnpm exec playwright install --with-deps ${{ matrix.project == 'mobile-webkit' && 'webkit' || matrix.project }}
       - name: Build both sites with local origins
         run: pnpm build:e2e
-      - run: pnpm e2e
-      - name: Design-system stories × 3 themes (axe, with planted-violation self-test)
-        run: pnpm a11y:stories
+      - run: pnpm e2e --project=${{ matrix.project }}
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}
           path: playwright-report/
           retention-days: 7
+
+  stories:
+    name: Design-system stories × 3 themes (axe)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Every story in 3 themes, with a planted-violation self-test
+        run: pnpm a11y:stories
