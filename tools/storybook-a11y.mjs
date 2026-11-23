@@ -53,7 +53,11 @@ async function open(id, theme) {
   );
   // Scan the settled state: mid-animation (e.g. a panel fading in) text is translucent and
   // would fail contrast for a reason no learner ever sees for more than 200 ms.
-  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {}))));
+  // Only animations that END: Byte's blink and the editor's cursor repeat forever, and waiting for
+  // those never returns (it hung the scan the day the mascot arrived, docs/05-f3-mvp0.md §17.14).
+  await page.evaluate(() => Promise.all(document.getAnimations()
+    .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+    .map((a) => a.finished.catch(() => {}))));
   const state = await page.evaluate(() => ({
     theme: document.documentElement.dataset.theme,
     error: document.body.classList.contains("sb-show-errordisplay"),

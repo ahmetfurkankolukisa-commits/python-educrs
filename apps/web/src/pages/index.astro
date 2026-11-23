@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Runner from "../components/Runner.svelte";
-import { Button } from "@educrs/ui";
+import { Button, Mascot } from "@educrs/ui";
 import { t } from "@educrs/i18n";
 
 const features = [
@@ -13,9 +13,25 @@ const features = [
 
 <Base>
   <section class="hero">
-    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{t("home.heading")}</h1>
-    <p class="mt-4 max-w-xl text-lg text-muted">{t("home.lead")}</p>
-    <div class="mt-6"><Button href="/learn/" data-testid="start-learning">{t("home.startLearning")}</Button></div>
+    <!-- Decoration (aria-hidden): Byte, and on wide screens a glimpse of what a lesson looks like. -->
+    <div class="art" aria-hidden="true">
+      <div class="preview">
+        <span class="pv-chip">Predict the output</span>
+        <pre class="pv-code">name = "Ada"
+print("Hi", name)</pre>
+        <div class="pv-choice pv-right"><span>Hi Ada</span><span>✓</span></div>
+        <div class="pv-choice"><span>Hi name</span></div>
+      </div>
+      <div class="byte"><Mascot mood="hello" size={128} /></div>
+    </div>
+    <div class="intro">
+      <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{t("home.heading")}</h1>
+      <p class="mt-4 max-w-xl text-lg text-muted">{t("home.lead")}</p>
+      <div class="mt-6"><Button href="/learn/" data-testid="start-learning">{t("home.startLearning")}</Button></div>
+    </div>
+  </section>
+
+  <section aria-label={t("home.features")}>
     <ul class="features">
       {
         features.map((f) => (
@@ -43,6 +59,84 @@ const features = [
 </Base>
 
 <style>
+  .hero {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .art {
+    position: relative;
+    justify-self: start;
+  }
+  .preview {
+    display: none;
+  }
+  .byte {
+    width: 6rem;
+  }
+  .byte :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+  @media (min-width: 720px) {
+    /* Byte leans out of the art column by 2.25rem; the 3rem gap keeps it clear of the words. */
+    .hero {
+      grid-template-columns: minmax(0, 1fr) 16rem;
+      align-items: center;
+      gap: var(--space-12);
+    }
+    .art {
+      order: 2;
+      justify-self: end;
+      width: 16rem;
+      padding-bottom: 2.5rem;
+    }
+    .preview {
+      display: grid;
+      gap: var(--space-2);
+      padding: var(--space-4);
+      border: 2px solid var(--color-border-soft);
+      border-bottom-width: 6px;
+      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      rotate: 2deg;
+    }
+    .pv-chip {
+      justify-self: start;
+      padding: 0.125rem var(--space-3);
+      border-radius: 999px;
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .pv-code {
+      margin: 0;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+      background: var(--color-code-bg);
+      font: 0.8125rem / 1.5 var(--font-mono);
+    }
+    .pv-choice {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-3);
+      border: 2px solid var(--color-border-soft);
+      border-bottom-width: 4px;
+      border-radius: var(--radius-sm);
+      font: 0.8125rem / 1.4 var(--font-mono);
+    }
+    .pv-right {
+      border-color: var(--color-success);
+      background: var(--color-success-soft);
+      color: var(--color-text);
+    }
+    .byte {
+      position: absolute;
+      left: -2.25rem;
+      bottom: -0.5rem;
+      width: 7rem;
+    }
+  }
   .features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));

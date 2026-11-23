@@ -51,6 +51,7 @@
   "editor.cursorLeft": "Move cursor left",
   "editor.cursorRight": "Move cursor right",
   "editor.loading": "Loading the editor…",
+  "editor.placeholder": "Type your code here",
   "home.startLearning": "Start learning",
   "lesson.exit": "Leave the lesson (your progress is saved)",
   "lesson.progress": "Lesson progress",
@@ -153,6 +154,9 @@
   "lesson.kind.code": "Write the code",
   "lesson.kind.project": "Project step {n} of {m}",
   "runner.outputEmpty": "Press Run to see what your program shows.",
+  "runner.fullScreen": "Full screen",
+  "runner.exitFullScreen": "Exit full screen",
+  "runner.fullScreenTitle": "Your code",
   "runner.failedHelp": "Try reloading the page. If it keeps happening, use a recent version of Chrome, Firefox, Edge or Safari.",
   "home.feature.free": "Free, for good",
   "home.feature.free.text": "No ads, no shop, no paid plan.",
@@ -162,5 +166,6 @@
   "home.feature.offline.text": "Short steps, real Python, help when you get stuck.",
   "page.notFound.title": "Page not found",
   "page.notFound.text": "This page doesn't exist, or it has moved. Your progress is safe.",
-  "page.notFound.back": "Back to the learning path"
+  "page.notFound.back": "Back to the learning path",
+  "home.features": "Why this course"
 }

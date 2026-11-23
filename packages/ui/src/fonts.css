@@ -6,3 +6,19 @@
  */
 @import "@fontsource-variable/lexend/wght.css";
 @import "@fontsource-variable/jetbrains-mono/wght.css";
+
+/*
+ * Code is read one character at a time. JetBrains Mono would otherwise draw != as ≠, >= as ⩾ and
+ * -> as an arrow: signs a beginner cannot find on the keyboard (docs/05-f3-mvp0.md §17.15). These
+ * are "contextual alternates"; switching them off changes nothing in ordinary text.
+ *
+ * On every element and !important, not once on the root: the `font` shorthand resets this property,
+ * so any component that writes `font: 16px/1.5 var(--font-mono)` would switch the ligatures back
+ * on (the first attempt, on :root, left every code block as it was — an e2e test caught it). The
+ * editor's shadow root inherits it from its host.
+ */
+*,
+*::before,
+*::after {
+  font-variant-ligatures: no-contextual !important;
+}

@@ -6,6 +6,7 @@
   import { t } from "@educrs/i18n";
   import Button from "./Button.svelte";
   import GoalRing from "./GoalRing.svelte";
+  import Mascot from "./Mascot.svelte";
 
   interface Rewards {
     /** XP this lesson added. */
@@ -33,15 +34,31 @@
   let heading = $state<HTMLHeadingElement>();
   onMount(() => heading?.focus());
   const met = $derived(!!rewards && rewards.todayXp >= rewards.goal);
+
+  // "+55 XP" counts up from 0 (a reward moment, §17.11). Screen readers get the final number once;
+  // with reduced motion there is no counting.
+  let shownXp = $state(0);
+  $effect(() => {
+    const target = rewards?.xp ?? 0;
+    if (target <= 0 || typeof matchMedia !== "function" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      shownXp = target;
+      return;
+    }
+    const started = performance.now();
+    const duration = 800;
+    let frame = requestAnimationFrame(function tick(now) {
+      const k = Math.min(1, (now - started) / duration);
+      shownXp = Math.round(target * (1 - (1 - k) ** 3)); // ease-out
+      if (k < 1) frame = requestAnimationFrame(tick);
+    });
+    return () => cancelAnimationFrame(frame);
+  });
 </script>
 
 <section class="done" data-testid="lesson-complete" data-plain={plain}>
   {#if !plain}
     <div class="badge-wrap" aria-hidden="true">
-      <svg class="badge" viewBox="0 0 64 64" focusable="false">
-        <circle cx="32" cy="32" r="30" />
-        <path d="M32 13l5.6 11.4 12.6 1.8-9.1 8.9 2.1 12.5L32 41.7l-11.2 5.9 2.1-12.5-9.1-8.9 12.6-1.8z" />
-      </svg>
+      <div class="badge"><Mascot mood="celebrate" size={128} /></div>
       <!-- A small burst of sparks: CSS only, never in plain mode or with reduced motion (§17.6). -->
       <span class="sparks">{#each [0, 1, 2, 3, 4, 5, 6, 7] as i (i)}<i></i>{/each}</span>
     </div>
@@ -52,9 +69,10 @@
     <p class="stat">{t("lesson.complete.firstTry", { n: firstTry, m: exercises })}</p>
     {#if rewards}
       <ul class="rewards" data-testid="rewards">
-        <li class="xp" data-testid="reward-xp" data-xp={rewards.xp}>
+        <li class="xp" data-xp={rewards.xp}>
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 2 4.5 13.5h6.2L9.8 22l9.4-12.2h-6.4z" /></svg>
-          {t("lesson.complete.xp", { n: rewards.xp })}
+          <span class="count" aria-hidden="true" data-testid="reward-xp">{t("lesson.complete.xp", { n: shownXp })}</span>
+          <span class="sr-only">{t("lesson.complete.xp", { n: rewards.xp })}</span>
         </li>
         <li class="goal" class:celebrate={rewards.goalReachedNow} data-testid="reward-goal" data-met={met}>
           <GoalRing value={rewards.todayXp} goal={rewards.goal} label={t("stats.goal.label")} valueText={t("stats.goal.value", { n: rewards.todayXp, m: rewards.goal })} />
@@ -88,22 +106,11 @@
   }
   .badge-wrap {
     position: relative;
-    width: 7rem;
-    height: 7rem;
+    width: 8rem;
+    height: 8rem;
   }
   .badge {
-    width: 100%;
-    height: 100%;
     animation: pop var(--motion-base) var(--ease-out);
-  }
-  .badge circle {
-    fill: var(--color-streak-soft);
-  }
-  .badge path {
-    fill: var(--color-streak-fill);
-    stroke: var(--color-streak);
-    stroke-width: 1.5;
-    stroke-linejoin: round;
   }
   .sparks i {
     position: absolute;
@@ -135,7 +142,10 @@
   }
   h1 {
     margin: 0;
+    /* stated, not left to the browser: the app's reset makes headings inherit their weight */
     font-size: var(--text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
   h1:focus {
     outline: none;
@@ -173,6 +183,17 @@
   .xp {
     background: var(--color-xp-soft);
     color: var(--color-xp);
+  }
+  .count {
+    font-variant-numeric: tabular-nums;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
   }
   .xp .icon {
     fill: var(--color-xp);

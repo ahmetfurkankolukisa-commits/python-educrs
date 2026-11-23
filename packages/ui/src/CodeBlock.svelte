@@ -6,17 +6,19 @@
   interface Props {
     code: string;
     label: string;
+    /** Show the label above the code. Off: it is still there for screen readers. */
+    showLabel?: boolean;
     /** Optional output shown under the code. */
     output?: string | null;
     outputLabel?: string;
     /** Replaces the code text (e.g. GapFill draws the gap itself). */
     children?: Snippet;
   }
-  let { code, label, output = null, outputLabel = "Output", children }: Props = $props();
+  let { code, label, showLabel = false, output = null, outputLabel = "Output", children }: Props = $props();
 </script>
 
 <figure class="block">
-  <figcaption class="sr-only">{label}</figcaption>
+  <figcaption class={showLabel ? "cap" : "sr-only"}>{label}</figcaption>
   <pre class="code" data-testid="code-block"><code>{#if children}{@render children()}{:else}{code}{/if}</code></pre>
   {#if output !== null}
     <div class="out">
@@ -43,6 +45,12 @@
   .code {
     padding: var(--space-3) var(--space-4);
     color: var(--color-text);
+  }
+  .cap {
+    padding: var(--space-2) var(--space-4) 0;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
   }
   .out {
     border-top: 2px solid var(--color-border-soft);

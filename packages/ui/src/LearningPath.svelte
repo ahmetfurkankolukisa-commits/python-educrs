@@ -23,7 +23,7 @@
       </div>
       <ol>
         {#each m.nodes as n, i (n.lessonId)}
-          <li class="row" class:project={isProject(n.lessonId)}>
+          <li class="row" class:project={isProject(n.lessonId)} class:done={n.state === "completed"}>
             <a class="node {n.state}" href={n.href} data-testid="path-node" data-lesson={n.lessonId} data-state={n.state} data-in-progress={n.inProgress}>
               <span class="dot" aria-hidden="true">
                 {#if n.state === "completed"}
@@ -60,6 +60,7 @@
     gap: var(--space-2);
     margin: 0 0 var(--space-6);
     font-size: var(--text-xl);
+    font-weight: 700;
     text-align: center;
   }
   .mod-id {
@@ -78,11 +79,37 @@
     gap: calc(104px - 4rem); /* node centres 104 px apart (§13.6) */
     justify-items: center;
   }
+  .row {
+    position: relative;
+  }
   .row:nth-child(4n + 1) {
     translate: -60px 0;
   }
   .row:nth-child(4n + 3) {
     translate: 60px 0;
+  }
+  /* The trail between two lessons (docs/05-f3-mvp0.md §17.11): a short line from under this
+     lesson's name to the next lesson's circle. The zig-zag moves 60 px sideways over the 40 px
+     gap, so the line is 72 px long and leans 56°. Solid once the lesson above it is done.
+     Pure CSS, so the static HTML already shows the trail. */
+  .row:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 4px);
+    left: calc(50% - 2px);
+    height: 62px;
+    border-left: 4px dotted var(--color-border);
+    transform-origin: top center;
+    rotate: -56.3deg;
+    pointer-events: none;
+  }
+  .row:nth-child(4n + 3):not(:last-child)::after,
+  .row:nth-child(4n):not(:last-child)::after {
+    rotate: 56.3deg;
+  }
+  .row.done:not(:last-child)::after {
+    border-left-style: solid;
+    border-left-color: var(--color-accent);
   }
   .node {
     display: grid;

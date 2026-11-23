@@ -1,11 +1,12 @@
 ---
 import Base from "../layouts/Base.astro";
-import { Button } from "@educrs/ui";
+import { Button, Mascot } from "@educrs/ui";
 import { t } from "@educrs/i18n";
 ---
 
 <Base title={`${t("page.notFound.title")} · Learn Python`}>
   <section class="grid justify-items-center gap-4 py-12 text-center" data-testid="not-found">
+    <Mascot mood="oops" size={120} />
     <pre class="rounded-2xl border-2 border-border-soft bg-code px-6 py-4 text-left font-mono text-base" aria-hidden="true">page = find("this page")
 <span class="text-danger">NameError: not found</span></pre>
     <h1 class="text-3xl font-bold tracking-tight">{t("page.notFound.title")}</h1>

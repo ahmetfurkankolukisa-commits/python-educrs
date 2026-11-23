@@ -4,8 +4,9 @@
   // because it receives focus when the panel opens.
   import type { Snippet } from "svelte";
   import { onMount } from "svelte";
-  import type { PanelTone } from "./types.ts";
+  import type { MascotMood, PanelTone } from "./types.ts";
   import Button from "./Button.svelte";
+  import Mascot from "./Mascot.svelte";
 
   interface Action {
     label: string;
@@ -18,9 +19,11 @@
     secondary?: Action | null;
     /** Move focus to the primary button on open (keyboard flow). */
     autofocus?: boolean;
+    /** Byte's mood on the sheet, or null for none (plain mode). Decoration only. */
+    mascot?: MascotMood | null;
     children?: Snippet;
   }
-  let { tone, title, primary, secondary = null, autofocus = true, children }: Props = $props();
+  let { tone, title, primary, secondary = null, autofocus = true, mascot = null, children }: Props = $props();
   let button = $state<HTMLElement>();
   const id = $props.id();
 
@@ -30,6 +33,7 @@
 </script>
 
 <section class="panel {tone}" aria-labelledby={id} data-testid="feedback" data-tone={tone}>
+  {#if mascot}<div class="mascot"><Mascot mood={mascot} size={72} /></div>{/if}
   <div class="inner">
     <h2 class="title" {id}>
       <span class="badge" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -69,6 +73,14 @@
     color: var(--color-text);
     animation: rise var(--motion-base) var(--ease-out);
   }
+  /* Byte stands on the top edge of the sheet, out of the way of the text. */
+  .mascot {
+    position: absolute;
+    top: -3.6rem;
+    right: var(--space-4);
+    pointer-events: none;
+    animation: rise var(--motion-base) var(--ease-out);
+  }
   .correct {
     --tone: var(--color-success);
     --tone-soft: var(--color-success-soft);
@@ -96,6 +108,7 @@
     gap: var(--space-3);
     margin: 0;
     font-size: var(--text-xl);
+    font-weight: 700;
     color: var(--tone);
   }
   .badge {

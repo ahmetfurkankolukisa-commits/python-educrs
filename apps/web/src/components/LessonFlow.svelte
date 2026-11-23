@@ -9,7 +9,8 @@
     startFlow, summary, type Exercise, type Explanation, type Feedback, type FlowAction, type FlowState, type Lesson,
     type StepKind, type Tone,
   } from "@educrs/core";
-  import { DAILY_GOALS, progressOf } from "@educrs/gamification";
+  import type { MascotMood } from "@educrs/ui";
+  import { DAILY_GOALS, progressOf, settingsOf } from "@educrs/gamification";
   import CodeWorkspace from "./CodeWorkspace.svelte";
   import SandboxFrame from "./SandboxFrame.svelte";
   import { SandboxClient, type SandboxStatus } from "../lib/sandbox.ts";
@@ -33,6 +34,9 @@
   let choice = $state<string | null>(null);
   let code = $state("");
   let checking = $state(false);
+  let revealedEl = $state<HTMLElement>();
+  /** The last Continue is being stored: a second press must not complete the lesson twice. */
+  let finishing = false;
   let pickFirst = $state(false);
   let announce = $state("");
   let heading = $state<HTMLHeadingElement>();
@@ -96,11 +100,14 @@
       const opened = await openProgress();
       if (cancelled) return;
       progress = opened;
+      // Known from the start, not only at the end: plain mode also hides Byte on the feedback sheet.
+      plainMode = settingsOf(opened.events()).plainMode;
       const at = resumePoint(opened.events(), lesson);
       if (at.start) await record(EVENT.lessonStarted, { lessonId: lesson.id, contentHash: lesson.contentHash });
-      fs = startFlow(kinds, at.step);
-      if (fs.phase === "done") await finish();
-      else await enterStep(false);
+      const start = startFlow(kinds, at.step);
+      if (start.phase === "done") await finish();
+      fs = start;
+      if (start.phase !== "done") await enterStep(false);
     })();
     return () => { cancelled = true; };
   });
@@ -155,15 +162,24 @@
   }
 
   async function next() {
-    if (!fs) return;
-    const before = fs;
-    dispatch({ type: "continue" });
-    if (fs === before) return;
+    if (!fs || finishing) return;
+    const after = flow(fs, { type: "continue" });
+    if (after === fs) return;
     announce = "";
-    if (fs.phase === "done") {
-      await finish();
+    if (after.phase === "done") {
+      // The completion is stored BEFORE the end screen shows, like an attempt before its feedback
+      // (§15.10): its buttons lead away, and someone who leaves the moment they appear must not
+      // lose the lesson. It did happen — to a test that left 30 ms after the screen came up (§17.14).
+      finishing = true;
+      try {
+        await finish();
+      } finally {
+        finishing = false;
+      }
+      fs = after;
       return;
     }
+    fs = after;
     await enterStep();
   }
 
@@ -179,7 +195,13 @@
     dispatch({ type: "reveal", units: units(ex) });
     if (revealedAnswer !== null) choice = revealedAnswer;
     await tick();
-    heading?.focus();
+    if (revealedEl) {
+      // Focus tells a screen reader what appeared; centring keeps it clear of the bottom bar.
+      revealedEl.focus({ preventScroll: true });
+      revealedEl.scrollIntoView({ block: "center" });
+    } else {
+      heading?.focus();
+    }
   }
 
   /** Enter = Check / Continue (§13.3) when focus is not somewhere Enter already means something. */
@@ -207,6 +229,10 @@
     if (isProject && type !== "explain") return t("lesson.kind.project", { n: exerciseNumber(i), m: exerciseCount });
     return t(KIND[type] ?? "lesson.kind.explain");
   }
+
+  // Byte's face on the feedback sheet (docs/05-f3-mvp0.md §17.11). Never the only signal: the
+  // sheet's title, icon and colour already say it.
+  const MOODS: Record<Tone, MascotMood> = { correct: "happy", mixup: "thinking", wrong: "oops", unavailable: "thinking" };
 
   const TITLES: Record<Tone, MessageKey> = {
     correct: "lesson.feedback.correct",
@@ -295,6 +321,14 @@
         {:else if ex.type === "fill-gap"}
           <GapFill template={ex.fill.template} tiles={ex.fill.tiles} bind:selected={choice} name="tile-{fs.step}" disabled={fs.phase !== "answering"} highlight={revealedAnswer} result={fs.phase === "feedback" ? (fs.feedback?.tone ?? null) : null} onchange={() => (pickFirst = false)} />
         {:else}
+          <!-- "Show me" on a code step: the solution so far, right above the editor it is typed
+               into. It used to sit under the output box, below the fold and behind the bottom
+               bar, while the page jumped to the top: nothing seemed to happen (§17.14). -->
+          {#if revealedCode !== null}
+            <div class="revealed" data-testid="revealed-code" tabindex="-1" bind:this={revealedEl}>
+              <CodeBlock code={revealedCode} label={t("lesson.reveal.code")} showLabel />
+            </div>
+          {/if}
           {#key fs.step}
             <CodeWorkspace
               {client}
@@ -307,12 +341,6 @@
               check={fs.phase === "answering" ? { label: t("lesson.check"), onclick: check, busy: checking } : null}
             />
           {/key}
-        {/if}
-
-        {#if revealedCode !== null}
-          <div data-testid="revealed-code">
-            <CodeBlock code={revealedCode} label={t("lesson.reveal.code")} />
-          </div>
         {/if}
 
         {#if fs.phase === "answering"}
@@ -347,6 +375,7 @@
       <FeedbackPanel
         tone={fb.tone}
         title={t(TITLES[fb.tone])}
+        mascot={plainMode ? null : MOODS[fb.tone]}
         primary={fb.tone === "correct" ? { label: t("lesson.continue"), onclick: next } : { label: t("lesson.tryAgain"), onclick: retry }}
         secondary={fb.tone !== "correct" && canReveal(fs) && ex && fs.revealed < units(ex) ? { label: t("lesson.showMe"), onclick: reveal } : null}
       >
@@ -369,9 +398,22 @@
     max-width: 42rem;
     margin: 0 auto;
   }
-  /* Short cards: the bottom zone still sits at the bottom of the screen. */
+  /* Phones: on a short card the bottom zone still sits at the bottom of the screen, under the
+     thumb. Wide screens: it follows the card instead — a button far below the text looks lost. */
   .bottom {
     margin-top: auto;
+  }
+  @media (min-width: 720px) {
+    .lesson {
+      flex: none;
+    }
+    .action-bar.bottom {
+      margin-top: var(--space-2);
+      border-top: 0;
+    }
+  }
+  .revealed:focus {
+    outline: none;
   }
   .step {
     display: grid;
