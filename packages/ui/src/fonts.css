@@ -1,0 +1,8 @@
+/*
+ * Fonts (docs/05-f3-mvp0.md §17.6): Lexend for text, JetBrains Mono for code. Self-hosted from npm
+ * (@fontsource, OFL-1.1): the build copies the files next to the site, so the CSP stays 'self' and
+ * nothing is requested from a font service. The browser only downloads a family on a page that
+ * uses it, and only the unicode ranges that page needs (Latin for our content).
+ */
+@import "@fontsource-variable/lexend/wght.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";

@@ -47,6 +47,7 @@
   }
   .exit:hover {
     color: var(--color-text);
+    background: var(--color-accent-soft);
   }
   .exit:focus-visible {
     outline: 3px solid var(--color-focus);
@@ -62,15 +63,24 @@
   }
   .track {
     flex: 1;
-    height: 0.75rem;
+    height: 0.875rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--color-border) 30%, transparent);
+    background: var(--color-border-soft);
     overflow: hidden;
   }
   .fill {
     height: 100%;
     border-radius: inherit;
-    background: var(--color-success);
+    background: var(--color-accent);
     transition: width var(--motion-base) var(--ease-out);
+  }
+  @media (forced-colors: active) {
+    .track {
+      border: 1px solid CanvasText;
+    }
+    .fill {
+      forced-color-adjust: none;
+      background: Highlight;
+    }
   }
 </style>

@@ -16,3 +16,6 @@ export { default as GoalRing } from "./GoalRing.svelte";
 export { default as StatsBar } from "./StatsBar.svelte";
 export { default as GoalPicker } from "./GoalPicker.svelte";
 export { default as Toggle } from "./Toggle.svelte";
+export { default as Button } from "./Button.svelte";
+export { default as Logo } from "./Logo.svelte";
+export { default as SiteHeader } from "./SiteHeader.svelte";

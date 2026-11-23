@@ -7,6 +7,8 @@ const EVIL = "http://127.0.0.1:4323";
 
 async function ready(page: Page) {
   await page.goto("/");
+  // "Try it now" loads when it scrolls into view (client:visible); on a phone it is below the fold.
+  await page.getByTestId("runner-status").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready", { timeout: 60_000 });
 }
 
@@ -34,6 +36,7 @@ test("boots with strict headers, noindex and no CSP violations", async ({ page }
   expect(res?.headers()["x-robots-tag"]).toContain("noindex");
   expect(res?.headers()["content-security-policy"]).toContain(`frame-src ${RUN}`);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await page.getByTestId("runner-status").scrollIntoViewIfNeeded(); // loads when visible (client:visible)
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready", { timeout: 60_000 });
   expect(cspErrors).toEqual([]);
 });
@@ -52,6 +55,30 @@ test("stops an infinite loop and keeps working", async ({ page }) => {
   await page.getByRole("button", { name: "Stop" }).click();
   await expect(page.getByTestId("runner-output")).toContainText("Stopped.");
   expect(await run(page, 'print("after")')).toBe("after\n");
+});
+
+test("a runaway print loop: the output is cut off with a note, and Stop still says so", async ({ page }) => {
+  await ready(page);
+  await setCode(page, 'while True:\n    print("x" * 1000)');
+  await page.getByRole("button", { name: "Run" }).click();
+  const out = page.getByTestId("runner-output");
+  await expect(out).toContainText("the output is too long", { timeout: 30_000 });
+  await page.getByRole("button", { name: "Stop" }).click();
+  // The cap must not swallow the status line: this is when a learner presses Stop the most.
+  await expect(out).toContainText("Stopped.");
+  const text = (await out.textContent()) ?? "";
+  expect(text.length).toBeLessThan(100_000 + 200);
+  expect(text.trimEnd().endsWith("Stopped.")).toBe(true);
+  expect(await run(page, 'print("after")')).toBe("after\n"); // a new run starts clean
+});
+
+test("a long, fast output arrives complete and in order (it is batched after the first burst)", async ({ page }) => {
+  await ready(page);
+  const out = await run(page, 'for i in range(3000):\n    print(i)\nprint("end")');
+  const lines = out.trimEnd().split("\n");
+  expect(lines).toHaveLength(3001);
+  expect(lines.slice(0, 3)).toEqual(["0", "1", "2"]);
+  expect(lines.slice(-2)).toEqual(["2999", "end"]);
 });
 
 test("user code cannot read the app's storage", async ({ page }) => {
@@ -167,9 +194,15 @@ test.describe("code editor (F3.4)", () => {
     await editorReady(page);
     const style = await page.locator(".cm-editor").evaluate((el) => {
       const cs = getComputedStyle(el);
-      return { radius: cs.borderTopLeftRadius, font: getComputedStyle(el.querySelector(".cm-scroller")!).fontFamily, position: cs.position };
+      return {
+        radius: cs.borderTopLeftRadius,
+        token: getComputedStyle(document.documentElement).getPropertyValue("--radius-md").trim(),
+        font: getComputedStyle(el.querySelector(".cm-scroller")!).fontFamily,
+        position: cs.position,
+      };
     });
-    expect(style.radius).toBe("8px"); // --radius-md from our theme
+    expect(style.radius).toBe(style.token); // --radius-md from our theme, whatever its value
+    expect(style.token).not.toBe("");
     expect(style.font).toMatch(/mono|Menlo|monospace/i);
     expect(style.position).toBe("relative"); // CodeMirror's own base theme
   });

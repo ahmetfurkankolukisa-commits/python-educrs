@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
 import { setCode } from "./helpers.ts";
+import { seriousViolations } from "./flows.ts";
 
 // Step-by-step lessons and the learning path (docs/05-f3-mvp0.md §13, map §14).
 // Every test starts with a fresh browser context, so a fresh IndexedDB: a brand-new learner.
@@ -28,12 +28,6 @@ async function checkExpect(page: Page, tone: string) {
   await expect(feedback(page)).toHaveAttribute("data-tone", tone, { timeout: 70_000 });
 }
 
-async function seriousViolations(page: Page): Promise<string[]> {
-  const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
-  return r.violations
-    .filter((v) => v.impact === "serious" || v.impact === "critical")
-    .map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`);
-}
 
 async function sandboxReady(page: Page) {
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready", { timeout: 60_000 });

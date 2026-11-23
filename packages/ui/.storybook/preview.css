@@ -1,3 +1,9 @@
+/* The app's reset (Tailwind preflight) in short, so stories look like the app. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 html,
 body {
   background: var(--color-bg);

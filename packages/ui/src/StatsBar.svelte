@@ -68,14 +68,20 @@
   }
   .stat {
     display: grid;
-    gap: 0.125rem;
+    justify-items: center;
+    gap: var(--space-1);
     min-width: 4.5rem;
   }
+  /* Pills (direction A, docs/05-f3-mvp0.md §17.6). */
   .top {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    min-height: 2.25rem;
+    min-height: 2.75rem;
+    padding: var(--space-1) var(--space-3);
+    border: 2px solid var(--color-border-soft);
+    border-radius: 999px;
+    background: var(--color-surface);
   }
   .icon {
     width: 1.5rem;
@@ -88,7 +94,7 @@
     stroke-linejoin: round;
   }
   .flame.lit {
-    fill: var(--color-streak);
+    fill: var(--color-streak-fill);
     stroke: var(--color-streak);
   }
   .bolt {

@@ -25,7 +25,10 @@
       </ol>
     {/if}
     {#if shown < hints.length}
-      <button type="button" class="more" onclick={onmore}>{t("lesson.hint", { n: shown + 1, m: hints.length })}</button>
+      <button type="button" class="more" onclick={onmore}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z" /></svg>
+        {t("lesson.hint", { n: shown + 1, m: hints.length })}
+      </button>
     {/if}
   </div>
 {/if}
@@ -43,10 +46,9 @@
     gap: var(--space-2);
   }
   li {
-    padding: var(--space-3);
-    border-left: 3px solid var(--color-accent);
-    background: var(--color-surface);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-accent-soft);
+    border-radius: var(--radius-md);
   }
   .label {
     display: block;
@@ -61,9 +63,26 @@
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-md);
     background: transparent;
-    color: var(--color-text);
-    font: 600 var(--text-base) / 1 var(--font-sans);
+    color: var(--color-accent);
+    font: 700 var(--text-base) / 1 var(--font-sans);
     cursor: pointer;
+  }
+  .more:hover {
+    background: var(--color-accent-soft);
+  }
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .more svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .more:focus-visible {
     outline: 3px solid var(--color-focus);

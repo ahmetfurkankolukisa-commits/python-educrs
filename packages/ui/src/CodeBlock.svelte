@@ -29,7 +29,7 @@
 <style>
   .block {
     margin: 0;
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-border-soft);
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--color-code-bg);
@@ -45,7 +45,7 @@
     color: var(--color-text);
   }
   .out {
-    border-top: 1px solid var(--color-border);
+    border-top: 2px solid var(--color-border-soft);
     padding: var(--space-2) var(--space-4) var(--space-3);
     background: var(--color-surface);
   }

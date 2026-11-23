@@ -3,7 +3,7 @@
   // pure reducer in @educrs/core; this component wires it to the sandbox, the store and the UI.
   import { onMount, tick } from "svelte";
   import { catalog, t, type MessageKey } from "@educrs/i18n";
-  import { ChoiceList, CodeBlock, FeedbackPanel, GapFill, GoalPicker, HintLadder, LessonComplete, LessonHeader, Markdown } from "@educrs/ui";
+  import { Button, ChoiceList, CodeBlock, FeedbackPanel, GapFill, GoalPicker, HintLadder, LessonComplete, LessonHeader, Markdown } from "@educrs/ui";
   import {
     EVENT, canReveal, checkFeedback, fillFeedback, flow, lessonRun, parseGrade, predictFeedback, resumePoint, revealRatio,
     startFlow, summary, type Exercise, type Explanation, type Feedback, type FlowAction, type FlowState, type Lesson,
@@ -192,6 +192,22 @@
     else if (ex && (ex.type === "predict-output" || ex.type === "fill-gap")) { e.preventDefault(); void check(); }
   }
 
+  // What this card asks for, above its title (docs/05-f3-mvp0.md §17.7).
+  const KIND: Record<string, MessageKey> = {
+    explain: "lesson.kind.explain",
+    "predict-output": "lesson.kind.predict",
+    "fill-gap": "lesson.kind.fill",
+    verbatim: "lesson.kind.verbatim",
+    code: "lesson.kind.code",
+  };
+  const isProject = $derived(lesson.concept.startsWith("proj."));
+  const exerciseNumber = (i: number) => kinds.slice(0, i + 1).filter((k) => k === "exercise").length;
+  const exerciseCount = $derived(kinds.filter((k) => k === "exercise").length);
+  function eyebrow(i: number, type: string): string {
+    if (isProject && type !== "explain") return t("lesson.kind.project", { n: exerciseNumber(i), m: exerciseCount });
+    return t(KIND[type] ?? "lesson.kind.explain");
+  }
+
   const TITLES: Record<Tone, MessageKey> = {
     correct: "lesson.feedback.correct",
     mixup: "lesson.feedback.mixup",
@@ -224,11 +240,11 @@
     <div class="grid gap-3 sm:grid-cols-2" data-testid="feedback-compare">
       <figure class="m-0">
         <figcaption class="text-sm font-semibold">{t("lesson.compare.expected")}</figcaption>
-        <pre class="mt-1 whitespace-pre-wrap rounded-md border border-border bg-surface p-2 font-mono text-base">{fb.compare.expected || t("lesson.compare.nothing")}</pre>
+        <pre class="mt-1 whitespace-pre-wrap rounded-2xl border-2 border-border-soft bg-surface px-3 py-2 font-mono text-base">{fb.compare.expected || t("lesson.compare.nothing")}</pre>
       </figure>
       <figure class="m-0">
         <figcaption class="text-sm font-semibold">{ex?.type === "fill-gap" ? t("lesson.compare.tile") : t("lesson.compare.actual")}</figcaption>
-        <pre class="mt-1 whitespace-pre-wrap rounded-md border border-border bg-surface p-2 font-mono text-base">{fb.compare.actual || t("lesson.compare.nothing")}</pre>
+        <pre class="mt-1 whitespace-pre-wrap rounded-2xl border-2 border-border-soft bg-surface px-3 py-2 font-mono text-base">{fb.compare.actual || t("lesson.compare.nothing")}</pre>
       </figure>
     </div>
   {/if}
@@ -238,12 +254,16 @@
   <LessonHeader done={fs ? (fs.phase === "done" ? kinds.length : fs.step) : 0} total={kinds.length} exitHref={pathHref} />
 
   {#if !fs}
-    <p class="mt-8 text-muted">{t("lesson.loading")}</p>
+    <!-- The card's outline while the lesson's progress is read: no layout jump when it arrives. -->
+    <div class="skeleton" aria-busy="true">
+      <span class="sr-only" role="status">{t("lesson.loading")}</span>
+      <span class="sk chip"></span><span class="sk title"></span><span class="sk line"></span><span class="sk line"></span><span class="sk line short"></span><span class="sk block"></span>
+    </div>
   {:else if fs.phase === "done"}
     {@const s = summary(fs)}
     <LessonComplete lessonTitle={lesson.title} exercises={s.exercises} firstTry={s.firstTry} {nextHref} {pathHref} {rewards} plain={plainMode}>
       {#if askGoal}
-        <div class="mt-4 grid w-full max-w-xl gap-2 text-left" data-testid="goal-question">
+        <div class="goal-card" data-testid="goal-question">
           <h2 class="text-lg font-semibold">{t("lesson.complete.pickGoal")}</h2>
           <p class="text-sm text-muted">{t("lesson.complete.pickGoalHelp")}</p>
           <GoalPicker goals={DAILY_GOALS} bind:selected={chosenGoal} name="daily-goal" legend={t("lesson.complete.pickGoal")} onchange={chooseGoal} />
@@ -252,27 +272,28 @@
       {/if}
     </LessonComplete>
   {:else if step}
-    <article class="mt-6 grid gap-5" data-testid="lesson-step" data-step={fs.step} data-kind={ex?.type ?? "explain"}>
-      <h1 class="text-2xl font-bold tracking-tight" tabindex="-1" bind:this={heading}>
-        {step.kind === "explain" ? lesson.title : ex?.title}
-      </h1>
+    {#key fs.step}
+    <article class="step" data-testid="lesson-step" data-step={fs.step} data-kind={ex?.type ?? "explain"}>
+      <div class="heading">
+        <p class="eyebrow" data-testid="eyebrow">{eyebrow(fs.step, ex?.type ?? "explain")}</p>
+        <h1 class="text-2xl font-bold tracking-tight" tabindex="-1" bind:this={heading}>
+          {step.kind === "explain" ? lesson.title : ex?.title}
+        </h1>
+      </div>
 
       {#if step.kind === "explain"}
         <Markdown text={step.text} />
         {#if step.example}
           <CodeBlock code={step.example} label={t("lesson.program")} output={step.example_output ?? null} outputLabel={t("lesson.exampleOutput")} />
         {/if}
-        <button type="button" class="min-h-11 rounded-md bg-accent px-6 font-semibold text-on-accent" onclick={next} data-testid="continue">
-          {t("lesson.continue")}
-        </button>
       {:else if ex}
         <Markdown text={ex.prompt} />
 
         {#if ex.type === "predict-output"}
           <CodeBlock code={ex.predict.program} label={t("lesson.program")} />
-          <ChoiceList options={ex.predict.options} bind:selected={choice} name="answer-{fs.step}" legend={t("lesson.choices")} disabled={fs.phase !== "answering"} highlight={revealedAnswer} onchange={() => (pickFirst = false)} />
+          <ChoiceList options={ex.predict.options} bind:selected={choice} name="answer-{fs.step}" legend={t("lesson.choices")} disabled={fs.phase !== "answering"} highlight={revealedAnswer} result={fs.phase === "feedback" ? (fs.feedback?.tone ?? null) : null} onchange={() => (pickFirst = false)} />
         {:else if ex.type === "fill-gap"}
-          <GapFill template={ex.fill.template} tiles={ex.fill.tiles} bind:selected={choice} name="tile-{fs.step}" disabled={fs.phase !== "answering"} highlight={revealedAnswer} onchange={() => (pickFirst = false)} />
+          <GapFill template={ex.fill.template} tiles={ex.fill.tiles} bind:selected={choice} name="tile-{fs.step}" disabled={fs.phase !== "answering"} highlight={revealedAnswer} result={fs.phase === "feedback" ? (fs.feedback?.tone ?? null) : null} onchange={() => (pickFirst = false)} />
         {:else}
           {#key fs.step}
             <CodeWorkspace
@@ -295,24 +316,34 @@
         {/if}
 
         {#if fs.phase === "answering"}
-          <div class="flex flex-wrap items-start gap-3">
-            <div class="flex-1">
-              <HintLadder hints={ex.hints} shown={fs.hints} onmore={() => dispatch({ type: "hint", available: ex.hints.length })} />
-            </div>
-            {#if canReveal(fs) && fs.revealed < units(ex)}
-              <button type="button" class="min-h-11 rounded-md border-2 border-border px-4 font-semibold" onclick={reveal} data-testid="show-me">{t("lesson.showMe")}</button>
-            {/if}
-            {#if ex.type === "predict-output" || ex.type === "fill-gap"}
-              <button type="button" class="min-h-11 rounded-md bg-accent px-8 font-semibold text-on-accent" onclick={check} data-testid="check">{t("lesson.check")}</button>
-            {/if}
-          </div>
-          {#if pickFirst}<p class="text-danger" role="alert">{t("lesson.pickFirst")}</p>{/if}
+          <HintLadder hints={ex.hints} shown={fs.hints} onmore={() => dispatch({ type: "hint", available: ex.hints.length })} />
         {/if}
       {/if}
     </article>
+    {/key}
+
+    <!-- One bottom zone (§17.7): Continue / Check / Show me live where the feedback panel opens. -->
+    {#if fs.phase === "answering" && (step.kind === "explain" || (ex && (ex.type === "predict-output" || ex.type === "fill-gap" || (canReveal(fs) && fs.revealed < units(ex)))))}
+      <div class="action-bar bottom" data-testid="action-bar">
+        {#if pickFirst}<p class="pick" role="alert">{t("lesson.pickFirst")}</p>{/if}
+        <div class="actions">
+          {#if step.kind === "explain"}
+            <Button class="grow" onclick={next} data-testid="continue">{t("lesson.continue")}</Button>
+          {:else if ex}
+            {#if canReveal(fs) && fs.revealed < units(ex)}
+              <Button variant="secondary" onclick={reveal} data-testid="show-me">{t("lesson.showMe")}</Button>
+            {/if}
+            {#if ex.type === "predict-output" || ex.type === "fill-gap"}
+              <Button class="grow" onclick={check} data-testid="check">{t("lesson.check")}</Button>
+            {/if}
+          {/if}
+        </div>
+      </div>
+    {/if}
 
     {#if fs.phase === "feedback" && fs.feedback}
       {@const fb = fs.feedback}
+      <div class="bottom"></div>
       <FeedbackPanel
         tone={fb.tone}
         title={t(TITLES[fb.tone])}
@@ -328,3 +359,135 @@
 </div>
 
 <SandboxFrame {client} onstatus={(s, reason) => { sandbox = s; failReason = reason ?? ""; }} />
+
+<style>
+  .lesson {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  /* Short cards: the bottom zone still sits at the bottom of the screen. */
+  .bottom {
+    margin-top: auto;
+  }
+  .step {
+    display: grid;
+    /* minmax(0, 1fr), not auto: the symbol bar's long row must scroll inside its box instead of
+       widening the card past the screen (found on a 390 px phone, §17.9) */
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5, 1.25rem);
+    margin: var(--space-6) 0;
+    animation: step-in var(--motion-base) var(--ease-out);
+  }
+  .heading {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .eyebrow {
+    justify-self: start;
+    margin: 0;
+    padding: 0.125rem var(--space-3);
+    border-radius: 999px;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+  /* The bottom zone: same place as the feedback panel, clear of the iPhone home indicator. */
+  .action-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    display: grid;
+    gap: var(--space-2);
+    /* auto on top: on a short card the bar still sits at the bottom of the screen */
+    margin: auto calc(-1 * var(--space-4)) 0;
+    padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+    border-top: 2px solid var(--color-border-soft);
+    background: var(--color-bg);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .actions :global(.grow) {
+    flex: 1 1 12rem;
+  }
+  .pick {
+    margin: 0;
+    color: var(--color-danger);
+    font-weight: 600;
+  }
+  .goal-card {
+    display: grid;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 36rem;
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    border: 2px solid var(--color-border-soft);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    text-align: left;
+  }
+  .goal-card h2 {
+    margin: 0;
+    font-size: var(--text-lg);
+  }
+  .skeleton {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+  .sk {
+    display: block;
+    height: 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-border-soft);
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+  .sk.chip {
+    width: 7rem;
+    height: 1.5rem;
+    border-radius: 999px;
+  }
+  .sk.title {
+    width: 70%;
+    height: 2rem;
+  }
+  .sk.short {
+    width: 55%;
+  }
+  .sk.block {
+    height: 7rem;
+    border-radius: var(--radius-md);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sk {
+      animation: none;
+    }
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  @keyframes shimmer {
+    50% {
+      opacity: 0.55;
+    }
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+</style>

@@ -5,12 +5,11 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertRunOrigin } from "./run-origin.mjs";
 
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "dist");
-const RUN_ORIGIN = process.env.PUBLIC_RUN_ORIGIN;
-// No default on purpose: a forgotten variable must fail the build, not silently frame the wrong site.
-if (!RUN_ORIGIN) throw new Error("PUBLIC_RUN_ORIGIN is required (e.g. https://python-educrs-run.<account>.workers.dev)");
-if (new URL(RUN_ORIGIN).origin !== RUN_ORIGIN) throw new Error(`PUBLIC_RUN_ORIGIN must be a bare origin, got ${RUN_ORIGIN}`);
+// Refuses a missing, same-site or plain-http sandbox origin before anything is read or written.
+const RUN_ORIGIN = assertRunOrigin(process.env.PUBLIC_RUN_ORIGIN);
 
 const hashes = new Set();
 const styleHashes = new Set();

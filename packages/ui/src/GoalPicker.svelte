@@ -61,7 +61,8 @@
     gap: 0.125rem;
     min-height: var(--target-min);
     padding: var(--space-2) var(--space-3);
-    border: 2px solid var(--color-border);
+    border: 2px solid var(--color-border-soft);
+    border-bottom: var(--press) solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-surface);
     color: var(--color-text);
@@ -74,7 +75,8 @@
   }
   .option.selected {
     border-color: var(--color-accent);
-    background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+    border-bottom-color: var(--color-accent-shadow);
+    background: var(--color-accent-soft);
   }
   .option:has(input:focus-visible) {
     outline: 3px solid var(--color-focus);

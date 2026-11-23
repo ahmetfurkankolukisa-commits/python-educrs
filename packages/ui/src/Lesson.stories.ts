@@ -122,3 +122,23 @@ export const CompletePlain: StoryObj<typeof LessonComplete> = {
     rewards: { xp: 45, todayXp: 45, goal: 20, goalReachedNow: true, streak: 3 },
   },
 };
+export const ChoicesWrongPick: StoryObj<typeof ChoiceList> = {
+  name: "Choices (after a check: wrong pick)",
+  render: (args) => ({ Component: ChoiceList, props: args }),
+  args: { options, name: "q4", legend: "Answers", selected: "AdaLovelace", disabled: true, result: "wrong" },
+};
+export const ChoicesMixupPick: StoryObj<typeof ChoiceList> = {
+  name: "Choices (after a check: common mix-up)",
+  render: (args) => ({ Component: ChoiceList, props: args }),
+  args: { options, name: "q5", legend: "Answers", selected: "first last", disabled: true, result: "mixup" },
+};
+export const ChoicesCorrectPick: StoryObj<typeof ChoiceList> = {
+  name: "Choices (after a check: correct)",
+  render: (args) => ({ Component: ChoiceList, props: args }),
+  args: { options, name: "q6", legend: "Answers", selected: "Ada Lovelace", disabled: true, result: "correct" },
+};
+export const GapMixup: StoryObj<typeof GapFill> = {
+  name: "Fill the gap (after a check: common mix-up)",
+  render: (args) => ({ Component: GapFill, props: args }),
+  args: { ...gap, name: "g3", selected: '"name"', disabled: true, result: "mixup" },
+};

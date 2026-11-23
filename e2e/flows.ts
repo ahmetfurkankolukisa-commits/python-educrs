@@ -89,6 +89,9 @@ export async function openSettings(page: Page) {
 }
 
 export async function seriousViolations(page: Page): Promise<string[]> {
+  // Scan the settled page: mid-animation text is half transparent and fails contrast for a moment
+  // (the same finding as the Storybook scan, docs/05-f3-mvp0.md §14.9).
+  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))));
   const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   return r.violations
     .filter((v) => v.impact === "serious" || v.impact === "critical")

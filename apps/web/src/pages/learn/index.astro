@@ -15,6 +15,6 @@ const modules = bundle.path.map((m) => ({
   <h1 class="text-center text-3xl font-bold tracking-tight">{t("path.title")}</h1>
   <p class="mt-2 text-center text-muted">{t("path.lead")}</p>
   <div class="mt-8">
-    <PathIsland client:load modules={modules} path={bundle.path} settingsHref="/settings/" />
+    <PathIsland client:load modules={modules} path={bundle.path} />
   </div>
 </Base>

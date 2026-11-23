@@ -9,6 +9,8 @@ const SPOOF = "http://localhost:4326";
 
 async function ready(page: Page, url = "/") {
   await page.goto(url);
+  // "Try it now" loads when it scrolls into view (client:visible); on a phone it is below the fold.
+  await page.getByTestId("runner-status").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready", { timeout: 60_000 });
 }
 

@@ -2,12 +2,14 @@
   "name": "@educrs/ui",
   "private": true,
   "type": "module",
-  "description": "Design system: tokens, themes, wrapped components (plan §2.4). The only place allowed to import third-party UI libraries.",
+  "description": "Design system: tokens, themes, wrapped components (plan \u00a72.4). The only place allowed to import third-party UI libraries.",
   "exports": {
     ".": "./src/index.ts",
     "./tokens.css": "./src/tokens.css",
     "./CodeEditor.svelte": "./src/CodeEditor.svelte",
-    "./SymbolBar.svelte": "./src/SymbolBar.svelte"
+    "./SymbolBar.svelte": "./src/SymbolBar.svelte",
+    "./fonts.css": "./src/fonts.css",
+    "./font-urls": "./src/font-urls.ts"
   },
   "scripts": {
     "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
@@ -23,6 +25,8 @@
     "@codemirror/state": "6.7.6",
     "@codemirror/view": "6.43.15",
     "@educrs/i18n": "workspace:*",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@fontsource-variable/lexend": "5.3.0",
     "@lezer/highlight": "1.2.5"
   },
   "peerDependencies": {

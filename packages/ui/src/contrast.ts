@@ -58,5 +58,16 @@ export const REQUIRED_PAIRS: ReadonlyArray<readonly [string, string, number]> = 
   ["--color-danger", "--color-danger-soft", 4.5],
   // non-text UI (borders, focus rings): WCAG 1.4.11 asks for 3:1
   ["--color-border", "--color-bg", 3],
+  ["--color-border", "--color-surface", 3],
   ["--color-focus", "--color-bg", 3],
+  // visual direction A (docs/05-f3-mvp0.md §17.6): selected tiles, reward chips, the mix-up button, the flame
+  ["--color-text", "--color-accent-soft", 4.5],
+  ["--color-accent", "--color-accent-soft", 4.5],
+  ["--color-xp", "--color-xp-soft", 4.5],
+  ["--color-streak", "--color-streak-soft", 4.5],
+  ["--color-on-warning-strong", "--color-warning-strong", 4.5],
+  // tone buttons in the feedback panel: Continue (correct) and Try again (wrong) carry on-accent text
+  ["--color-on-accent", "--color-success", 4.5],
+  ["--color-on-accent", "--color-danger", 4.5],
+  ["--color-streak-fill", "--color-bg", 3],
 ];

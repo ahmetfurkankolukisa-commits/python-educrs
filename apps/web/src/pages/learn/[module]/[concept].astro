@@ -12,6 +12,6 @@ const lesson = lessonById(Astro.props.id);
 const next = nextLesson(bundle.path, lesson.id);
 ---
 
-<Base title={`${lesson.title} · Learn Python`}>
+<Base title={`${lesson.title} · Learn Python`} chrome="focus">
   <LessonFlow client:load lesson={lesson} exercises={exercisesOf(lesson)} pathHref="/learn/" nextHref={next ? lessonHref(lessonById(next)) : null} />
 </Base>

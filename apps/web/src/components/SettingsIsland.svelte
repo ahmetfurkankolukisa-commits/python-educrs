@@ -3,7 +3,7 @@
   // Settings are events like everything else, so they will sync later; nothing leaves the device.
   import { onMount } from "svelte";
   import { t } from "@educrs/i18n";
-  import { GoalPicker, Toggle } from "@educrs/ui";
+  import { Button, GoalPicker, Toggle } from "@educrs/ui";
   import { EVENT } from "@educrs/core";
   import { DAILY_GOALS, settingsOf } from "@educrs/gamification";
   import { localTz, openProgress, type Progress } from "../lib/progress.ts";
@@ -26,10 +26,17 @@
     return () => { cancelled = true; };
   });
 
+  // "Saved." appears as a small toast near the bottom, where the thumb is, then fades (§17.7).
+  // The live region keeps its text a while longer so screen readers hear it.
+  let shown = $state(false);
+  let hideTimer: ReturnType<typeof setTimeout> | undefined;
   async function save(change: Record<string, unknown>) {
     status = "";
     await progress?.record(EVENT.settingsChanged, change);
     status = t("settings.saved");
+    shown = true;
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => { shown = false; }, 2500);
   }
 
   function downloadData() {
@@ -43,28 +50,92 @@
     <p class="mt-6 text-muted">{t("settings.loading")}</p>
   {:else}
     {#if !progress.persistent}
-      <p class="mt-6 rounded-md border-2 border-border bg-surface p-3" role="note" data-testid="not-persistent">{t("settings.notPersistent")}</p>
+      <p class="note" role="note" data-testid="not-persistent">{t("settings.notPersistent")}</p>
     {/if}
 
-    <section class="mt-8 grid gap-3" aria-labelledby="goal-title">
-      <h2 id="goal-title" class="text-xl font-semibold">{t("settings.goal.title")}</h2>
+    <section class="card" aria-labelledby="goal-title">
+      <h2 id="goal-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="0.5" /></svg></span>{t("settings.goal.title")}</h2>
       <p class="text-muted">{t("settings.goal.help")}</p>
       <GoalPicker goals={DAILY_GOALS} bind:selected={goal} name="daily-goal" legend={t("settings.goal.title")} onchange={(g) => save({ dailyGoal: g })} />
       <p class="text-sm text-muted">{t("settings.goal.later")} {t("settings.freezes.help")}</p>
     </section>
 
-    <section class="mt-10 grid gap-3" aria-labelledby="plain-title">
-      <h2 id="plain-title" class="text-xl font-semibold">{t("settings.plain.title")}</h2>
+    <section class="card" aria-labelledby="plain-title">
+      <h2 id="plain-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg></span>{t("settings.plain.title")}</h2>
       <Toggle id="plain-mode" label={t("settings.plain.label")} description={t("settings.plain.help")} bind:checked={plainMode} onchange={(on) => save({ plainMode: on })} />
     </section>
 
-    <section class="mt-10 grid gap-3" aria-labelledby="data-title">
-      <h2 id="data-title" class="text-xl font-semibold">{t("settings.data.title")}</h2>
+    <section class="card" aria-labelledby="data-title">
+      <h2 id="data-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg></span>{t("settings.data.title")}</h2>
       <p class="text-muted">{t("settings.data.help")}</p>
-      <button type="button" class="min-h-11 justify-self-start rounded-md border-2 border-accent px-5 font-semibold text-accent" onclick={downloadData} data-testid="download-data">
-        {t("settings.data.download")}
-      </button>
+      <div><Button variant="secondary" onclick={downloadData} data-testid="download-data">{t("settings.data.download")}</Button></div>
     </section>
   {/if}
-  <p class="mt-6 min-h-6 text-sm" role="status" data-testid="settings-status">{status}</p>
+  <p class="toast" class:shown role="status" data-testid="settings-status">{status}</p>
 </div>
+
+<style>
+  .card {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding: var(--space-6);
+    border: 2px solid var(--color-border-soft);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+  .card h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    font-size: var(--text-xl);
+  }
+  .card p {
+    margin: 0;
+  }
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .note {
+    margin: var(--space-6) 0 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-warning-soft);
+  }
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+    z-index: 3;
+    margin: 0;
+    padding: var(--space-2) var(--space-4);
+    border-radius: 999px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 8px);
+    transition: opacity var(--motion-base) var(--ease-out), transform var(--motion-base) var(--ease-out);
+  }
+  .toast.shown {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+</style>
