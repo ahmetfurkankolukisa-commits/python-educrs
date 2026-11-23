@@ -67,10 +67,25 @@ async function open(id, theme) {
   if (pageErrors.length) throw new Error(`page errors: ${pageErrors.join("; ")}`);
 }
 
-const scan = async () =>
-  (await new AxeBuilder({ page }).include("#storybook-root").withTags(TAGS).analyze()).violations.filter(
-    (v) => v.impact === "serious" || v.impact === "critical",
-  );
+// Storybook's own a11y addon loads axe into the story about 300 ms after it renders and runs it
+// there. When that run is still going as ours starts, axe throws "Axe is already running": a busy
+// signal, not a finding. It failed a CI run in which nothing was wrong (docs/05-f3-mvp0.md §17.17).
+// Wait and ask again; anything else, or a page that stays busy, is still an error.
+const BUSY = /Axe is already running/;
+const BUSY_TRIES = 10;
+let busyWaits = 0;
+async function analyze() {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await new AxeBuilder({ page }).include("#storybook-root").withTags(TAGS).analyze();
+    } catch (e) {
+      if (!BUSY.test(String(e?.message)) || attempt >= BUSY_TRIES) throw e;
+      busyWaits += 1;
+      await page.waitForTimeout(300);
+    }
+  }
+}
+const scan = async () => (await analyze()).violations.filter((v) => v.impact === "serious" || v.impact === "critical");
 
 let failed = false;
 for (const story of stories) {
@@ -92,6 +107,8 @@ for (const story of stories) {
     }
   }
 }
+
+const busyInRealScan = busyWaits;
 
 // Self-test: the scan must catch planted violations, including inside the shadow root.
 const editorStory = stories.find((s) => s.id.startsWith("editor-codeeditor--default")) ?? stories[0];
@@ -117,7 +134,40 @@ if (caughtLight && caughtShadow) {
   console.log(`FAIL  self-test: scanner missed planted violations (light DOM: ${caughtLight}, shadow root: ${caughtShadow})`);
 }
 
+// Self-test: a busy axe is waited for. The page marks the next axe it is given as running for a
+// moment — what the addon's own run looks like to ours — and the scan must still come back clean.
+await open(editorStory.id, "light");
+await page.evaluate(() => {
+  let current = window.axe;
+  let armed = true;
+  Object.defineProperty(window, "axe", {
+    configurable: true,
+    get: () => current,
+    set(next) {
+      current = next;
+      if (!armed || !next) return;
+      armed = false;
+      next._running = true;
+      setTimeout(() => { next._running = false; }, 700);
+    },
+  });
+});
+const waitsBefore = busyWaits;
+let busyOutcome;
+try {
+  busyOutcome = (await scan()).length === 0 ? "clean" : "violations";
+} catch (e) {
+  busyOutcome = `error: ${e.message}`;
+}
+if (busyOutcome === "clean" && busyWaits > waitsBefore) {
+  console.log(`PASS  self-test: a busy axe is waited for (${busyWaits - waitsBefore} wait(s)), not reported as a failure`);
+} else {
+  failed = true;
+  console.log(`FAIL  self-test: busy axe — outcome "${busyOutcome}", waits ${busyWaits - waitsBefore} (expected a clean scan after at least one wait)`);
+}
+
 await browser.close();
 server.close();
+if (busyInRealScan > 0) console.log(`note: axe was busy ${busyInRealScan} time(s) during the real scan; each was waited for`);
 console.log(failed ? "storybook a11y: FAILED" : `storybook a11y: ${stories.length} stories × ${THEMES.length} themes clean`);
 process.exit(failed ? 1 : 0);

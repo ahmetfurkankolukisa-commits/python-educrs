@@ -1,7 +1,7 @@
 {
   "name": "python-educrs",
   "private": true,
-  "description": "Free, interactive, offline-first Python course for absolute beginners \u2014 python.educrs.com",
+  "description": "Free, interactive, offline-first Python course for absolute beginners — python.educrs.com",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@12.21.0",
@@ -19,6 +19,7 @@
     "test:boundaries": "node tools/tests/test_boundaries.mjs",
     "lint:ci": "node tools/check-ci-matrix.mjs",
     "budget": "node tools/js-budget.mjs",
+    "lighthouse": "node tools/lighthouse.mjs",
     "a11y:stories": "pnpm --filter @educrs/ui build-storybook && node tools/storybook-a11y.mjs",
     "e2e": "playwright test",
     "build:e2e": "APP_ORIGIN=http://localhost:4321 PREVIEW_ORIGIN_REGEX='^http://localhost:4325$' FRAME_ANCESTORS_EXTRA='http://localhost:4325 http://localhost:4326' pnpm --filter run build && PUBLIC_RUN_ORIGIN=http://127.0.0.1:4322 pnpm --filter web build",
@@ -34,6 +35,7 @@
     "@types/node": "22.20.5",
     "dependency-cruiser": "18.8.0",
     "fast-check": "4.10.3",
+    "lighthouse": "13.6.0",
     "typescript": "6.0.3",
     "vitest": "5.1.1",
     "wrangler": "4.166.0"
