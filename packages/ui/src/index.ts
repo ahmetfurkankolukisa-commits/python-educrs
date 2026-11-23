@@ -1,6 +1,6 @@
 export { contrastRatio, luminance, REQUIRED_PAIRS } from "./contrast.ts";
 export { parseInline, parseMarkdown, type Block, type Inline } from "./markdown.ts";
-export type { PanelTone, PathModuleView, PathNodeView } from "./types.ts";
+export type { MascotMood, PanelTone, PathModuleView, PathNodeView } from "./types.ts";
 export { default as CodeEditor } from "./CodeEditor.svelte";
 export { default as SymbolBar } from "./SymbolBar.svelte";
 export { default as Markdown } from "./Markdown.svelte";
@@ -18,4 +18,5 @@ export { default as GoalPicker } from "./GoalPicker.svelte";
 export { default as Toggle } from "./Toggle.svelte";
 export { default as Button } from "./Button.svelte";
 export { default as Logo } from "./Logo.svelte";
+export { default as Mascot } from "./Mascot.svelte";
 export { default as SiteHeader } from "./SiteHeader.svelte";

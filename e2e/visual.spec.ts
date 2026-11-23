@@ -22,6 +22,8 @@ for (const scheme of ["light", "dark"] as const) {
     expect(await page.evaluate(() => document.fonts.check('16px "JetBrains Mono Variable"'))).toBe(true);
     const code = await page.locator("pre").first().evaluate((el) => getComputedStyle(el).fontFamily);
     expect(code).toContain("JetBrains Mono Variable");
+    // …without its ligatures: the font would draw != as one "not equal" sign (§17.15)
+    expect(await page.locator("pre").first().evaluate((el) => getComputedStyle(el).fontVariantLigatures)).toBe("no-contextual");
 
     const shadow = await page.getByTestId("continue").evaluate((el) => getComputedStyle(el).boxShadow);
     expect(shadow).toContain(PRESS_EDGE[scheme]);
@@ -62,18 +64,20 @@ test("the head carries theme-color for both schemes and preloads the Lexend file
 });
 
 // Nothing may scroll sideways on a 375 px phone: a wide row (the symbol bar) once pushed the lesson
-// card past the screen while every test stayed green (§17.9).
-for (const [name, url, enter] of [
+// card past the screen while every test stayed green (§17.9). Nor on a 1280 px laptop, where the
+// home page puts Byte and a lesson preview beside the heading (§17.11).
+for (const width of [375, 1280]) for (const [name, url, enter] of [
   ["home", "/", false],
   ["path", "/learn/", false],
   ["settings", "/settings/", false],
   ["a code step", "/learn/m0/intro-run-code/", true],
   ["the 404 page", "/no-such-page/", false],
 ] as const) {
-  test(`no sideways scrolling at 375 px: ${name}`, async ({ page, isMobile }) => {
+  test(`no sideways scrolling at ${width} px: ${name}`, async ({ page, isMobile }) => {
     // The iPhone project is already phone-sized (and is where the symbol bar shows: touch only);
     // resizing a mobile WebKit page mid-test breaks its hit-testing.
-    if (!isMobile) await page.setViewportSize({ width: 375, height: 740 });
+    test.skip(isMobile && width !== 375, "the iPhone project stays phone-sized");
+    if (!isMobile) await page.setViewportSize({ width, height: 740 });
     await page.goto(url);
     if (enter) {
       await expect(page.getByTestId("lesson")).toHaveAttribute("data-ready", "true");

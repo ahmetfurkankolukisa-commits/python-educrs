@@ -4,6 +4,17 @@
 *::after {
   box-sizing: border-box;
 }
+/* Preflight also takes the size and weight off headings. Without this a heading that forgets its
+   own weight is bold here and regular in the app (it happened: docs/05-f3-mvp0.md §17.14). */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
 html,
 body {
   background: var(--color-bg);
@@ -11,6 +22,7 @@ body {
   font-family: var(--font-sans);
 }
 #storybook-root {
-  padding: var(--space-4);
+  /* room at the top: Byte stands on the top edge of the feedback sheet */
+  padding: 4.5rem var(--space-4) var(--space-4);
   max-width: 40rem;
 }

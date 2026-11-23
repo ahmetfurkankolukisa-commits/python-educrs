@@ -13,7 +13,10 @@ import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirro
 import { python } from "@codemirror/lang-python";
 import { bracketMatching, HighlightStyle, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { EditorState, StateEffect, StateField } from "@codemirror/state";
-import { Decoration, type DecorationSet, drawSelection, EditorView, keymap, lineNumbers } from "@codemirror/view";
+import {
+  Decoration, type DecorationSet, drawSelection, EditorView, highlightActiveLine, highlightActiveLineGutter, keymap, lineNumbers,
+  placeholder,
+} from "@codemirror/view";
 import { tags } from "@lezer/highlight";
 
 const highlight = HighlightStyle.define([
@@ -24,6 +27,12 @@ const highlight = HighlightStyle.define([
   { tag: [tags.function(tags.variableName), tags.standard(tags.variableName)], color: "var(--color-code-function)" },
 ]);
 
+/** The editor's height when it holds less than that: six lines, room to see it is a place to write. */
+const MIN_HEIGHT = "9rem";
+
+// Every colour is a token. CodeMirror's own defaults come in a light and a dark set, and it picks
+// by a flag on the theme, not by the page: with our token themes it stayed "light" and drew a
+// BLACK cursor on the dark theme's near-black editor — no cursor at all (docs/05-f3-mvp0.md §17.15).
 const theme = EditorView.theme({
   "&": {
     color: "var(--color-text)",
@@ -32,14 +41,29 @@ const theme = EditorView.theme({
     borderRadius: "var(--radius-md)",
     // 16px everywhere: iOS Safari zooms into editable text smaller than that (F3.2 finding).
     fontSize: "16px",
-    minHeight: "9rem",
+    overflow: "hidden", // the gutter and the active line keep inside the rounded corners
+    // As tall as its container when that has a height (full-screen mode): the code then scrolls
+    // inside the editor. In a container without a height this means nothing and the editor grows.
+    height: "100%",
   },
   "&.cm-focused": { outline: "3px solid var(--color-focus)", outlineOffset: "2px" },
-  ".cm-scroller": { fontFamily: "var(--font-mono)", lineHeight: "1.5" },
-  ".cm-content": { padding: "8px 0", caretColor: "var(--color-text)" },
+  ".cm-scroller": { fontFamily: "var(--font-mono)", lineHeight: "1.5", overflow: "auto" },
+  // The minimum height goes on the content and the gutter (CodeMirror's own advice), so the whole
+  // box is content: a click anywhere in an empty editor puts the cursor there.
+  ".cm-content": { padding: "8px 0", minHeight: MIN_HEIGHT, caretColor: "var(--color-text)" },
+  ".cm-gutter": { minHeight: MIN_HEIGHT },
+  // drawSelection() hides the browser's caret and draws this one: 2 px, in the text colour.
+  ".cm-cursor, .cm-dropCursor": { borderLeft: "2px solid var(--color-text)", marginLeft: "-1px" },
   ".cm-gutters": { backgroundColor: "var(--color-code-bg)", color: "var(--color-text-muted)", border: "none" },
+  ".cm-lineNumbers .cm-gutterElement": { padding: "0 8px 0 12px" },
+  // Where am I? The line with the cursor is tinted and its number is in the text colour.
+  ".cm-activeLine": { backgroundColor: "color-mix(in srgb, var(--color-accent) 7%, transparent)" },
+  ".cm-activeLineGutter": { backgroundColor: "transparent", color: "var(--color-text)", fontWeight: "700" },
   ".cm-line.cm-error-line": { backgroundColor: "var(--color-code-error-line)" },
   "&.cm-focused .cm-selectionBackground, .cm-selectionBackground": { backgroundColor: "color-mix(in srgb, var(--color-accent) 25%, transparent)" },
+  "&.cm-focused .cm-matchingBracket, .cm-matchingBracket": { backgroundColor: "color-mix(in srgb, var(--color-accent) 22%, transparent)", outline: "1px solid var(--color-accent)" },
+  "&.cm-focused .cm-nonmatchingBracket, .cm-nonmatchingBracket": { backgroundColor: "var(--color-code-error-line)" },
+  ".cm-placeholder": { color: "var(--color-text-muted)", fontFamily: "var(--font-sans)" },
 });
 
 export interface EditorHandle {
@@ -58,6 +82,8 @@ export interface EditorOptions {
   root: ShadowRoot;
   doc: string;
   label: string;
+  /** Shown while the editor is empty. */
+  placeholder: string;
   readonly: boolean;
   onChange(value: string): void;
   onRun(): void;
@@ -86,8 +112,11 @@ export function createEditor(o: EditorOptions): EditorHandle {
       doc: o.doc,
       extensions: [
         lineNumbers(),
+        highlightActiveLineGutter(),
         history(),
         drawSelection(),
+        highlightActiveLine(),
+        placeholder(o.placeholder),
         indentOnInput(),
         bracketMatching(),
         closeBrackets(),

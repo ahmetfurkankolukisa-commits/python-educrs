@@ -90,6 +90,7 @@
     gap: var(--space-3);
     margin: 0;
     font-size: var(--text-xl);
+    font-weight: 700; /* stated: the reset makes headings inherit, and "Plain mode" under it is 600 */
   }
   .card p {
     margin: 0;

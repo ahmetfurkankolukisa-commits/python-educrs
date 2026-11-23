@@ -34,6 +34,12 @@ export const Code: StoryObj<typeof CodeBlock> = {
   args: { code: 'name = "Ada"\nprint(name)\nprint("name")', label: "Example", output: "Ada\nname\n" },
 };
 
+export const CodeLabelled: StoryObj<typeof CodeBlock> = {
+  name: "Code block with a visible label (Show me)",
+  render: (args) => ({ Component: CodeBlock, props: args }),
+  args: { code: 'name = "Ada"', label: "Solution so far", showLabel: true },
+};
+
 const options = ["Ada Lovelace", "first last", "AdaLovelace", "Error"];
 export const Choices: StoryObj<typeof ChoiceList> = {
   name: "Choices (nothing picked)",
@@ -75,10 +81,13 @@ export const HintsShown: StoryObj<typeof HintLadder> = {
   args: { hints, shown: 1, onmore: noop },
 };
 
-const panel = (tone: "correct" | "mixup" | "wrong" | "unavailable", title: string, html: string, secondary = false): StoryObj<typeof FeedbackPanel> => ({
+// Byte stands on the sheet's top edge with the mood the app gives each tone (§17.11); the last
+// story is the sheet as plain mode shows it.
+const MOOD = { correct: "happy", mixup: "thinking", wrong: "oops", unavailable: "thinking" } as const;
+const panel = (tone: "correct" | "mixup" | "wrong" | "unavailable", title: string, html: string, secondary = false, byte = true): StoryObj<typeof FeedbackPanel> => ({
   render: (args) => ({ Component: FeedbackPanel, props: args }),
   args: {
-    tone, title, autofocus: false, children: body(html),
+    tone, title, autofocus: false, children: body(html), mascot: byte ? MOOD[tone] : null,
     primary: { label: tone === "correct" ? "Continue" : "Try again", onclick: noop },
     secondary: secondary ? { label: "Show me", onclick: noop } : null,
   },
@@ -87,6 +96,7 @@ export const Correct = { ...panel("correct", "Correct!", "<p>Without quotes, Pyt
 export const Mixup = { ...panel("mixup", "Common mix-up", "<p>With quotes, Python prints the word name itself.</p>"), name: "Feedback: common mix-up" };
 export const Wrong = { ...panel("wrong", "Not quite", "<p>Your program runs, but its output is different.</p>", true), name: "Feedback: wrong (Show me available)" };
 export const Unavailable = { ...panel("unavailable", "Couldn't check", "<p>Python didn't answer in time.</p>"), name: "Feedback: check unavailable" };
+export const CorrectPlain = { ...panel("correct", "Correct!", "<p>Without quotes, Python uses the value stored in the variable.</p>", false, false), name: "Feedback: plain mode (no Byte)" };
 
 export const Complete: StoryObj<typeof LessonComplete> = {
   name: "Lesson complete",

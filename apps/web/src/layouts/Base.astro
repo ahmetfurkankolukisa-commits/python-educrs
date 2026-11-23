@@ -42,7 +42,7 @@ const { title = t("site.title"), description = t("site.description"), chrome = "
         </div>
       )
     }
-    <main class:list={["page-x mx-auto flex w-full max-w-3xl flex-1 flex-col", chrome === "site" ? "pt-6 pb-12" : "pt-4"]}>
+    <main class:list={["page-x mx-auto w-full max-w-3xl flex-1", chrome === "site" ? "pt-6 pb-12" : "flex flex-col pt-4"]}>
       <slot />
     </main>
     {/* Focus mode (lessons): no footer, the lesson fills the screen and its buttons sit at the bottom. */}

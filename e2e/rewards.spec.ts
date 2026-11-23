@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import {
   PATH, VARS_USE, choice, finishVarsReassign, finishVarsUse, openLesson, openPath, openSettings, seriousViolations,
 } from "./flows.ts";
@@ -7,12 +7,45 @@ import {
 // XP, daily goal, streak, plain mode and "download my data" (docs/05-f3-mvp0.md §15).
 // Every test starts with a fresh browser context, so a fresh IndexedDB: a brand-new learner.
 
+/**
+ * Every number the "+N XP" pill shows, in order (docs/05-f3-mvp0.md §17.11: it counts up from 0, and
+ * does not count at all under reduced motion). Call before the lesson is opened.
+ */
+async function watchXp(page: Page) {
+  await page.addInitScript(() => {
+    const seen: number[] = [];
+    (window as unknown as { xpSeen: number[] }).xpSeen = seen;
+    new MutationObserver(() => {
+      const shown = /\+(\d+) XP/.exec(document.querySelector('[data-testid="reward-xp"]')?.textContent ?? "");
+      if (shown && seen.at(-1) !== Number(shown[1])) seen.push(Number(shown[1]));
+    }).observe(document, { subtree: true, childList: true, characterData: true });
+  });
+}
+const xpSeen = (page: Page) => page.evaluate(() => (window as unknown as { xpSeen: number[] }).xpSeen);
+/** The trail under a lesson on the path, as the browser draws it. */
+const trail = (page: Page, href: string) => page.locator(`[data-testid="path-node"][href="${href}"]`).locator("xpath=..").evaluate((li) => {
+  const after = getComputedStyle(li, "::after");
+  return `${after.borderLeftStyle} ${after.borderLeftColor}`;
+});
+
 test.describe("rewards", () => {
   test("a first lesson: +55 XP, the goal reached, a 1-day streak, then the goal question; it all survives a reload", async ({ page }) => {
     test.setTimeout(240_000);
+    await watchXp(page);
     await finishVarsUse(page);
 
     await expect(page.getByTestId("reward-xp")).toHaveText("+55 XP");
+    // The number counted up to 55 (never past it, never back); a screen reader hears "+55 XP" once.
+    const counted = await xpSeen(page);
+    expect(counted.at(-1)).toBe(55);
+    expect(counted).toEqual([...counted].sort((a, b) => a - b));
+    expect(counted.some((n) => n > 0 && n < 55), `shown: ${counted.join(", ")}`).toBe(true);
+    await expect(page.getByTestId("reward-xp")).toHaveAttribute("aria-hidden", "true");
+    await expect(page.locator('[data-xp="55"] .sr-only')).toHaveText("+55 XP");
+    // Byte celebrates, and the heading is as heavy as every other page title.
+    const done = page.getByTestId("lesson-complete");
+    await expect(done.getByTestId("mascot")).toHaveAttribute("data-mood", "celebrate");
+    expect(await done.locator("h1").evaluate((el) => getComputedStyle(el).fontWeight)).toBe("700");
     const goal = page.getByTestId("reward-goal");
     await expect(goal).toHaveAttribute("data-met", "true");
     await expect(goal).toContainText("Daily goal reached!");
@@ -32,6 +65,10 @@ test.describe("rewards", () => {
 
     await page.getByRole("link", { name: "Back to the path" }).click();
     await page.waitForSelector('[data-testid="path"][data-loaded="true"]');
+    // The trail under the finished lesson is solid and in the accent colour; ahead it stays dotted.
+    await page.emulateMedia({ colorScheme: "light" });
+    expect(await trail(page, VARS_USE)).toBe("solid rgb(67, 56, 202)");
+    expect(await trail(page, "/learn/m2/vars-reassign/")).toMatch(/^dotted /);
     const check = async () => {
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-days", "1");
       await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-lit", "true");
@@ -56,7 +93,14 @@ test.describe("rewards", () => {
       test.setTimeout(300_000);
       await page.clock.setFixedTime(new Date("2026-11-20T10:00:00+03:00"));
       await finishVarsUse(page);
-      await expect(page.getByTestId("reward-streak")).toHaveAttribute("data-days", "1");
+      // Leave the moment the end screen is up, before reading anything on it: the lesson and its
+      // XP are already stored. (The completion used to be written after the screen showed; a test
+      // that left 30 ms later lost it, docs/05-f3-mvp0.md §17.14.)
+      await openPath(page);
+      await expect(page.locator(`[data-testid="path-node"][href="${VARS_USE}"]`)).toHaveAttribute("data-state", "completed");
+      await expect(page.getByTestId("stat-xp")).toHaveAttribute("data-xp", "55");
+      await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-days", "1");
+      await expect(page.getByTestId("stat-streak")).toHaveAttribute("data-lit", "true");
 
       await page.clock.setFixedTime(new Date("2026-11-21T09:00:00+03:00"));
       await openPath(page);
@@ -66,8 +110,11 @@ test.describe("rewards", () => {
       await expect(page.getByTestId("stat-goal").getByTestId("goal-ring")).toHaveAttribute("data-value", "0");
 
       await page.emulateMedia({ reducedMotion: "reduce" });
+      await watchXp(page);
       await finishVarsReassign(page);
       await expect(page.getByTestId("reward-xp")).toHaveText("+60 XP");
+      // no counting for someone who asked for less motion: the number is simply there
+      expect((await xpSeen(page)).filter((n) => n > 0 && n < 60)).toEqual([]);
       await expect(page.getByTestId("reward-streak")).toHaveAttribute("data-days", "2");
       // …but not for someone who asked for less motion
       expect(await page.locator(".sparks").evaluate((el) => getComputedStyle(el).display)).toBe("none");
@@ -91,6 +138,7 @@ test.describe("rewards", () => {
     await finishVarsReassign(page);
     const done = page.getByTestId("lesson-complete");
     await expect(done).toHaveAttribute("data-plain", "true");
+    await expect(done.getByTestId("mascot")).toHaveCount(0);
     await expect(done).not.toContainText("first try");
     await expect(page.getByTestId("rewards")).toHaveCount(0);
     await expect(page.getByTestId("goal-question")).toHaveCount(0);

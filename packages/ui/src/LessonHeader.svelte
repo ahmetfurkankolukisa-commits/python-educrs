@@ -27,6 +27,8 @@
     data-testid="lesson-progress"
   >
     <div class="fill" style:width="{pct}%"></div>
+    <!-- re-created on every step, so the glint plays once each time the bar grows -->
+    {#if done > 0}{#key done}<span class="glint" style:left="{pct}%" aria-hidden="true"></span>{/key}{/if}
   </div>
 </header>
 
@@ -62,11 +64,35 @@
     stroke-linecap: round;
   }
   .track {
+    position: relative;
     flex: 1;
     height: 0.875rem;
     border-radius: 999px;
     background: var(--color-border-soft);
     overflow: hidden;
+  }
+  .glint {
+    position: absolute;
+    top: 0;
+    width: 2.5rem;
+    height: 100%;
+    margin-left: -2.5rem;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-on-accent) 70%, transparent));
+    opacity: 0;
+    animation: glint 700ms var(--ease-out) var(--motion-base);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glint {
+      animation: none;
+    }
+  }
+  @keyframes glint {
+    0% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+    }
   }
   .fill {
     height: 100%;

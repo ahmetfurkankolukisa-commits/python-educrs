@@ -140,7 +140,16 @@
   .result .mark {
     color: var(--tone);
   }
-  .result .key {
+  /* A small "yes!" when the pick was right (0 ms under reduced motion: --motion-base). */
+  .choice.result.correct {
+    animation: right var(--motion-base) var(--ease-out);
+  }
+  @keyframes right {
+    50% {
+      transform: scale(1.03);
+    }
+  }
+  .choice.result .key {
     border-color: var(--tone);
     color: var(--tone);
   }

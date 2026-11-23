@@ -88,10 +88,20 @@ export async function openSettings(page: Page) {
   await page.waitForSelector('[data-testid="settings"][data-ready="true"]');
 }
 
+/**
+ * Wait until every animation that ENDS has ended. Animations that repeat forever (Byte's blink, the
+ * editor's cursor, the skeleton shimmer) are skipped: waiting for them never returns.
+ */
+export async function settled(page: Page) {
+  await page.evaluate(() => Promise.all(document.getAnimations()
+    .filter((a) => a.effect?.getComputedTiming().iterations !== Infinity)
+    .map((a) => a.finished.catch(() => undefined))));
+}
+
 export async function seriousViolations(page: Page): Promise<string[]> {
   // Scan the settled page: mid-animation text is half transparent and fails contrast for a moment
   // (the same finding as the Storybook scan, docs/05-f3-mvp0.md §14.9).
-  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined))));
+  await settled(page);
   const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   return r.violations
     .filter((v) => v.impact === "serious" || v.impact === "critical")

@@ -1,6 +1,7 @@
 <script lang="ts">
   // Editor + Run/Stop + input() box + output. Used by the home page Runner and by lesson code
   // steps (which add a Check button). "Run" is always free; "Check" grades in a fresh worker.
+  import { onDestroy, tick } from "svelte";
   import { catalog, t, type MessageKey } from "@educrs/i18n";
   import { Button, CodeEditor } from "@educrs/ui";
   import { explanationOf, type SandboxClient, type SandboxStatus } from "../lib/sandbox.ts";
@@ -45,6 +46,60 @@
    */
   function appendStatus(text: string) {
     output += text.slice(0, MAX_STATUS_CHARS);
+  }
+
+  // Full-screen mode (docs/05-f3-mvp0.md §17.15): the same workspace grows over the window, so the
+  // code, the cursor and the undo history stay. Not the browser's Fullscreen API — an iPhone cannot
+  // put an element full screen. While it is open the rest of the page is inert, like under a dialog.
+  let expanded = $state(false);
+  let workspace = $state<HTMLDivElement>();
+  let editor = $state<{ focus(): void }>();
+  let expandButton = $state<HTMLButtonElement>();
+  let restore: (() => void) | null = null;
+  const titleId = $derived(`${id}-fullscreen`);
+
+  /** Make everything outside `el` inert, and stop the page behind from scrolling. Returns the undo. */
+  function isolate(el: HTMLElement) {
+    const made: HTMLElement[] = [];
+    for (let node: HTMLElement | null = el; node && node !== document.body; node = node.parentElement) {
+      for (const other of node.parentElement?.children ?? []) {
+        if (other !== node && other instanceof HTMLElement && !other.inert) {
+          other.inert = true;
+          made.push(other);
+        }
+      }
+    }
+    const page = document.documentElement;
+    const overflow = page.style.overflow;
+    page.style.overflow = "hidden";
+    return () => {
+      for (const other of made) other.inert = false;
+      page.style.overflow = overflow;
+    };
+  }
+
+  async function setExpanded(on: boolean) {
+    if (on === expanded || !workspace) return;
+    expanded = on;
+    if (on) {
+      restore = isolate(workspace);
+      await tick();
+      editor?.focus();
+    } else {
+      restore?.();
+      restore = null;
+      await tick();
+      expandButton?.focus();
+    }
+  }
+  onDestroy(() => restore?.());
+
+  function onKey(e: KeyboardEvent) {
+    // Esc leaves the mode. Not when the editor used the key itself (it then marks it handled).
+    if (expanded && e.key === "Escape" && !e.defaultPrevented) {
+      e.preventDefault();
+      void setExpanded(false);
+    }
   }
 
   const shownStatus = $derived(status === "ready" && running ? "running" : status);
@@ -95,14 +150,35 @@
   }
 </script>
 
-<div class="workspace">
-  <CodeEditor bind:value={code} {id} {label} errorLine={highlight} onRun={run} />
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  class="workspace"
+  class:expanded
+  bind:this={workspace}
+  role={expanded ? "dialog" : undefined}
+  aria-modal={expanded ? "true" : undefined}
+  aria-labelledby={expanded ? titleId : undefined}
+  data-testid="workspace"
+  data-expanded={expanded}
+  onkeydown={onKey}
+>
+  {#if expanded}
+    <div class="bar">
+      <h2 id={titleId} class="bar-title">{t("runner.fullScreenTitle")}</h2>
+      <Button variant="secondary" onclick={() => setExpanded(false)} data-testid="exit-full-screen">{t("runner.exitFullScreen")}</Button>
+    </div>
+  {/if}
+  <div class="edit">
+    <CodeEditor bind:this={editor} bind:value={code} {id} {label} errorLine={highlight} onRun={run} fill={expanded} />
+  </div>
 
-  <div class="mt-3 flex flex-wrap items-center gap-3">
+  <div class="side">
+  <div class="controls flex flex-wrap items-center gap-3">
     <Button variant={check ? "secondary" : "primary"} onclick={run} disabled={status !== "ready" || running}>{t("runner.run")}</Button>
     <Button variant="secondary" onclick={() => client.stop()} disabled={!running}>{t("runner.stop")}</Button>
     {#if check}
-      <Button onclick={check.onclick} disabled={status !== "ready" || check.busy} data-testid="check">
+      <!-- The result is shown in the lesson, so Check leaves full-screen mode first. -->
+      <Button onclick={() => { void setExpanded(false); check.onclick(); }} disabled={status !== "ready" || check.busy} data-testid="check">
         {check.busy ? t("lesson.checking") : check.label}
       </Button>
     {/if}
@@ -110,10 +186,16 @@
       <span class="dot {shownStatus}" aria-hidden="true"></span>
       {#if status === "loading"}{t("runner.loading")}{:else if status === "failed"}{t("runner.failed", { reason: failReason })}{:else}{t("runner.ready")}{/if}
     </span>
+    {#if !expanded}
+      <button type="button" class="expand" bind:this={expandButton} onclick={() => setExpanded(true)} aria-label={t("runner.fullScreen")} title={t("runner.fullScreen")} data-testid="full-screen">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
+        <span class="expand-text">{t("runner.fullScreen")}</span>
+      </button>
+    {/if}
   </div>
 
   {#if status === "failed"}
-    <p class="failed" data-testid="runner-failed">{t("runner.failedHelp")}</p>
+    <p class="failed-help" data-testid="runner-failed">{t("runner.failedHelp")}</p>
   {/if}
 
   {#if asking}
@@ -143,6 +225,7 @@
   <h3 class="out-label">{t("runner.output")}</h3>
   <!-- Empty until something runs: the hint is a CSS pseudo-element, so the text stays "". -->
   <pre data-testid="runner-output" class="out" data-empty={t("runner.outputEmpty")}>{output}</pre>
+  </div>
 </div>
 
 <style>
@@ -152,6 +235,104 @@
     border-radius: var(--radius-lg);
     background: var(--color-surface);
   }
+  .controls {
+    margin-top: var(--space-3);
+  }
+  /* A quiet button at the end of the row: an icon everywhere, with its words where there is room. */
+  .expand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-width: var(--target-min);
+    min-height: var(--target-min);
+    margin-left: auto;
+    padding: 0 var(--space-2);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--color-text-muted);
+    font: 600 var(--text-sm) / 1 var(--font-sans);
+    cursor: pointer;
+  }
+  .expand:hover {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .expand:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .expand svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .expand-text {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .expand-text {
+      display: inline;
+    }
+  }
+
+  /* Full-screen mode: the workspace over the whole window. One column on a phone (the editor
+     takes the height that is left and scrolls inside); from 900 px the output sits beside it. */
+  .workspace.expanded {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    box-sizing: border-box;
+    height: 100dvh;
+    padding: max(var(--space-3), env(safe-area-inset-top)) max(var(--space-4), env(safe-area-inset-right))
+      max(var(--space-3), env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-left));
+    border: 0;
+    border-radius: 0;
+    background: var(--color-bg);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .bar-title {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: 700;
+  }
+  .expanded .edit {
+    min-height: 0;
+  }
+  .expanded .side {
+    min-height: 0;
+    max-height: 42dvh;
+    overflow: auto;
+  }
+  .expanded .controls {
+    margin-top: 0;
+  }
+  @media (min-width: 900px) {
+    .workspace.expanded {
+      grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
+      grid-template-rows: auto minmax(0, 1fr);
+      column-gap: var(--space-6);
+    }
+    .expanded .bar {
+      grid-column: 1 / -1;
+    }
+    .expanded .side {
+      max-height: none;
+    }
+  }
   .status {
     display: inline-flex;
     align-items: center;
@@ -160,6 +341,7 @@
     color: var(--color-text-muted);
   }
   .dot {
+    flex: 0 0 auto;
     width: 0.625rem;
     height: 0.625rem;
     border-radius: 50%;
@@ -173,7 +355,9 @@
   .dot.failed {
     background: var(--color-danger);
   }
-  .failed {
+  /* Not `.failed`: the status dot carries the status as a class too (`dot failed`), and a shared
+     name gave the dot this card's padding — a red blob instead of a dot (§17.14). */
+  .failed-help {
     margin: var(--space-3) 0 0;
     padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-md);

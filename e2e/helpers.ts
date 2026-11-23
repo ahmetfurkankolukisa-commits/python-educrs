@@ -68,9 +68,14 @@ export async function focusTarget(page: Page) {
   });
 }
 
+/** The program in the editor. The placeholder of an empty editor is drawn inside its first line, but it is not code. */
 export async function editorText(page: Page) {
   return page.locator(".cm-content").evaluate((el) => {
-    const lines = [...el.querySelectorAll(".cm-line")].map((l) => l.textContent ?? "");
+    const lines = [...el.querySelectorAll(".cm-line")].map((line) => {
+      const copy = line.cloneNode(true) as Element;
+      for (const hint of copy.querySelectorAll(".cm-placeholder")) hint.remove();
+      return copy.textContent ?? "";
+    });
     return lines.join("\n");
   });
 }

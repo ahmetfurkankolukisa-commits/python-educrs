@@ -14,3 +14,6 @@ export interface PathModuleView {
   title: string;
   nodes: PathNodeView[];
 }
+
+/** Byte's expressions (docs/05-f3-mvp0.md §17.11). */
+export type MascotMood = "hello" | "happy" | "thinking" | "oops" | "celebrate";
