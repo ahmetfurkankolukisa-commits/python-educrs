@@ -40,6 +40,7 @@
 <style>
   .btn {
     --edge: var(--color-accent-shadow);
+    box-sizing: border-box; /* `wide` is 100% including padding, with or without a CSS reset */
     display: inline-flex;
     align-items: center;
     justify-content: center;

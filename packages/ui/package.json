@@ -8,7 +8,8 @@
     "./tokens.css": "./src/tokens.css",
     "./CodeEditor.svelte": "./src/CodeEditor.svelte",
     "./SymbolBar.svelte": "./src/SymbolBar.svelte",
-    "./fonts.css": "./src/fonts.css"
+    "./fonts.css": "./src/fonts.css",
+    "./font-urls": "./src/font-urls.ts"
   },
   "scripts": {
     "typecheck": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",

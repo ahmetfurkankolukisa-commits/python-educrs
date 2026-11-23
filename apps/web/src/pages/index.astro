@@ -3,14 +3,37 @@ import Base from "../layouts/Base.astro";
 import Runner from "../components/Runner.svelte";
 import { Button } from "@educrs/ui";
 import { t } from "@educrs/i18n";
+
+const features = [
+  { title: t("home.feature.free"), text: t("home.feature.free.text"), icon: "M12 21s-7-4.4-9.3-9A5.3 5.3 0 0 1 12 6.3 5.3 5.3 0 0 1 21.3 12C19 16.6 12 21 12 21z" },
+  { title: t("home.feature.noAccount"), text: t("home.feature.noAccount.text"), icon: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0" },
+  { title: t("home.feature.offline"), text: t("home.feature.offline.text"), icon: "M5 12.5l4.5 4.5L19 7.5" },
+];
 ---
 
 <Base>
-  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{t("home.heading")}</h1>
-  <p class="mt-4 text-lg text-muted">{t("home.lead")}</p>
-  <div class="mt-6"><Button href="/learn/" data-testid="start-learning">{t("home.startLearning")}</Button></div>
+  <section class="hero">
+    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{t("home.heading")}</h1>
+    <p class="mt-4 max-w-xl text-lg text-muted">{t("home.lead")}</p>
+    <div class="mt-6"><Button href="/learn/" data-testid="start-learning">{t("home.startLearning")}</Button></div>
+    <ul class="features">
+      {
+        features.map((f) => (
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d={f.icon} /></svg>
+            </span>
+            <span>
+              <strong>{f.title}</strong>
+              <span class="block text-sm text-muted">{f.text}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
-  <section aria-labelledby="try" class="mt-10">
+  <section aria-labelledby="try" class="try">
     <h2 id="try" class="text-xl font-semibold">{t("home.tryIt")}</h2>
     <p class="mt-1 text-muted">{t("home.tryIt.help")}</p>
     <div class="mt-4">
@@ -18,3 +41,41 @@ import { t } from "@educrs/i18n";
     </div>
   </section>
 </Base>
+
+<style>
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .features li {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+  }
+  .feature-icon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  .feature-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .try {
+    margin-top: var(--space-12);
+  }
+</style>

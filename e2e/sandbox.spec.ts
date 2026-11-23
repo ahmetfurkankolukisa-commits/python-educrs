@@ -7,6 +7,8 @@ const EVIL = "http://127.0.0.1:4323";
 
 async function ready(page: Page) {
   await page.goto("/");
+  // "Try it now" loads when it scrolls into view (client:visible); on a phone it is below the fold.
+  await page.getByTestId("runner-status").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready", { timeout: 60_000 });
 }
 
@@ -34,6 +36,7 @@ test("boots with strict headers, noindex and no CSP violations", async ({ page }
   expect(res?.headers()["x-robots-tag"]).toContain("noindex");
   expect(res?.headers()["content-security-policy"]).toContain(`frame-src ${RUN}`);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  await page.getByTestId("runner-status").scrollIntoViewIfNeeded(); // loads when visible (client:visible)
   await expect(page.getByTestId("runner-status")).toHaveAttribute("data-status", "ready", { timeout: 60_000 });
   expect(cspErrors).toEqual([]);
 });

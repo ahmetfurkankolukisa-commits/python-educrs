@@ -4,8 +4,11 @@ import SettingsIsland from "../../components/SettingsIsland.svelte";
 import { t } from "@educrs/i18n";
 ---
 
-<Base title={`${t("settings.title")} · Learn Python`}>
-  <a class="inline-flex min-h-11 items-center font-semibold text-accent" href="/learn/">← {t("settings.back")}</a>
+<Base title={`${t("settings.title")} · Learn Python`} current="settings">
+  <a class="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent-soft px-4 font-semibold text-accent" href="/learn/">
+    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 6l-6 6 6 6" /></svg>
+    {t("settings.back")}
+  </a>
   <h1 class="mt-4 text-3xl font-bold tracking-tight">{t("settings.title")}</h1>
   <SettingsIsland client:load />
 </Base>

@@ -25,7 +25,10 @@
       </ol>
     {/if}
     {#if shown < hints.length}
-      <button type="button" class="more" onclick={onmore}>{t("lesson.hint", { n: shown + 1, m: hints.length })}</button>
+      <button type="button" class="more" onclick={onmore}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z" /></svg>
+        {t("lesson.hint", { n: shown + 1, m: hints.length })}
+      </button>
     {/if}
   </div>
 {/if}
@@ -66,6 +69,20 @@
   }
   .more:hover {
     background: var(--color-accent-soft);
+  }
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .more svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .more:focus-visible {
     outline: 3px solid var(--color-focus);

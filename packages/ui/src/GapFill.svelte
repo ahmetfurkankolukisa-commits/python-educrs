@@ -15,9 +15,10 @@
     name: string;
     disabled?: boolean;
     highlight?: string | null;
+    result?: "correct" | "mixup" | "wrong" | "unavailable" | null;
     onchange?: ((value: string) => void) | undefined;
   }
-  let { template, tiles, selected = $bindable(null), name, disabled = false, highlight = null, onchange }: Props = $props();
+  let { template, tiles, selected = $bindable(null), name, disabled = false, highlight = null, result = null, onchange }: Props = $props();
   const parts = $derived.by(() => {
     const i = template.indexOf(GAP);
     return i < 0 ? [template, ""] : [template.slice(0, i), template.slice(i + GAP.length)];
@@ -26,9 +27,9 @@
 
 <div class="gapfill">
   <CodeBlock code={template} label={t("lesson.program")}>
-    {parts[0]}<span class="gap" class:filled={selected !== null} data-testid="gap">{#if selected === null}<span aria-hidden="true">{BLANK}</span><span class="sr-only">({t("lesson.gap")})</span>{:else}{selected}{/if}</span>{parts[1]}
+    {parts[0]}<span class="gap {selected !== null && result && result !== 'unavailable' ? result : ''}" class:filled={selected !== null} data-testid="gap">{#if selected === null}<span aria-hidden="true">{BLANK}</span><span class="sr-only">({t("lesson.gap")})</span>{:else}{selected}{/if}</span>{parts[1]}
   </CodeBlock>
-  <ChoiceList options={tiles} bind:selected {name} legend={t("lesson.tiles")} {disabled} {highlight} variant="tiles" {onchange} />
+  <ChoiceList options={tiles} bind:selected {name} legend={t("lesson.tiles")} {disabled} {highlight} {result} variant="tiles" {onchange} />
 </div>
 
 <style>
@@ -47,6 +48,18 @@
   .gap.filled {
     border-style: solid;
     background: var(--color-accent-soft);
+  }
+  .gap.correct {
+    border-color: var(--color-success);
+    background: var(--color-success-soft);
+  }
+  .gap.mixup {
+    border-color: var(--color-warning);
+    background: var(--color-warning-soft);
+  }
+  .gap.wrong {
+    border-color: var(--color-danger);
+    background: var(--color-danger-soft);
   }
   .sr-only {
     position: absolute;

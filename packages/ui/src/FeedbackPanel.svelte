@@ -88,7 +88,7 @@
   .inner {
     display: grid;
     gap: var(--space-3);
-    padding: var(--space-4) var(--space-6) var(--space-6);
+    padding: var(--space-4) var(--space-6) calc(var(--space-6) + env(safe-area-inset-bottom));
   }
   .title {
     display: flex;

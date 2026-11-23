@@ -95,7 +95,7 @@
   }
 </script>
 
-<div class="rounded-lg border border-border bg-surface p-4">
+<div class="workspace">
   <CodeEditor bind:value={code} {id} {label} errorLine={highlight} onRun={run} />
 
   <div class="mt-3 flex flex-wrap items-center gap-3">
@@ -106,10 +106,15 @@
         {check.busy ? t("lesson.checking") : check.label}
       </Button>
     {/if}
-    <span class="text-sm text-muted" role="status" aria-live="polite" data-testid="runner-status" data-status={shownStatus}>
+    <span class="status" role="status" aria-live="polite" data-testid="runner-status" data-status={shownStatus}>
+      <span class="dot {shownStatus}" aria-hidden="true"></span>
       {#if status === "loading"}{t("runner.loading")}{:else if status === "failed"}{t("runner.failed", { reason: failReason })}{:else}{t("runner.ready")}{/if}
     </span>
   </div>
+
+  {#if status === "failed"}
+    <p class="failed" data-testid="runner-failed">{t("runner.failedHelp")}</p>
+  {/if}
 
   {#if asking}
     <form class="mt-3 flex gap-2" onsubmit={send}>
@@ -127,7 +132,7 @@
   {/if}
 
   {#if runExplanation}
-    <div role="alert" data-testid="runner-explanation" class="mt-4 rounded-md border border-danger p-3">
+    <div role="alert" data-testid="runner-explanation" class="explain">
       <p class="text-sm font-semibold text-danger">
         {t("runner.explanationTitle")}{#if runExplanation.lineno !== null}{" · "}{t("runner.line", { n: runExplanation.lineno })}{/if}
       </p>
@@ -135,6 +140,84 @@
     </div>
   {/if}
 
-  <h3 class="mt-4 text-sm font-semibold text-muted">{t("runner.output")}</h3>
-  <pre data-testid="runner-output" class="mt-1 min-h-24 whitespace-pre-wrap rounded-md border border-border bg-code p-3 font-mono text-sm text-text">{output}</pre>
+  <h3 class="out-label">{t("runner.output")}</h3>
+  <!-- Empty until something runs: the hint is a CSS pseudo-element, so the text stays "". -->
+  <pre data-testid="runner-output" class="out" data-empty={t("runner.outputEmpty")}>{output}</pre>
 </div>
+
+<style>
+  .workspace {
+    padding: var(--space-4);
+    border: 2px solid var(--color-border-soft);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    background: var(--color-success);
+  }
+  .dot.loading,
+  .dot.running {
+    background: var(--color-warning-strong);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .dot.failed {
+    background: var(--color-danger);
+  }
+  .failed {
+    margin: var(--space-3) 0 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--color-danger-soft);
+    color: var(--color-text);
+  }
+  .explain {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid var(--color-danger);
+    border-radius: var(--radius-md);
+    background: var(--color-danger-soft);
+  }
+  .out-label {
+    margin: var(--space-4) 0 var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+  .out {
+    min-height: 6rem;
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid var(--color-border-soft);
+    border-radius: var(--radius-md);
+    background: var(--color-code-bg);
+    color: var(--color-text);
+    font: 0.9375rem / 1.6 var(--font-mono);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .out:empty::before {
+    content: attr(data-empty);
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      animation: none !important;
+    }
+  }
+  @keyframes pulse {
+    50% {
+      opacity: 0.35;
+    }
+  }
+</style>

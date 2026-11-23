@@ -62,7 +62,14 @@ export function serve(dir, host, port) {
     if (!fs.existsSync(file) && fs.existsSync(file + ".html")) file += ".html";
     const headers = headersFor(rules, pathname);
     if (!fs.existsSync(file) || path.basename(file) === "_headers") {
-      res.writeHead(404, { ...headers, "Content-Type": "text/plain" }).end("not found");
+      // Like Cloudflare's not_found_handling: "404-page" (apps/web/wrangler.jsonc).
+      const page = path.join(root, "404.html");
+      if (fs.existsSync(page)) {
+        res.writeHead(404, { ...headers, "Content-Type": MIME[".html"] });
+        fs.createReadStream(page).pipe(res);
+      } else {
+        res.writeHead(404, { ...headers, "Content-Type": "text/plain" }).end("not found");
+      }
       return;
     }
     res.writeHead(200, { ...headers, "Content-Type": MIME[path.extname(file)] || "application/octet-stream" });

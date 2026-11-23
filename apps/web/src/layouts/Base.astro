@@ -1,38 +1,57 @@
 ---
 import "../styles/global.css";
 import { t } from "@educrs/i18n";
+import { SiteHeader } from "@educrs/ui";
+import { lexendLatin } from "@educrs/ui/font-urls";
 
 interface Props {
   title?: string;
   description?: string;
+  /** "site": the slim site bar on top. "focus": none — lesson pages (docs/05-f3-mvp0.md §17.7). */
+  chrome?: "site" | "focus";
+  current?: "settings" | null;
 }
-const { title = t("site.title"), description = t("site.description") } = Astro.props;
+const { title = t("site.title"), description = t("site.description"), chrome = "site", current = null } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <!-- Early access: keep out of search engines until MVP-0 passes user tests (plan F2). -->
     <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <!-- The phone's browser bar takes the page colour (light / dark theme backgrounds). -->
+    <meta name="theme-color" content="#fff8f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16132b" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Lexend (Latin) is on every page: preload it so headings don't flash in a fallback font. -->
+    <link rel="preload" href={lexendLatin} as="font" type="font/woff2" crossorigin="anonymous" data-testid="font-preload" />
   </head>
-  <body class="min-h-dvh bg-bg text-text">
-    <div role="note" class="border-b border-border bg-surface px-4 py-2 text-center text-sm text-muted">
-      {t("banner.earlyAccess")}
+  <body class="flex min-h-dvh flex-col bg-bg text-text">
+    <div role="note" class="banner">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l1.8 4.6L18.5 9.4 13.8 11.2 12 16l-1.8-4.8L5.5 9.4l4.7-1.8z" /></svg>
+      <span>{t("banner.earlyAccess")}</span>
     </div>
-    <main class="mx-auto w-full max-w-3xl px-4 py-10">
+    {
+      chrome === "site" && (
+        <div class="page-x mx-auto w-full max-w-3xl">
+          <SiteHeader homeHref="/" settingsHref="/settings/" current={current} />
+        </div>
+      )
+    }
+    <main class:list={["page-x mx-auto flex w-full max-w-3xl flex-1 flex-col", chrome === "site" ? "pt-6 pb-12" : "pt-4"]}>
       <slot />
     </main>
-    <footer class="mx-auto flex w-full max-w-3xl flex-wrap items-center gap-x-6 gap-y-2 px-4 pb-10 text-sm text-muted">
+    {/* Focus mode (lessons): no footer, the lesson fills the screen and its buttons sit at the bottom. */}
+    {chrome === "site" && <footer class="page-x mx-auto flex w-full max-w-3xl flex-wrap items-center gap-x-6 gap-y-2 pb-10 text-sm text-muted">
       <nav aria-label={t("footer.nav")} class="flex gap-4">
         <a class="inline-flex min-h-11 items-center underline" href="/learn/">{t("nav.path")}</a>
         <a class="inline-flex min-h-11 items-center underline" href="/settings/">{t("nav.settings")}</a>
       </nav>
       <span>{t("footer.license")}</span>
-    </footer>
+    </footer>}
   </body>
 </html>

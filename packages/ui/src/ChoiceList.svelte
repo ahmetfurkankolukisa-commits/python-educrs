@@ -12,6 +12,8 @@
     disabled?: boolean;
     /** Marks this option as the right answer ("Show me"). */
     highlight?: string | null;
+    /** After a check: the picked option takes the feedback's tone and mark (docs/05-f3-mvp0.md §17.7). */
+    result?: "correct" | "mixup" | "wrong" | "unavailable" | null;
     /** "list": full-width rows (outputs); "tiles": compact chips (code fragments). */
     variant?: "list" | "tiles";
     /** Listen for number keys. Only one active list per page should have this on. */
@@ -25,6 +27,7 @@
     legend,
     disabled = false,
     highlight = null,
+    result = null,
     variant = "list",
     shortcuts = true,
     onchange,
@@ -54,11 +57,13 @@
 <fieldset class="choices {variant}" {disabled} data-testid="choices">
   <legend class="sr-only">{legend}</legend>
   {#each options as opt, i (opt)}
-    <label class="choice" class:selected={selected === opt} class:highlight={highlight === opt} data-choice={opt}>
+    {@const tone = selected === opt && result && result !== "unavailable" ? result : null}
+    <label class="choice {tone ? `result ${tone}` : ''}" class:selected={selected === opt} class:highlight={highlight === opt} data-choice={opt} data-result={tone}>
       <input class="sr-only" type="radio" {name} value={opt} checked={selected === opt} onchange={() => pick(opt)} />
       {#if variant === "list"}<span class="key" aria-hidden="true">{i + 1}</span>{/if}
       <span class="text">{opt}</span>
-      {#if highlight === opt}<span class="sr-only">{t("lesson.reveal.answer")}</span><span class="mark" aria-hidden="true">✓</span>{/if}
+      {#if highlight === opt}<span class="sr-only">{t("lesson.reveal.answer")}</span><span class="mark" aria-hidden="true">✓</span>
+      {:else if tone}<span class="mark" aria-hidden="true">{tone === "correct" ? "✓" : tone === "mixup" ? "!" : "×"}</span>{/if}
     </label>
   {/each}
 </fieldset>
@@ -112,12 +117,38 @@
   .choice.highlight {
     border-color: var(--color-success);
     border-style: dashed;
+    border-bottom-style: solid;
+    background: var(--color-success-soft);
+  }
+  .choice.result {
+    border-color: var(--tone);
+    border-bottom-color: var(--tone);
+    background: var(--tone-soft);
+  }
+  .correct {
+    --tone: var(--color-success);
+    --tone-soft: var(--color-success-soft);
+  }
+  .mixup {
+    --tone: var(--color-warning);
+    --tone-soft: var(--color-warning-soft);
+  }
+  .wrong {
+    --tone: var(--color-danger);
+    --tone-soft: var(--color-danger-soft);
+  }
+  .result .mark {
+    color: var(--tone);
+  }
+  .result .key {
+    border-color: var(--tone);
+    color: var(--tone);
   }
   .choice:has(input:focus-visible) {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
-  fieldset:disabled .choice {
+  fieldset:disabled .choice:not(.result):not(.highlight) {
     cursor: default;
     opacity: 0.75;
   }

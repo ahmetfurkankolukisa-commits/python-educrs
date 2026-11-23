@@ -74,4 +74,13 @@
     background: var(--color-accent);
     transition: width var(--motion-base) var(--ease-out);
   }
+  @media (forced-colors: active) {
+    .track {
+      border: 1px solid CanvasText;
+    }
+    .fill {
+      forced-color-adjust: none;
+      background: Highlight;
+    }
+  }
 </style>
