@@ -11,12 +11,19 @@ export const DEFAULT_GOAL: DailyGoal = 20;
 
 export const isDailyGoal = (v: unknown): v is DailyGoal => (DAILY_GOALS as readonly unknown[]).includes(v);
 
+/** Colour theme (docs/05-f3-mvp0.md §17.18). "system" follows the device's light / dark setting. */
+export const THEMES = ["system", "light", "dark", "high-contrast"] as const;
+export type Theme = (typeof THEMES)[number];
+export const DEFAULT_THEME: Theme = "system";
+export const isTheme = (v: unknown): v is Theme => (THEMES as readonly unknown[]).includes(v);
+
 export interface Settings {
   readonly dailyGoal: DailyGoal;
   /** Hide XP, streak, goal and celebrations; learning is unchanged (plan §3.5.1 #4). */
   readonly plainMode: boolean;
   /** The learner picked a goal at least once (otherwise we ask after a lesson). */
   readonly goalChosen: boolean;
+  readonly theme: Theme;
 }
 
 /** Settings events in canonical (t, id) order, duplicates removed. */
@@ -27,11 +34,13 @@ export function settingsOf(events: readonly StoredEvent[]): Settings {
   let dailyGoal: DailyGoal = DEFAULT_GOAL;
   let plainMode = false;
   let goalChosen = false;
+  let theme: Theme = DEFAULT_THEME;
   for (const e of settingEvents(events)) {
+    if (isTheme(e.p.theme)) theme = e.p.theme;
     if (isDailyGoal(e.p.dailyGoal)) { dailyGoal = e.p.dailyGoal; goalChosen = true; }
     if (typeof e.p.plainMode === "boolean") plainMode = e.p.plainMode;
   }
-  return { dailyGoal, plainMode, goalChosen };
+  return { dailyGoal, plainMode, goalChosen, theme };
 }
 
 /**
