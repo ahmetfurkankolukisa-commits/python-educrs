@@ -3,6 +3,8 @@
  * zone, device) and keeps every event in memory, including the ones this page writes. Shared by
  * the lesson, path and settings pages (docs/05-f3-mvp0.md §15.7).
  */
+import { settingsOf } from "@educrs/gamification";
+import { applyTheme } from "./theme.ts";
 import { monotonic, newEvent, type EventContext, type StoredEvent } from "@educrs/core";
 import { openLocalStore } from "@educrs/store";
 
@@ -30,6 +32,9 @@ export async function openProgress(): Promise<Progress> {
     random: () => crypto.getRandomValues(new Uint8Array(10)),
   };
   let events: StoredEvent[] = await store.all();
+  // The events are the truth about the theme; the copy that paints the next page first is only a
+  // mirror. Put it right whenever the events are read (it may have been cleared, or be stale).
+  applyTheme(settingsOf(events).theme);
   return {
     persistent,
     device,

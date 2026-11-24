@@ -3,15 +3,17 @@
   // Settings are events like everything else, so they will sync later; nothing leaves the device.
   import { onMount } from "svelte";
   import { t } from "@educrs/i18n";
-  import { Button, GoalPicker, Toggle } from "@educrs/ui";
+  import { Button, GoalPicker, ThemePicker, Toggle } from "@educrs/ui";
   import { EVENT } from "@educrs/core";
-  import { DAILY_GOALS, settingsOf } from "@educrs/gamification";
+  import { DAILY_GOALS, THEMES, settingsOf, type Theme } from "@educrs/gamification";
+  import { applyTheme } from "../lib/theme.ts";
   import { localTz, openProgress, type Progress } from "../lib/progress.ts";
   import { download, exportFile } from "../lib/export.ts";
 
   let progress = $state<Progress | null>(null);
   let goal = $state<number | null>(null);
   let plainMode = $state(false);
+  let theme = $state<Theme>("system");
   let status = $state("");
 
   onMount(() => {
@@ -21,6 +23,7 @@
       const s = settingsOf(p.events());
       goal = s.dailyGoal;
       plainMode = s.plainMode;
+      theme = s.theme;
       progress = p;
     });
     return () => { cancelled = true; };
@@ -62,6 +65,9 @@
 
     <section class="card" aria-labelledby="plain-title">
       <h2 id="plain-title"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg></span>{t("settings.plain.title")}</h2>
+      <!-- Applied at once, then stored: the page must not wait for the write to change colour. -->
+      <ThemePicker themes={THEMES} bind:selected={theme} name="theme" legend={t("settings.theme.title")} onchange={(v) => { applyTheme(v); void save({ theme: v }); }} />
+      <p class="text-sm text-muted">{t("settings.theme.help")}</p>
       <Toggle id="plain-mode" label={t("settings.plain.label")} description={t("settings.plain.help")} bind:checked={plainMode} onchange={(on) => save({ plainMode: on })} />
     </section>
 

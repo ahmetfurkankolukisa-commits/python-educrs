@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/svelte-vite";
 import GoalPicker from "./GoalPicker.svelte";
 import GoalRing from "./GoalRing.svelte";
 import StatsBar from "./StatsBar.svelte";
+import ThemePicker from "./ThemePicker.svelte";
 import Toggle from "./Toggle.svelte";
 
 // Streak, XP, daily goal and settings controls (docs/05-f3-mvp0.md §15.7). Every state has a story,
@@ -51,6 +52,20 @@ export const PickerChosen: StoryObj<typeof GoalPicker> = {
   name: "Goal picker (20 chosen, visible legend)",
   render: (args) => ({ Component: GoalPicker, props: args }),
   args: { goals, name: "goal-b", legend: "Daily goal", selected: 20, showLegend: true },
+};
+
+// Theme choice (docs/05-f3-mvp0.md §17.18): each option shows a sample of its own theme, whatever
+// theme the page is in — the scan runs these in all three.
+const themes = ["system", "light", "dark", "high-contrast"] as const;
+export const ThemeDefault: StoryObj<typeof ThemePicker> = {
+  name: "Theme picker (same as my device)",
+  render: (args) => ({ Component: ThemePicker, props: args }),
+  args: { themes, name: "theme-a", legend: "Theme", selected: "system" },
+};
+export const ThemeHighContrast: StoryObj<typeof ThemePicker> = {
+  name: "Theme picker (high contrast chosen)",
+  render: (args) => ({ Component: ThemePicker, props: args }),
+  args: { themes, name: "theme-b", legend: "Theme", selected: "high-contrast" },
 };
 
 const plain = { label: "Plain mode", description: "Hide XP, streaks, goals and celebrations. Lessons work exactly the same, and your progress is still saved." };

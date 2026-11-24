@@ -1,4 +1,5 @@
 ---
+import { BAR, PRE_PAINT } from "../lib/theme.ts";
 import "../styles/global.css";
 import { t } from "@educrs/i18n";
 import { SiteHeader } from "@educrs/ui";
@@ -24,8 +25,11 @@ const { title = t("site.title"), description = t("site.description"), chrome = "
     <title>{title}</title>
     <meta name="description" content={description} />
     <!-- The phone's browser bar takes the page colour (light / dark theme backgrounds). -->
-    <meta name="theme-color" content="#fff8f1" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#16132b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content={BAR.light} media="(prefers-color-scheme: light)" data-default={BAR.light} />
+    <meta name="theme-color" content={BAR.dark} media="(prefers-color-scheme: dark)" data-default={BAR.dark} />
+    <!-- The learner's own theme, before the first paint (docs/05-f3-mvp0.md §17.18). Inline, and
+         after the two tags above because it rewrites them; its hash is added to the CSP at build time. -->
+    <script is:inline set:html={PRE_PAINT} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Lexend (Latin) is on every page: preload it so headings don't flash in a fallback font. -->
     <link rel="preload" href={lexendLatin} as="font" type="font/woff2" crossorigin="anonymous" data-testid="font-preload" />
